@@ -6,7 +6,16 @@
     <description>Recent content in golang on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 06 Mar 2019 12:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 May 2019 12:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>常见排序算法Go实现</title>
+      <link>https://daryeon.github.io/post/small-common-sort-func/</link>
+      <pubDate>Mon, 06 May 2019 12:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/small-common-sort-func/</guid>
+      <description>常见排序算法Go实现 简介 介绍一些常用的排序，包括：快排、冒泡、选择、插入、归并、堆排序，基于go语言的实现。 快排排序 package main import ( &amp;#34;fmt&amp;#34; ) func main() { arr := []int{3,</description>
+    </item>
+    
     <item>
       <title>Go的一些小细节</title>
       <link>https://daryeon.github.io/post/go-small-details/</link>
@@ -14,51 +23,6 @@
       
       <guid>https://daryeon.github.io/post/go-small-details/</guid>
       <description>GO的一些小细节分享 map 无序性 map存储的数据并不保证有序性，通常可以把key写入一个slice切片，依靠slice切片的有序性来读取map。</description>
-    </item>
-    
-    <item>
-      <title>Creating a New Theme</title>
-      <link>https://daryeon.github.io/post/creating-a-new-theme/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://daryeon.github.io/post/creating-a-new-theme/</guid>
-      <description>Introduction This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content. I&amp;rsquo;ll explain how Hugo uses templates and how you can organize your templates to create a theme. I won&amp;rsquo;t cover using CSS to style your theme.
-We&amp;rsquo;ll start with creating a new site with a very basic template.</description>
-    </item>
-    
-    <item>
-      <title>(Hu)go Template Primer</title>
-      <link>https://daryeon.github.io/post/goisforlovers/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://daryeon.github.io/post/goisforlovers/</guid>
-      <description>Hugo uses the excellent go html/template library for its template engine. It is an extremely lightweight engine that provides a very small amount of logic. In our experience that it is just the right amount of logic to be able to create a good static website. If you have used other template systems from different languages or frameworks you will find a lot of similarities in go templates.
-This document is a brief primer on using go templates.</description>
-    </item>
-    
-    <item>
-      <title>Getting Started with Hugo</title>
-      <link>https://daryeon.github.io/post/hugoisforlovers/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://daryeon.github.io/post/hugoisforlovers/</guid>
-      <description>Step 1. Install Hugo Goto hugo releases and download the appropriate version for your os and architecture.
-Save it somewhere specific as we will be using it in the next step.
-More complete instructions are available at installing hugo
-Step 2. Build the Docs Hugo has its own example site which happens to also be the documentation site you are reading right now.
-Follow the following steps:
- Clone the hugo repository Go into the repo Run hugo in server mode and build the docs Open your browser to http://localhost:1313  Corresponding pseudo commands:</description>
-    </item>
-    
-    <item>
-      <title>Migrate to Hugo from Jekyll</title>
-      <link>https://daryeon.github.io/post/migrate-from-jekyll/</link>
-      <pubDate>Mon, 10 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://daryeon.github.io/post/migrate-from-jekyll/</guid>
-      <description>Move static content to static Jekyll has a rule that any directory not starting with _ will be copied as-is to the _site output. Hugo keeps all static content under static. You should therefore move it all there. With Jekyll, something that looked like
-▾ &amp;lt;root&amp;gt;/ ▾ images/ logo.png  should become
-▾ &amp;lt;root&amp;gt;/ ▾ static/ ▾ images/ logo.png  Additionally, you&amp;rsquo;ll want any files that should reside at the root (such as CNAME) to be moved to static.</description>
     </item>
     
   </channel>

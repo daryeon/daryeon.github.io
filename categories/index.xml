@@ -6,13 +6,13 @@
     <description>Recent content in Categories on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 06 Mar 2019 12:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 May 2019 12:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>index</title>
-      <link>https://daryeon.github.io/categories/index/</link>
-      <pubDate>Wed, 06 Mar 2019 12:09:12 +0800</pubDate>
+      <title>首页</title>
+      <link>https://daryeon.github.io/categories/%E9%A6%96%E9%A1%B5/</link>
+      <pubDate>Mon, 06 May 2019 12:09:12 +0800</pubDate>
       
-      <guid>https://daryeon.github.io/categories/index/</guid>
+      <guid>https://daryeon.github.io/categories/%E9%A6%96%E9%A1%B5/</guid>
       <description></description>
     </item>
     
@@ -22,6 +22,15 @@
       <pubDate>Mon, 04 Mar 2019 16:01:23 +0800</pubDate>
       
       <guid>https://daryeon.github.io/categories/docs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>index</title>
+      <link>https://daryeon.github.io/categories/index/</link>
+      <pubDate>Mon, 04 Mar 2019 16:01:23 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/categories/index/</guid>
       <description></description>
     </item>
     
@@ -37,45 +46,9 @@
     <item>
       <title>shortcodes</title>
       <link>https://daryeon.github.io/categories/shortcodes/</link>
-      <pubDate>Tue, 06 Mar 2018 16:01:23 +0800</pubDate>
+      <pubDate>Sat, 03 Mar 2018 16:01:23 +0800</pubDate>
       
       <guid>https://daryeon.github.io/categories/shortcodes/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>English</title>
-      <link>https://daryeon.github.io/categories/english/</link>
-      <pubDate>Thu, 31 Aug 2017 15:43:48 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/categories/english/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>test</title>
-      <link>https://daryeon.github.io/categories/test/</link>
-      <pubDate>Wed, 30 Aug 2017 15:43:48 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/categories/test/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Development</title>
-      <link>https://daryeon.github.io/categories/development/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://daryeon.github.io/categories/development/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>golang</title>
-      <link>https://daryeon.github.io/categories/golang/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://daryeon.github.io/categories/golang/</guid>
       <description></description>
     </item>
     

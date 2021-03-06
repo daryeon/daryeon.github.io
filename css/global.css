@@ -1,0 +1,7 @@
+.post .post-content code{
+    background: none;
+    padding: 0;
+}
+.post .post-content code span{
+    padding: 2px;
+}
