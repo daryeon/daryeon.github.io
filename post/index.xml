@@ -5,8 +5,17 @@
     <link>https://daryeon.github.io/post/</link>
     <description>Recent content in Posts on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Mon, 06 May 2019 12:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 06 Feb 2020 16:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go的编译命令总结</title>
+      <link>https://daryeon.github.io/post/golang-build-command/</link>
+      <pubDate>Thu, 06 Feb 2020 16:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/golang-build-command/</guid>
+      <description>golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语</description>
+    </item>
+    
     <item>
       <title>常见排序算法Go实现</title>
       <link>https://daryeon.github.io/post/small-common-sort-func/</link>
@@ -54,6 +63,16 @@
   &lt;span style=&#34;color:#a6e22e&#34;&gt;alert&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello, World!&amp;#34;&lt;/span&gt;)
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>(Hu)go Template Primer</title>
+      <link>https://daryeon.github.io/post/goisforlovers/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://daryeon.github.io/post/goisforlovers/</guid>
+      <description>+++ description = &amp;quot;&amp;quot; tags = [ &amp;ldquo;go&amp;rdquo;, &amp;ldquo;golang&amp;rdquo;, &amp;ldquo;templates&amp;rdquo;, &amp;ldquo;themes&amp;rdquo;, &amp;ldquo;development&amp;rdquo;, ] date = &amp;ldquo;2014-04-02&amp;rdquo; categories = [ &amp;ldquo;Development&amp;rdquo;, &amp;ldquo;golang&amp;rdquo;, &amp;ldquo;index&amp;rdquo;, ] +++
+Hugo uses the excellent go html/template library for its template engine. It is an extremely lightweight engine that provides a very small amount of logic. In our experience that it is just the right amount of logic to be able to create a good static website. If you have used other template systems from different languages or frameworks you will find a lot of similarities in go templates.</description>
     </item>
     
   </channel>

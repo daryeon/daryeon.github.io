@@ -5,12 +5,30 @@
     <link>https://daryeon.github.io/tags/</link>
     <description>Recent content in Tags on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Mon, 06 May 2019 12:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 06 Feb 2020 16:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>build</title>
+      <link>https://daryeon.github.io/tags/build/</link>
+      <pubDate>Thu, 06 Feb 2020 16:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/tags/build/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>command</title>
+      <link>https://daryeon.github.io/tags/command/</link>
+      <pubDate>Thu, 06 Feb 2020 16:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/tags/command/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>go</title>
       <link>https://daryeon.github.io/tags/go/</link>
-      <pubDate>Mon, 06 May 2019 12:09:12 +0800</pubDate>
+      <pubDate>Thu, 06 Feb 2020 16:09:12 +0800</pubDate>
       
       <guid>https://daryeon.github.io/tags/go/</guid>
       <description></description>
@@ -19,7 +37,7 @@
     <item>
       <title>golang</title>
       <link>https://daryeon.github.io/tags/golang/</link>
-      <pubDate>Mon, 06 May 2019 12:09:12 +0800</pubDate>
+      <pubDate>Thu, 06 Feb 2020 16:09:12 +0800</pubDate>
       
       <guid>https://daryeon.github.io/tags/golang/</guid>
       <description></description>

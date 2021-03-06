@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -79,6 +79,17 @@
   <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 <![endif]-->
 
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'FnqQug9uRJOY3m-RDZahKQ', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 
 
@@ -388,6 +399,49 @@
 
         </span>
       
+      <a class="post-link" href="/post/golang-build-command/">Go的编译命令总结</a>
+    </h1>
+    
+    <div class="post-meta">
+      <time datetime="2020-02-06" class="post-time">
+        2020-02-06
+      </time>
+      <div class="post-category">
+          <a href="https://daryeon.github.io/categories/%E9%A6%96%E9%A1%B5/"> 首页 </a>
+          <a href="https://daryeon.github.io/categories/command/"> command </a>
+          
+        </div>
+      
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语
+    </div>
+    <div class="read-more">
+      <a href="/post/golang-build-command/" class="read-more-link">阅读全文</a>
+    </div>
+    
+  </div>
+</article>
+
+  
+    <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+        <span class="post-pinned">
+          <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  width="32" height="32">
+  <path d="M682.666667 512V170.666667h42.666666V85.333333H298.666667v85.333334h42.666666v341.333333l-85.333333 85.333333v85.333334h221.866667v256h68.266666v-256H768v-85.333334l-85.333333-85.333333z"></path>
+</svg>
+
+        </span>
+      
       <a class="post-link" href="/post/small-common-sort-func/">常见排序算法Go实现</a>
     </h1>
     
@@ -411,7 +465,7 @@
       常见排序算法Go实现 简介 介绍一些常用的排序，包括：快排、冒泡、选择、插入、归并、堆排序，基于go语言的实现。 快排排序 package main import ( &#34;fmt&#34; ) func main() { arr := []int{3,
     </div>
     <div class="read-more">
-      <a href="/post/small-common-sort-func/" class="read-more-link">Read more</a>
+      <a href="/post/small-common-sort-func/" class="read-more-link">阅读全文</a>
     </div>
     
   </div>
@@ -453,7 +507,7 @@
       GO的一些小细节分享 map 无序性 map存储的数据并不保证有序性，通常可以把key写入一个slice切片，依靠slice切片的有序性来读取map。
     </div>
     <div class="read-more">
-      <a href="/post/go-small-details/" class="read-more-link">Read more</a>
+      <a href="/post/go-small-details/" class="read-more-link">阅读全文</a>
     </div>
     
   </div>
@@ -489,7 +543,7 @@
       <p><a href="https://www.intmath.com/cg5/katex-mathjax-comparison.php">KaTeX and MathJax Comparison Demo, currently processed as KaTex</a></p>
     </div>
     <div class="read-more">
-      <a href="/post/math-preview/" class="read-more-link">Read more</a>
+      <a href="/post/math-preview/" class="read-more-link">阅读全文</a>
     </div>
     
   </div>
@@ -525,46 +579,7 @@
       normal use Note example: {{% notice note %}} A notice disclaimer {{% /notice %}} Result: You could custom title : {{% notice note 笔记 %}} A notice disclaimer {{% /notice %}} tip {{% notice tip %}} A tip disclaimer {{% /tip %}} info {{% notice info %}} A info disclaimer {{% /notice %}} warning {{% notice warning %}} A warning disclaimer {{% /notice %}}
     </div>
     <div class="read-more">
-      <a href="/post/shortcode-notice/" class="read-more-link">Read more</a>
-    </div>
-    
-  </div>
-</article>
-
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/syntax-highlighting/">Syntax Highlighting</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2011-08-30" class="post-time">
-        2011-08-30
-      </time>
-      <div class="post-category">
-          <a href="https://daryeon.github.io/categories/syntax-highlighting/"> Syntax Highlighting </a>
-          <a href="https://daryeon.github.io/categories/index/"> index </a>
-          
-        </div>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      <p>More detail: <a href="https://gohugo.io/content-management/syntax-highlighting/">Syntax Highlighting | Hugo</a></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">helloWorld</span> () {
-  <span style="color:#a6e22e">alert</span>(<span style="color:#e6db74">&#34;Hello, World!&#34;</span>)
-}
-</code></pre></div>
-    </div>
-    <div class="read-more">
-      <a href="/post/syntax-highlighting/" class="read-more-link">Read more</a>
+      <a href="/post/shortcode-notice/" class="read-more-link">阅读全文</a>
     </div>
     
   </div>
@@ -590,6 +605,22 @@
 
   
   
+
+  
+  
+  <nav class="pagination">
+    <ul>
+      
+      <li  class="active" >
+        <a href="/">1</a>
+      </li>
+      
+      <li >
+        <a href="/page/2/">2</a>
+      </li>
+      
+    </ul>
+  </nav>
 
   
   

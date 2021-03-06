@@ -5,8 +5,17 @@
     <link>https://daryeon.github.io/tags/go/</link>
     <description>Recent content in go on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Mon, 06 May 2019 12:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 06 Feb 2020 16:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go的编译命令总结</title>
+      <link>https://daryeon.github.io/post/golang-build-command/</link>
+      <pubDate>Thu, 06 Feb 2020 16:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/golang-build-command/</guid>
+      <description>golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语</description>
+    </item>
+    
     <item>
       <title>常见排序算法Go实现</title>
       <link>https://daryeon.github.io/post/small-common-sort-func/</link>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>command on 大叶的博客</title>
+    <link>https://daryeon.github.io/categories/command/</link>
+    <description>Recent content in command on 大叶的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 06 Feb 2020 16:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/categories/command/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go的编译命令总结</title>
+      <link>https://daryeon.github.io/post/golang-build-command/</link>
+      <pubDate>Thu, 06 Feb 2020 16:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/golang-build-command/</guid>
+      <description>golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语</description>
+    </item>
+    
+  </channel>
+</rss>
