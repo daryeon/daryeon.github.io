@@ -6,7 +6,25 @@
     <description>Recent content in Tags on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 04 Mar 2019 16:01:23 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 06 Mar 2019 12:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>go</title>
+      <link>https://daryeon.github.io/tags/go/</link>
+      <pubDate>Wed, 06 Mar 2019 12:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/tags/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>golang</title>
+      <link>https://daryeon.github.io/tags/golang/</link>
+      <pubDate>Wed, 06 Mar 2019 12:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/tags/golang/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>math</title>
       <link>https://daryeon.github.io/tags/math/</link>
@@ -112,24 +130,6 @@
       <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
       
       <guid>https://daryeon.github.io/tags/development/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>go</title>
-      <link>https://daryeon.github.io/tags/go/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://daryeon.github.io/tags/go/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>golang</title>
-      <link>https://daryeon.github.io/tags/golang/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://daryeon.github.io/tags/golang/</guid>
       <description></description>
     </item>
     

@@ -6,7 +6,16 @@
     <description>Recent content in golang on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 28 Sep 2014 00:00:00 +0000</lastBuildDate><atom:link href="https://daryeon.github.io/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 06 Mar 2019 12:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go的一些小细节</title>
+      <link>https://daryeon.github.io/post/go-small-details/</link>
+      <pubDate>Wed, 06 Mar 2019 12:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-small-details/</guid>
+      <description>GO的一些小细节分享 map 无序性 map存储的数据并不保证有序性，通常可以把key写入一个slice切片，依靠slice切片的有序性来读取map。</description>
+    </item>
+    
     <item>
       <title>Creating a New Theme</title>
       <link>https://daryeon.github.io/post/creating-a-new-theme/</link>
