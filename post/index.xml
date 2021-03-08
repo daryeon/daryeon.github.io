@@ -6,7 +6,16 @@
     <description>Recent content in Posts on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 06 Feb 2020 16:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 11 Mar 2020 16:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GO语言map类型interface{}转换踩坑小记</title>
+      <link>https://daryeon.github.io/post/go-map-to-interface/</link>
+      <pubDate>Wed, 11 Mar 2020 16:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-map-to-interface/</guid>
+      <description>简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &amp;#34;fmt&amp;#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&amp;#34;name&amp;#34;] = &amp;#34;小叶&amp;#34; mapA[&amp;#34;age&amp;#34;] = 25 mapB[&amp;#34;mapA&amp;#34;] = mapA for k,</description>
+    </item>
+    
     <item>
       <title>Go的编译命令总结</title>
       <link>https://daryeon.github.io/post/golang-build-command/</link>

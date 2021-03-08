@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Go的编译命令总结 - 大叶的博客</title>
+  <title>GO语言map类型interface{}转换踩坑小记 - 大叶的博客</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="darye" />
-  <meta name="description" content="golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语" />
+  <meta name="description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &amp;#34;fmt&amp;#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&amp;#34;name&amp;#34;] = &amp;#34;小叶&amp;#34; mapA[&amp;#34;age&amp;#34;] = 25 mapB[&amp;#34;mapA&amp;#34;] = mapA for k," />
 
   <meta name="keywords" content="darye, blog, golang" />
 
@@ -35,7 +35,7 @@
 <meta name="generator" content="Hugo 0.81.0" />
 
 
-<link rel="canonical" href="https://daryeon.github.io/post/golang-build-command/" />
+<link rel="canonical" href="https://daryeon.github.io/post/go-map-to-interface/" />
 
 
 
@@ -61,20 +61,20 @@
 <link rel="stylesheet" href="/css/global.css">
 
 
-<meta property="og:title" content="Go的编译命令总结" />
-<meta property="og:description" content="golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语" />
+<meta property="og:title" content="GO语言map类型interface{}转换踩坑小记" />
+<meta property="og:description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &#34;fmt&#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&#34;name&#34;] = &#34;小叶&#34; mapA[&#34;age&#34;] = 25 mapB[&#34;mapA&#34;] = mapA for k," />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daryeon.github.io/post/golang-build-command/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2020-02-06T16:09:12&#43;08:00" />
-<meta property="article:modified_time" content="2020-02-06T16:09:12&#43;08:00" />
+<meta property="og:url" content="https://daryeon.github.io/post/go-map-to-interface/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-03-11T16:09:12&#43;08:00" />
+<meta property="article:modified_time" content="2020-03-11T16:09:12&#43;08:00" />
 
-<meta itemprop="name" content="Go的编译命令总结">
-<meta itemprop="description" content="golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语"><meta itemprop="datePublished" content="2020-02-06T16:09:12&#43;08:00" />
-<meta itemprop="dateModified" content="2020-02-06T16:09:12&#43;08:00" />
-<meta itemprop="wordCount" content="867">
-<meta itemprop="keywords" content="go,golang,build,command," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Go的编译命令总结"/>
-<meta name="twitter:description" content="golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语"/>
+<meta itemprop="name" content="GO语言map类型interface{}转换踩坑小记">
+<meta itemprop="description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &#34;fmt&#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&#34;name&#34;] = &#34;小叶&#34; mapA[&#34;age&#34;] = 25 mapB[&#34;mapA&#34;] = mapA for k,"><meta itemprop="datePublished" content="2020-03-11T16:09:12&#43;08:00" />
+<meta itemprop="dateModified" content="2020-03-11T16:09:12&#43;08:00" />
+<meta itemprop="wordCount" content="270">
+<meta itemprop="keywords" content="go,map,interface," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GO语言map类型interface{}转换踩坑小记"/>
+<meta name="twitter:description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &#34;fmt&#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&#34;name&#34;] = &#34;小叶&#34; mapA[&#34;age&#34;] = 25 mapB[&#34;mapA&#34;] = mapA for k,"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -388,15 +388,15 @@ if (!doNotTrack) {
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">Go的编译命令总结</h1>
+      <h1 class="post-title">GO语言map类型interface{}转换踩坑小记</h1>
       
       <div class="post-meta">
-        <time datetime="2020-02-06" class="post-time">
-          2020-02-06
+        <time datetime="2020-03-11" class="post-time">
+          2020-03-11
         </time>
         <div class="post-category">
-            <a href="https://daryeon.github.io/categories/%E9%A6%96%E9%A1%B5/"> 首页 </a>
-            <a href="https://daryeon.github.io/categories/command/"> command </a>
+            <a href="https://daryeon.github.io/categories/map/"> map </a>
+            <a href="https://daryeon.github.io/categories/interface/"> interface </a>
             
           </div>
         
@@ -419,11 +419,7 @@ if (!doNotTrack) {
     <li>
       <ul>
         <li><a href="#简介">简介</a></li>
-        <li><a href="#1">理解Go的环境变量</a></li>
-        <li><a href="#2">Go的源码分类</a></li>
-        <li><a href="#3">go run 命令</a></li>
-        <li><a href="#4">go build</a></li>
-        <li><a href="#5">go install</a></li>
+        <li><a href="#代码介绍">代码介绍</a></li>
         <li><a href="#待续">待续···</a></li>
       </ul>
     </li>
@@ -434,47 +430,40 @@ if (!doNotTrack) {
 
     
     <div class="post-content">
-      <p>golang的编译命令总结</p>
-<ul>
-<li><a href="#1">理解Go的环境变量</a></li>
-<li><a href="#2">Go的源码分类</a></li>
-<li><a href="#3">go run 命令</a></li>
-<li><a href="#4">go build</a></li>
-<li><a href="#5">go install</a></li>
-</ul>
-<h3 id="简介">简介</h3>
-<p>go编译命令的一些总结。</p>
-<h3 id="1">理解Go的环境变量</h3>
-<ul>
-<li>GOROOT:Go语言的当前安装目录</li>
-<li>GOPATH:Go语言的工作区的集合，工作区就是我们平时写代码的地方，每个工作区用:隔开(windows是;)</li>
-<li>GOBIN:Go程序的可执行文件的目录</li>
-<li>PATH:系统环境变量，为了方便使用 Go 语言命令和 Go 程序的可执行文件，需要添加其值</li>
-</ul>
-<h3 id="2">Go的源码分类</h3>
-<ul>
-<li>命令源码文件:声明main包并有mian函数的源码文件</li>
-<li>库源码文件:代码包的普通源码文件</li>
-<li>测试源码文件:名称以 _test.go 为后缀的代码文件，并且必须包含 Test 或者 Benchmark 名称前缀的函数</li>
-</ul>
-<h3 id="3">go run 命令</h3>
-<ul>
-<li>专门用来运行命令源码文件的命令，注意，这个命令不是用来运行所有 Go 的源码文件的</li>
-<li>go run 命令只能接受一个命令源码文件以及若干个库源码文件（必须同属于 main 包）作为文件参数，且不能接受测试源码文件。它在执行时会检查源码文件的类型。如果参数中有多个或者没有命令源码文件，那么 go run 命令就只会打印错误提示信息并退出，而不会继续执行</li>
-<li>go run会生成归档文件和可执行文件，并自动执行可执行文件</li>
-</ul>
-<h3 id="4">go build</h3>
-<ul>
-<li>go build 用于编译我们指定的源码文件或代码包以及它们的依赖包。但是注意如果用来编译非命令源码文件，即库源码文件，go build 执行完是不会产生任何结果的。这种情况下，go build 命令只是检查库源码文件的有效性，只会做检查性的编译，而不会输出任何结果文件。</li>
-<li>go build对命令源码文件使用会生成可执行文件。可执行文件生成在当前目录</li>
-</ul>
-<h3 id="5">go install</h3>
-<ul>
-<li>go install 用于编译并安装指定的代码包及它们的依赖包。当指定的代码包的依赖包还没有被编译和安装时，该命令会先去处理依赖包。与 go build 命令一样，传给 go install 命令的代码包参数应该以导入路径的形式提供。并且，go build 命令的绝大多数标记也都可以用于</li>
-<li>go install 命令。实际上，go install 命令只比 go build 命令多做了一件事，即：安装编译后的结果文件到指定目录。</li>
-<li>安装代码包会在当前工作区的 pkg 的平台相关目录下生成归档文件（即 .a 文件）。 安装命令源码文件会在当前工作区的 bin 目录（如果 GOPATH 下有多个工作区，就会放在 GOBIN 目录下）生成可执行文件。</li>
-</ul>
-<h3 id="待续">待续···</h3>
+      <h3 id="简介">简介</h3>
+<p>最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。</p>
+<h3 id="代码介绍">代码介绍</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+    <span style="color:#a6e22e">mapA</span> <span style="color:#f92672">:=</span> make([<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{})
+    <span style="color:#a6e22e">mapB</span> <span style="color:#f92672">:=</span> make([<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{})
+    <span style="color:#a6e22e">mapA</span>[<span style="color:#e6db74">&#34;name&#34;</span>] = <span style="color:#e6db74">&#34;小叶&#34;</span> 
+    <span style="color:#a6e22e">mapA</span>[<span style="color:#e6db74">&#34;age&#34;</span>]  = <span style="color:#ae81ff">25</span>
+    <span style="color:#a6e22e">mapB</span>[<span style="color:#e6db74">&#34;mapA&#34;</span>] = <span style="color:#a6e22e">mapA</span>
+    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">k</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">mapB</span> {
+        (<span style="color:#a6e22e">k</span> <span style="color:#f92672">==</span> ) {
+            <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">v1</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">v</span>{
+                <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">v1</span>)
+            }
+        }
+    }
+    <span style="color:#75715e">//cannot range over v (type interface {})  不能对一个空接口进行range
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//所以再来看看下 上面发生了什么
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//mapA[&#34;name&#34;] = &#34;xiaowen&#34; //字符串被强转成interface{}
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//mapA[&#34;ege&#34;]  = 25        //int被强转成interface{}
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//mapB[&#34;mapA&#34;] = mapA     //mapA被转成interface{}了 取出可以强转成  map[string]interface{}
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">k</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">mapB</span> {
+        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">k</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;mapA&#34;</span>) {
+            <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">v1</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">v</span>.(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{}){
+                <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">v1</span>) 
+            } 
+        }
+    }
+    <span style="color:#75715e">//这里把v再转成mapA的类型即可
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//强类型语言要时刻记着类型的转换奥！
+</span><span style="color:#75715e"></span>}
+</code></pre></div><h3 id="待续">待续···</h3>
 
     </div>
 
@@ -488,7 +477,7 @@ if (!doNotTrack) {
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-      2020-02-06
+      2020-03-11
       
     </span>
   </p>
@@ -506,31 +495,17 @@ if (!doNotTrack) {
     <footer class="post-footer">
       <div class="post-tags">
           <a href="https://daryeon.github.io/tags/go/">go</a>
-          <a href="https://daryeon.github.io/tags/golang/">golang</a>
-          <a href="https://daryeon.github.io/tags/build/">build</a>
-          <a href="https://daryeon.github.io/tags/command/">command</a>
+          <a href="https://daryeon.github.io/tags/map/">map</a>
+          <a href="https://daryeon.github.io/tags/interface/">interface</a>
           
         </div>
 
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/go-map-to-interface/">
-            
-            <i class="iconfont">
-              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
-  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="18" height="18">
-  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
-</svg>
-
-            </i>
-            <span class="prev-text nav-default">GO语言map类型interface{}转换踩坑小记</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
         
-          <a class="next" href="/post/small-common-sort-func/">
-            <span class="next-text nav-default">常见排序算法Go实现</span>
+          <a class="next" href="/post/golang-build-command/">
+            <span class="next-text nav-default">Go的编译命令总结</span>
             <span class="prev-text nav-mobile">下一篇</span>
             
             <i class="iconfont">
