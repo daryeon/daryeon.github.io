@@ -6,117 +6,19 @@
     <description>Recent content on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 11 Mar 2020 16:09:12 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 20 Mar 2020 08:51:34 +0800</lastBuildDate>
     
         <atom:link href="https://daryeon.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>GO语言map类型interface{}转换踩坑小记</title>
-      <link>https://daryeon.github.io/post/go-map-to-interface/</link>
-      <pubDate>Wed, 11 Mar 2020 16:09:12 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/post/go-map-to-interface/</guid>
-      
-        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
-&lt;p&gt;最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。&lt;/p&gt;
-&lt;h3 id=&#34;代码介绍&#34;&gt;代码介绍&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(){
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; make([&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt;{})
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapB&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; make([&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt;{})
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;] = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;小叶&amp;#34;&lt;/span&gt; 
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;]  = &lt;span style=&#34;color:#ae81ff&#34;&gt;25&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapB&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mapA&amp;#34;&lt;/span&gt;] = &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;mapB&lt;/span&gt; {
-        (&lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; ) {
-            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;v1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt;{
-                &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;v1&lt;/span&gt;)
-            }
-        }
-    }
-    &lt;span style=&#34;color:#75715e&#34;&gt;//cannot range over v (type interface {})  不能对一个空接口进行range
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//所以再来看看下 上面发生了什么
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//mapA[&amp;#34;name&amp;#34;] = &amp;#34;xiaowen&amp;#34; //字符串被强转成interface{}
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//mapA[&amp;#34;ege&amp;#34;]  = 25        //int被强转成interface{}
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//mapB[&amp;#34;mapA&amp;#34;] = mapA     //mapA被转成interface{}了 取出可以强转成  map[string]interface{}
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;mapB&lt;/span&gt; {
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mapA&amp;#34;&lt;/span&gt;) {
-            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;v1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt;.(&lt;span style=&#34;color:#66d9ef&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt;{}){
-                &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;v1&lt;/span&gt;) 
-            } 
-        }
-    }
-    &lt;span style=&#34;color:#75715e&#34;&gt;//这里把v再转成mapA的类型即可
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//强类型语言要时刻记着类型的转换奥！
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;待续&#34;&gt;待续···&lt;/h3&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>Go的编译命令总结</title>
-      <link>https://daryeon.github.io/post/golang-build-command/</link>
-      <pubDate>Thu, 06 Feb 2020 16:09:12 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/post/golang-build-command/</guid>
-      
-        <description>&lt;p&gt;golang的编译命令总结&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#1&#34;&gt;理解Go的环境变量&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2&#34;&gt;Go的源码分类&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#3&#34;&gt;go run 命令&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#4&#34;&gt;go build&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#5&#34;&gt;go install&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
-&lt;p&gt;go编译命令的一些总结。&lt;/p&gt;
-&lt;h3 id=&#34;1&#34;&gt;理解Go的环境变量&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;GOROOT:Go语言的当前安装目录&lt;/li&gt;
-&lt;li&gt;GOPATH:Go语言的工作区的集合，工作区就是我们平时写代码的地方，每个工作区用:隔开(windows是;)&lt;/li&gt;
-&lt;li&gt;GOBIN:Go程序的可执行文件的目录&lt;/li&gt;
-&lt;li&gt;PATH:系统环境变量，为了方便使用 Go 语言命令和 Go 程序的可执行文件，需要添加其值&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;2&#34;&gt;Go的源码分类&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;命令源码文件:声明main包并有mian函数的源码文件&lt;/li&gt;
-&lt;li&gt;库源码文件:代码包的普通源码文件&lt;/li&gt;
-&lt;li&gt;测试源码文件:名称以 _test.go 为后缀的代码文件，并且必须包含 Test 或者 Benchmark 名称前缀的函数&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;3&#34;&gt;go run 命令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;专门用来运行命令源码文件的命令，注意，这个命令不是用来运行所有 Go 的源码文件的&lt;/li&gt;
-&lt;li&gt;go run 命令只能接受一个命令源码文件以及若干个库源码文件（必须同属于 main 包）作为文件参数，且不能接受测试源码文件。它在执行时会检查源码文件的类型。如果参数中有多个或者没有命令源码文件，那么 go run 命令就只会打印错误提示信息并退出，而不会继续执行&lt;/li&gt;
-&lt;li&gt;go run会生成归档文件和可执行文件，并自动执行可执行文件&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;4&#34;&gt;go build&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;go build 用于编译我们指定的源码文件或代码包以及它们的依赖包。但是注意如果用来编译非命令源码文件，即库源码文件，go build 执行完是不会产生任何结果的。这种情况下，go build 命令只是检查库源码文件的有效性，只会做检查性的编译，而不会输出任何结果文件。&lt;/li&gt;
-&lt;li&gt;go build对命令源码文件使用会生成可执行文件。可执行文件生成在当前目录&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;5&#34;&gt;go install&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;go install 用于编译并安装指定的代码包及它们的依赖包。当指定的代码包的依赖包还没有被编译和安装时，该命令会先去处理依赖包。与 go build 命令一样，传给 go install 命令的代码包参数应该以导入路径的形式提供。并且，go build 命令的绝大多数标记也都可以用于&lt;/li&gt;
-&lt;li&gt;go install 命令。实际上，go install 命令只比 go build 命令多做了一件事，即：安装编译后的结果文件到指定目录。&lt;/li&gt;
-&lt;li&gt;安装代码包会在当前工作区的 pkg 的平台相关目录下生成归档文件（即 .a 文件）。 安装命令源码文件会在当前工作区的 bin 目录（如果 GOPATH 下有多个工作区，就会放在 GOBIN 目录下）生成可执行文件。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;待续&#34;&gt;待续···&lt;/h3&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>常见排序算法Go实现</title>
+      <title>Go实现常见排序算法</title>
       <link>https://daryeon.github.io/post/small-common-sort-func/</link>
       <pubDate>Mon, 06 May 2019 12:09:12 +0800</pubDate>
       
       <guid>https://daryeon.github.io/post/small-common-sort-func/</guid>
       
-        <description>&lt;p&gt;常见排序算法Go实现&lt;/p&gt;
-&lt;h5 id=&#34;简介&#34;&gt;简介&lt;/h5&gt;
+        <description>&lt;h5 id=&#34;简介&#34;&gt;简介&lt;/h5&gt;
 &lt;p&gt;介绍一些常用的排序，包括：快排、冒泡、选择、插入、归并、堆排序，基于go语言的实现。&lt;/p&gt;
 &lt;h5 id=&#34;快排排序&#34;&gt;快排排序&lt;/h5&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;
@@ -382,7 +284,8 @@
       
       <guid>https://daryeon.github.io/post/go-small-details/</guid>
       
-        <description>&lt;p&gt;GO的一些小细节分享&lt;/p&gt;
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;GO的一些小细节分享。&lt;/p&gt;
 &lt;h5 id=&#34;map&#34;&gt;map&lt;/h5&gt;
 &lt;ol&gt;
 &lt;li&gt;无序性
@@ -618,6 +521,130 @@ defer2由于返回的不是匿名变量，所以不会创建中间变量，defer
 &lt;li&gt;web服务端开发，Phper, Gopher。&lt;/li&gt;
 &lt;li&gt;兴趣爱好广泛，喜欢Go，算法等。平时喜欢做 LeetCode 算法题。&lt;/li&gt;
 &lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>简单总结下并发编程模式</title>
+      <link>https://daryeon.github.io/post/go-bingfa-programing/</link>
+      <pubDate>Fri, 20 Mar 2020 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-bingfa-programing/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;简单介绍自己对并发编程模式的一些理解。&lt;/p&gt;
+&lt;h3 id=&#34;并发与并行&#34;&gt;并发与并行&lt;/h3&gt;
+&lt;p&gt;并发是指多个程序在一段时间内同时运行，而并行是指多个程序在某一时刻同时运行。所以并行也可以看做并行的特殊实例。并行也只能发生于多核计算机或者分布式系统中，试想，如果单台机器只有cpu只有单核，如何同一时刻运行多个程序呢？
+接下来，总结下常见的并发编程模式。&lt;/p&gt;
+&lt;h3 id=&#34;多进程&#34;&gt;多进程&lt;/h3&gt;
+&lt;p&gt;进程是Unix衍生操作系统的根本，因为所有的代码都是在进程中执行的。也可以说一个程序的执行称为一个进程。
+一个进程可以使用系统调用fork创建若干个新的进程，也称为子进程，因此，这个进程就是新创建进程的父进程。每个子进程都是父进程的一个副本，每一个副本都是独立的，也就是说，在fork调用之前都会被复制到各个子进程副本内，而副本内的操作对其兄弟进程和父进程是不可见的。这也就是多进程的进程隔离性，正是因其隔离性，可以尽量减少线程加锁/解锁的影响，极大提高性能。但是多进程之间通信比较复杂，需要利用管道，信号，消息队列等进行通信，并且调度开销比较大。&lt;/p&gt;
+&lt;h3 id=&#34;多线程&#34;&gt;多线程&lt;/h3&gt;
+&lt;p&gt;线程其实就是进程的一个控制流，每个进程都至少包含一个线程，这个线程也被称为主线程。一个进程内的所有线程是共享资源的，创建线程的代价比进程要小很多，apache使用的便是多线程并发处理。由于资源是共享的，所以不可避免的带来加锁解锁的复杂度，业务逻辑代码也因此变得复杂，同时，加锁解锁是非常消耗资源的。&lt;/p&gt;
+&lt;h3 id=&#34;协程&#34;&gt;协程&lt;/h3&gt;
+&lt;p&gt;协程，也称用户态线程，线程的调度不经过系统内核，减少了大量的IO操作，所以性能很高。协程一般都是由语言层面进行支持，比如swoole支持协程。其原理就是多个用户线程和一个内核线程进行绑定，通过yeild进行切换上下文。协程的缺点就是如果某段程序堵塞，其他代码也就得不到执行。另外，由于协程都是语言第三方库进行实现的，在兼容性上稍弱，稳定性不高。&lt;/p&gt;
+&lt;h3 id=&#34;go程&#34;&gt;Go程&lt;/h3&gt;
+&lt;p&gt;GO语言的Goroutine,它是结合线程和协程的产物。简单来说，就是多个Go程绑定多个线程，也称为两极态线程，内部其实很复杂，GO程逻辑关联对应多个P而每个个P又唯一关联一个线程，通过调度器来切换执行GO程。GO程是通过chanel通信的，chanel类似于消息队列，保证了并发的安全性。GO语言直接从语言层面对类似于协程的支持进行并发编程。&lt;/p&gt;
+&lt;h3 id=&#34;异步回调&#34;&gt;异步回调&lt;/h3&gt;
+&lt;p&gt;典型的node语言，通过单线程异步事件回调无阻塞，本质就是不断在事件队列中添加事件，不断循环这个事件队列进行事件处理，性能非常高。但是缺点是，如果某个事件堵塞掉了，整个程序就完了，因为它是单线程的。还有就是回调编程不断的callback，嵌套层级过深(可以利用promise进行流程控制减少回调嵌套)。还有一点就是node程序受制于V8的效能。&lt;/p&gt;
+&lt;h3 id=&#34;待续&#34;&gt;待续···&lt;/h3&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>GO语言map类型interface{}转换踩坑小记</title>
+      <link>https://daryeon.github.io/post/go-map-to-interface/</link>
+      <pubDate>Wed, 11 Mar 2020 16:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-map-to-interface/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。&lt;/p&gt;
+&lt;h3 id=&#34;代码介绍&#34;&gt;代码介绍&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(){
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; make([&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt;{})
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapB&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; make([&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt;{})
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;] = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;小叶&amp;#34;&lt;/span&gt; 
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;]  = &lt;span style=&#34;color:#ae81ff&#34;&gt;25&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapB&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mapA&amp;#34;&lt;/span&gt;] = &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;mapB&lt;/span&gt; {
+        (&lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; ) {
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;v1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt;{
+                &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;v1&lt;/span&gt;)
+            }
+        }
+    }
+    &lt;span style=&#34;color:#75715e&#34;&gt;//cannot range over v (type interface {})  不能对一个空接口进行range
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//所以再来看看下 上面发生了什么
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//mapA[&amp;#34;name&amp;#34;] = &amp;#34;xiaowen&amp;#34; //字符串被强转成interface{}
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//mapA[&amp;#34;ege&amp;#34;]  = 25        //int被强转成interface{}
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//mapB[&amp;#34;mapA&amp;#34;] = mapA     //mapA被转成interface{}了 取出可以强转成  map[string]interface{}
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;mapB&lt;/span&gt; {
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mapA&amp;#34;&lt;/span&gt;) {
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;v1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt;.(&lt;span style=&#34;color:#66d9ef&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt;{}){
+                &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;v1&lt;/span&gt;) 
+            } 
+        }
+    }
+    &lt;span style=&#34;color:#75715e&#34;&gt;//这里把v再转成mapA的类型即可
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//强类型语言要时刻记着类型的转换奥！
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;待续&#34;&gt;待续···&lt;/h3&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Go的编译命令总结</title>
+      <link>https://daryeon.github.io/post/golang-build-command/</link>
+      <pubDate>Thu, 06 Feb 2020 16:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/golang-build-command/</guid>
+      
+        <description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#1&#34;&gt;理解Go的环境变量&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2&#34;&gt;Go的源码分类&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#3&#34;&gt;go run 命令&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#4&#34;&gt;go build&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#5&#34;&gt;go install&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;go编译命令的一些总结。&lt;/p&gt;
+&lt;h3 id=&#34;1&#34;&gt;理解Go的环境变量&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;GOROOT:Go语言的当前安装目录&lt;/li&gt;
+&lt;li&gt;GOPATH:Go语言的工作区的集合，工作区就是我们平时写代码的地方，每个工作区用:隔开(windows是;)&lt;/li&gt;
+&lt;li&gt;GOBIN:Go程序的可执行文件的目录&lt;/li&gt;
+&lt;li&gt;PATH:系统环境变量，为了方便使用 Go 语言命令和 Go 程序的可执行文件，需要添加其值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2&#34;&gt;Go的源码分类&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;命令源码文件:声明main包并有mian函数的源码文件&lt;/li&gt;
+&lt;li&gt;库源码文件:代码包的普通源码文件&lt;/li&gt;
+&lt;li&gt;测试源码文件:名称以 _test.go 为后缀的代码文件，并且必须包含 Test 或者 Benchmark 名称前缀的函数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3&#34;&gt;go run 命令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;专门用来运行命令源码文件的命令，注意，这个命令不是用来运行所有 Go 的源码文件的&lt;/li&gt;
+&lt;li&gt;go run 命令只能接受一个命令源码文件以及若干个库源码文件（必须同属于 main 包）作为文件参数，且不能接受测试源码文件。它在执行时会检查源码文件的类型。如果参数中有多个或者没有命令源码文件，那么 go run 命令就只会打印错误提示信息并退出，而不会继续执行&lt;/li&gt;
+&lt;li&gt;go run会生成归档文件和可执行文件，并自动执行可执行文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;4&#34;&gt;go build&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;go build 用于编译我们指定的源码文件或代码包以及它们的依赖包。但是注意如果用来编译非命令源码文件，即库源码文件，go build 执行完是不会产生任何结果的。这种情况下，go build 命令只是检查库源码文件的有效性，只会做检查性的编译，而不会输出任何结果文件。&lt;/li&gt;
+&lt;li&gt;go build对命令源码文件使用会生成可执行文件。可执行文件生成在当前目录&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;5&#34;&gt;go install&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;go install 用于编译并安装指定的代码包及它们的依赖包。当指定的代码包的依赖包还没有被编译和安装时，该命令会先去处理依赖包。与 go build 命令一样，传给 go install 命令的代码包参数应该以导入路径的形式提供。并且，go build 命令的绝大多数标记也都可以用于&lt;/li&gt;
+&lt;li&gt;go install 命令。实际上，go install 命令只比 go build 命令多做了一件事，即：安装编译后的结果文件到指定目录。&lt;/li&gt;
+&lt;li&gt;安装代码包会在当前工作区的 pkg 的平台相关目录下生成归档文件（即 .a 文件）。 安装命令源码文件会在当前工作区的 bin 目录（如果 GOPATH 下有多个工作区，就会放在 GOBIN 目录下）生成可执行文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;待续&#34;&gt;待续···&lt;/h3&gt;
 </description>
       
     </item>

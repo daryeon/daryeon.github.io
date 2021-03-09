@@ -8,12 +8,12 @@
     <language>zh-cn</language>
     <lastBuildDate>Mon, 06 May 2019 12:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/quicksort/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>常见排序算法Go实现</title>
+      <title>Go实现常见排序算法</title>
       <link>https://daryeon.github.io/post/small-common-sort-func/</link>
       <pubDate>Mon, 06 May 2019 12:09:12 +0800</pubDate>
       
       <guid>https://daryeon.github.io/post/small-common-sort-func/</guid>
-      <description>常见排序算法Go实现 简介 介绍一些常用的排序，包括：快排、冒泡、选择、插入、归并、堆排序，基于go语言的实现。 快排排序 package main import ( &amp;#34;fmt&amp;#34; ) func main() { arr := []int{3,</description>
+      <description>简介 介绍一些常用的排序，包括：快排、冒泡、选择、插入、归并、堆排序，基于go语言的实现。 快排排序 package main import ( &amp;#34;fmt&amp;#34; ) func main() { arr := []int{3, 2, 4, 2, 1, 5, 6, 7, 5, 6, 7,</description>
     </item>
     
   </channel>

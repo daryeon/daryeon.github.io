@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="darye" />
-  <meta name="description" content="golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语" />
+  <meta name="description" content="理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语言的当前安装目录 GOPAT" />
 
   <meta name="keywords" content="darye, blog, golang" />
 
@@ -62,19 +62,19 @@
 
 
 <meta property="og:title" content="Go的编译命令总结" />
-<meta property="og:description" content="golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语" />
+<meta property="og:description" content="理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语言的当前安装目录 GOPAT" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://daryeon.github.io/post/golang-build-command/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2020-02-06T16:09:12&#43;08:00" />
 <meta property="article:modified_time" content="2020-02-06T16:09:12&#43;08:00" />
 
 <meta itemprop="name" content="Go的编译命令总结">
-<meta itemprop="description" content="golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语"><meta itemprop="datePublished" content="2020-02-06T16:09:12&#43;08:00" />
+<meta itemprop="description" content="理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语言的当前安装目录 GOPAT"><meta itemprop="datePublished" content="2020-02-06T16:09:12&#43;08:00" />
 <meta itemprop="dateModified" content="2020-02-06T16:09:12&#43;08:00" />
-<meta itemprop="wordCount" content="867">
+<meta itemprop="wordCount" content="854">
 <meta itemprop="keywords" content="go,golang,build,command," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go的编译命令总结"/>
-<meta name="twitter:description" content="golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语"/>
+<meta name="twitter:description" content="理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语言的当前安装目录 GOPAT"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -434,8 +434,7 @@ if (!doNotTrack) {
 
     
     <div class="post-content">
-      <p>golang的编译命令总结</p>
-<ul>
+      <ul>
 <li><a href="#1">理解Go的环境变量</a></li>
 <li><a href="#2">Go的源码分类</a></li>
 <li><a href="#3">go run 命令</a></li>
@@ -529,8 +528,8 @@ if (!doNotTrack) {
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
         
-          <a class="next" href="/post/small-common-sort-func/">
-            <span class="next-text nav-default">常见排序算法Go实现</span>
+          <a class="next" href="/post/math-preview/">
+            <span class="next-text nav-default">Math Preview</span>
             <span class="prev-text nav-mobile">下一篇</span>
             
             <i class="iconfont">

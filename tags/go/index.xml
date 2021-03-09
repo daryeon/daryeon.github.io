@@ -6,7 +6,34 @@
     <description>Recent content in go on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 11 Mar 2020 16:09:12 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 20 Mar 2020 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go实现常见排序算法</title>
+      <link>https://daryeon.github.io/post/small-common-sort-func/</link>
+      <pubDate>Mon, 06 May 2019 12:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/small-common-sort-func/</guid>
+      <description>简介 介绍一些常用的排序，包括：快排、冒泡、选择、插入、归并、堆排序，基于go语言的实现。 快排排序 package main import ( &amp;#34;fmt&amp;#34; ) func main() { arr := []int{3, 2, 4, 2, 1, 5, 6, 7, 5, 6, 7,</description>
+    </item>
+    
+    <item>
+      <title>Go的一些小细节</title>
+      <link>https://daryeon.github.io/post/go-small-details/</link>
+      <pubDate>Wed, 06 Mar 2019 12:09:12 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-small-details/</guid>
+      <description>简介 GO的一些小细节分享。 map 无序性 map存储的数据并不保证有序性，通常可以把key写入一个slice切片，依靠slice切片的有序性来读取m</description>
+    </item>
+    
+    <item>
+      <title>简单总结下并发编程模式</title>
+      <link>https://daryeon.github.io/post/go-bingfa-programing/</link>
+      <pubDate>Fri, 20 Mar 2020 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-bingfa-programing/</guid>
+      <description>简介 简单介绍自己对并发编程模式的一些理解。 并发与并行 并发是指多个程序在一段时间内同时运行，而并行是指多个程序在某一时刻同时运行。所以并行也可</description>
+    </item>
+    
     <item>
       <title>GO语言map类型interface{}转换踩坑小记</title>
       <link>https://daryeon.github.io/post/go-map-to-interface/</link>
@@ -22,25 +49,7 @@
       <pubDate>Thu, 06 Feb 2020 16:09:12 +0800</pubDate>
       
       <guid>https://daryeon.github.io/post/golang-build-command/</guid>
-      <description>golang的编译命令总结 理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语</description>
-    </item>
-    
-    <item>
-      <title>常见排序算法Go实现</title>
-      <link>https://daryeon.github.io/post/small-common-sort-func/</link>
-      <pubDate>Mon, 06 May 2019 12:09:12 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/post/small-common-sort-func/</guid>
-      <description>常见排序算法Go实现 简介 介绍一些常用的排序，包括：快排、冒泡、选择、插入、归并、堆排序，基于go语言的实现。 快排排序 package main import ( &amp;#34;fmt&amp;#34; ) func main() { arr := []int{3,</description>
-    </item>
-    
-    <item>
-      <title>Go的一些小细节</title>
-      <link>https://daryeon.github.io/post/go-small-details/</link>
-      <pubDate>Wed, 06 Mar 2019 12:09:12 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/post/go-small-details/</guid>
-      <description>GO的一些小细节分享 map 无序性 map存储的数据并不保证有序性，通常可以把key写入一个slice切片，依靠slice切片的有序性来读取map。</description>
+      <description>理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语言的当前安装目录 GOPAT</description>
     </item>
     
   </channel>
