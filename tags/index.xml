@@ -89,29 +89,11 @@
     </item>
     
     <item>
-      <title>math</title>
-      <link>https://daryeon.github.io/tags/math/</link>
-      <pubDate>Mon, 04 Mar 2019 16:01:23 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/tags/math/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>preview</title>
       <link>https://daryeon.github.io/tags/preview/</link>
-      <pubDate>Mon, 04 Mar 2019 16:01:23 +0800</pubDate>
+      <pubDate>Sat, 03 Mar 2018 16:01:23 +0800</pubDate>
       
       <guid>https://daryeon.github.io/tags/preview/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>tag-6</title>
-      <link>https://daryeon.github.io/tags/tag-6/</link>
-      <pubDate>Mon, 04 Mar 2019 16:01:23 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/tags/tag-6/</guid>
       <description></description>
     </item>
     
@@ -125,20 +107,29 @@
     </item>
     
     <item>
-      <title>Syntax Highlighting</title>
-      <link>https://daryeon.github.io/tags/syntax-highlighting/</link>
-      <pubDate>Tue, 30 Aug 2011 16:01:23 +0800</pubDate>
+      <title>tag-6</title>
+      <link>https://daryeon.github.io/tags/tag-6/</link>
+      <pubDate>Sat, 03 Mar 2018 16:01:23 +0800</pubDate>
       
-      <guid>https://daryeon.github.io/tags/syntax-highlighting/</guid>
+      <guid>https://daryeon.github.io/tags/tag-6/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>tag-5</title>
-      <link>https://daryeon.github.io/tags/tag-5/</link>
-      <pubDate>Tue, 30 Aug 2011 16:01:23 +0800</pubDate>
+      <title>autoload</title>
+      <link>https://daryeon.github.io/tags/autoload/</link>
+      <pubDate>Mon, 15 Jan 2018 08:51:34 +0800</pubDate>
       
-      <guid>https://daryeon.github.io/tags/tag-5/</guid>
+      <guid>https://daryeon.github.io/tags/autoload/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>composer</title>
+      <link>https://daryeon.github.io/tags/composer/</link>
+      <pubDate>Mon, 15 Jan 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/tags/composer/</guid>
       <description></description>
     </item>
     

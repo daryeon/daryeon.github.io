@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>composer on 大叶的博客</title>
+    <link>https://daryeon.github.io/tags/composer/</link>
+    <description>Recent content in composer on 大叶的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 15 Jan 2018 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/composer/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Composer和自动加载学习分享</title>
+      <link>https://daryeon.github.io/post/composer-and-aotuload/</link>
+      <pubDate>Mon, 15 Jan 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/composer-and-aotuload/</guid>
+      <description>简介 分享composer和自动加载相关介绍 概念 composer：是PHP用来管理依赖（dependency）关系的工具 对于现代语言而言，包管</description>
+    </item>
+    
+  </channel>
+</rss>
