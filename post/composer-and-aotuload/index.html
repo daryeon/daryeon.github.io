@@ -71,7 +71,7 @@
 <meta itemprop="name" content="Composer和自动加载学习分享">
 <meta itemprop="description" content="简介 分享composer和自动加载相关介绍 概念 composer：是PHP用来管理依赖（dependency）关系的工具 对于现代语言而言，包管"><meta itemprop="datePublished" content="2018-01-15T08:51:34&#43;08:00" />
 <meta itemprop="dateModified" content="2018-01-15T08:51:34&#43;08:00" />
-<meta itemprop="wordCount" content="2847">
+<meta itemprop="wordCount" content="2848">
 <meta itemprop="keywords" content="composer,autoload," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Composer和自动加载学习分享"/>
 <meta name="twitter:description" content="简介 分享composer和自动加载相关介绍 概念 composer：是PHP用来管理依赖（dependency）关系的工具 对于现代语言而言，包管"/>
@@ -449,17 +449,17 @@ if (!doNotTrack) {
 </ul>
 <ol>
 <li>创始人jordi boggiano</li>
-<li>创建于2011年4月，直到2016年4月才发布正式版
-<img src="/images/composer_and_autoload/1_20210316030453.png" alt="作者简介"></li>
+<li>创建于2011年4月，直到2016年4月才发布正式版</li>
 </ol>
+<p><img src="/images/composer_and_autoload/1_20210316030453.png" alt="作者简介"></p>
 <h3 id="安装">安装</h3>
 <ol>
 <li>linux下 <code>curl -sS https://getcomposer.org/installer | php</code> （全局安装）</li>
 <li>windows下，下载exe文件，一键安装即可（全局安装）</li>
 <li>局部安装。只下载composer.phar文件，调用php命令执行（需要注意php版本需大于5.3，已安装openssl扩展才能正常使用）</li>
-<li>检测是否安装成功，命令行输入composer或php composer.phar来检测是否安装成功
-<img src="/images/composer_and_autoload/2_20210316032201.png" alt="安装依赖运行过程"></li>
+<li>检测是否安装成功，命令行输入composer或php composer.phar来检测是否安装成功</li>
 </ol>
+<p><img src="/images/composer_and_autoload/2_20210316032201.png" alt="安装依赖运行过程"></p>
 <h3 id="常用命令">常用命令</h3>
 <ol>
 <li>composer install 安装命令（读取composer.json，安装到vendor目录）</li>
@@ -531,9 +531,9 @@ if (!doNotTrack) {
 <h3 id="应用场景">应用场景</h3>
 <ol>
 <li>主流的php框架都默认使用composer来管理类库，例如：laravel、yii2、thinkphp、ci3.1版本也可以配置composer，但默认是关闭的。</li>
-<li>如果框架默认没有配置项，也可以手动安装composer到框架
-<img src="/images/composer_and_autoload/5_20210316034741.png" alt="自研框架使用composer管理类库"></li>
+<li>如果框架默认没有配置项，也可以手动安装composer到框架；</li>
 </ol>
+<p><img src="/images/composer_and_autoload/5_20210316034741.png" alt="自研框架使用composer管理类库"></p>
 <h3 id="使用技巧">使用技巧</h3>
 <ul>
 <li>在github上看到一个类库很好用，又懒得查是否有上传到composer，可以看该类库下面是否有composer.json文件。点击进去就可以看到对应的包名和详细信息</li>
@@ -600,9 +600,9 @@ if (!doNotTrack) {
 </ol>
 <ul>
 <li>需要什么就require进来</li>
-<li>自己写__autoload()加载类库
-<img src="/images/composer_and_autoload/6_20210316042105.png" alt="自定义自动加载函数"></li>
+<li>自己写__autoload()加载类库</li>
 </ul>
+<p><img src="/images/composer_and_autoload/6_20210316042105.png" alt="自定义自动加载函数"></p>
 <h3 id="composer自动加载机制">composer自动加载机制</h3>
 <ol>
 <li>每一个可以使用composer安装的类库，都必须包含一个composer.json文件。（包含描述，依赖，路径和命名空间的映射关系）</li>
@@ -617,9 +617,9 @@ Framework Interoperability Group（框架可互用性小组），简称FIG，成
 <li>PSR-1（Basic Coding Standard）基础编码标准</li>
 <li>PSR-2（Coding Style Guide）编码风格向导</li>
 <li>PSR-3（Logger Interface）日志接口规范</li>
-<li>PSR-4（Improved Autoloading）自动加载优化标准
-<img src="/images/composer_and_autoload/7_20210316043717.png" alt="PSR-0和PSR-4的区别"></li>
+<li>PSR-4（Improved Autoloading）自动加载优化标准</li>
 </ol>
+<p><img src="/images/composer_and_autoload/7_20210316043717.png" alt="PSR-0和PSR-4的区别"></p>
 <p><a href="https://learnku.com/docs/psr">查看更多规范</a></p>
 <h3 id="使用composer安装自己的包">使用composer安装自己的包</h3>
 <ol>
