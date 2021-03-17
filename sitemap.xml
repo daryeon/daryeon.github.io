@@ -170,55 +170,6 @@
   </url>
   
   <url>
-    <loc>https://daryeon.github.io/categories/docs/</loc>
-    <lastmod>2018-03-04T16:01:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://daryeon.github.io/categories/index/</loc>
-    <lastmod>2018-03-04T16:01:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://daryeon.github.io/tags/preview/</loc>
-    <lastmod>2018-03-04T16:01:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://daryeon.github.io/tags/shortcodes/</loc>
-    <lastmod>2018-03-04T16:01:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://daryeon.github.io/categories/shortcodes/</loc>
-    <lastmod>2018-03-04T16:01:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://daryeon.github.io/post/shortcode-notice/</loc>
-    <lastmod>2018-03-04T16:01:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://daryeon.github.io/tags/tag-6/</loc>
-    <lastmod>2018-03-04T16:01:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://daryeon.github.io/tags/encode/</loc>
     <lastmod>2018-02-03T08:51:34+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -277,6 +228,55 @@
   <url>
     <loc>https://daryeon.github.io/categories/php/</loc>
     <lastmod>2018-01-15T08:51:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/categories/docs/</loc>
+    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/categories/index/</loc>
+    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/tags/preview/</loc>
+    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/tags/shortcodes/</loc>
+    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/categories/shortcodes/</loc>
+    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/post/shortcode-notice/</loc>
+    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/tags/tag-6/</loc>
+    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

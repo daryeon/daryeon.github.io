@@ -568,7 +568,7 @@ defer2由于返回的不是匿名变量，所以不会创建中间变量，defer
 &lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(){
     &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; make([&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt;{})
     &lt;span style=&#34;color:#a6e22e&#34;&gt;mapB&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; make([&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt;{})
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;] = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;小叶&amp;#34;&lt;/span&gt; 
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;] = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;大叶&amp;#34;&lt;/span&gt; 
     &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;]  = &lt;span style=&#34;color:#ae81ff&#34;&gt;25&lt;/span&gt;
     &lt;span style=&#34;color:#a6e22e&#34;&gt;mapB&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mapA&amp;#34;&lt;/span&gt;] = &lt;span style=&#34;color:#a6e22e&#34;&gt;mapA&lt;/span&gt;
     &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;mapB&lt;/span&gt; {
@@ -645,44 +645,6 @@ defer2由于返回的不是匿名变量，所以不会创建中间变量，defer
 &lt;li&gt;安装代码包会在当前工作区的 pkg 的平台相关目录下生成归档文件（即 .a 文件）。 安装命令源码文件会在当前工作区的 bin 目录（如果 GOPATH 下有多个工作区，就会放在 GOBIN 目录下）生成可执行文件。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;待续&#34;&gt;待续···&lt;/h3&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>Shortcodes Notice Preview</title>
-      <link>https://daryeon.github.io/post/shortcode-notice/</link>
-      <pubDate>Sat, 03 Mar 2018 16:01:23 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/post/shortcode-notice/</guid>
-      
-        <description>&lt;h2 id=&#34;normal-use&#34;&gt;normal use&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;Note&lt;/code&gt; example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice note %}}
-A notice disclaimer
-{{% /notice %}}
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Result:&lt;/strong&gt;&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;You could &lt;strong&gt;custom title&lt;/strong&gt; :&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice note 笔记 %}}
-A notice disclaimer
-{{% /notice %}}
-&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;tip&#34;&gt;tip&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice tip %}}
-A tip disclaimer
-{{% /tip %}}
-&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;info&#34;&gt;info&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice info %}}
-A info disclaimer
-{{% /notice %}}
-&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;warning&#34;&gt;warning&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice warning %}}
-A warning disclaimer
-{{% /notice %}}
-&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
 </description>
       
     </item>
@@ -917,6 +879,44 @@ Framework Interoperability Group（框架可互用性小组），简称FIG，成
 &lt;li&gt;发布到packagist &lt;a href=&#34;https://packagist.org/&#34;&gt;https://packagist.org/&lt;/a&gt; （注册-发布-收录）&lt;/li&gt;
 &lt;li&gt;发布成功后，等待一会（国内镜像是一定时间同步一次）就可以在本地使用composer命令下载自己的包了&lt;/li&gt;
 &lt;/ol&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Shortcodes Notice Preview</title>
+      <link>https://daryeon.github.io/post/shortcode-notice/</link>
+      <pubDate>Mon, 01 Jan 2018 16:01:23 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/shortcode-notice/</guid>
+      
+        <description>&lt;h2 id=&#34;normal-use&#34;&gt;normal use&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;Note&lt;/code&gt; example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice note %}}
+A notice disclaimer
+{{% /notice %}}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Result:&lt;/strong&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;You could &lt;strong&gt;custom title&lt;/strong&gt; :&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice note 笔记 %}}
+A notice disclaimer
+{{% /notice %}}
+&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;tip&#34;&gt;tip&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice tip %}}
+A tip disclaimer
+{{% /tip %}}
+&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;info&#34;&gt;info&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice info %}}
+A info disclaimer
+{{% /notice %}}
+&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;warning&#34;&gt;warning&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice warning %}}
+A warning disclaimer
+{{% /notice %}}
+&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
 </description>
       
     </item>

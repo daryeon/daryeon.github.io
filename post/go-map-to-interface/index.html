@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="darye" />
-  <meta name="description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &amp;#34;fmt&amp;#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&amp;#34;name&amp;#34;] = &amp;#34;小叶&amp;#34; mapA[&amp;#34;age&amp;#34;] = 25 mapB[&amp;#34;mapA&amp;#34;] = mapA for k," />
+  <meta name="description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &amp;#34;fmt&amp;#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&amp;#34;name&amp;#34;] = &amp;#34;大叶&amp;#34; mapA[&amp;#34;age&amp;#34;] = 25 mapB[&amp;#34;mapA&amp;#34;] = mapA for k," />
 
   <meta name="keywords" content="darye, blog, golang" />
 
@@ -62,19 +62,19 @@
 
 
 <meta property="og:title" content="GO语言map类型interface{}转换踩坑小记" />
-<meta property="og:description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &#34;fmt&#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&#34;name&#34;] = &#34;小叶&#34; mapA[&#34;age&#34;] = 25 mapB[&#34;mapA&#34;] = mapA for k," />
+<meta property="og:description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &#34;fmt&#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&#34;name&#34;] = &#34;大叶&#34; mapA[&#34;age&#34;] = 25 mapB[&#34;mapA&#34;] = mapA for k," />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://daryeon.github.io/post/go-map-to-interface/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2020-03-11T16:09:12&#43;08:00" />
 <meta property="article:modified_time" content="2020-03-11T16:09:12&#43;08:00" />
 
 <meta itemprop="name" content="GO语言map类型interface{}转换踩坑小记">
-<meta itemprop="description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &#34;fmt&#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&#34;name&#34;] = &#34;小叶&#34; mapA[&#34;age&#34;] = 25 mapB[&#34;mapA&#34;] = mapA for k,"><meta itemprop="datePublished" content="2020-03-11T16:09:12&#43;08:00" />
+<meta itemprop="description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &#34;fmt&#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&#34;name&#34;] = &#34;大叶&#34; mapA[&#34;age&#34;] = 25 mapB[&#34;mapA&#34;] = mapA for k,"><meta itemprop="datePublished" content="2020-03-11T16:09:12&#43;08:00" />
 <meta itemprop="dateModified" content="2020-03-11T16:09:12&#43;08:00" />
 <meta itemprop="wordCount" content="270">
 <meta itemprop="keywords" content="go,map,interface," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="GO语言map类型interface{}转换踩坑小记"/>
-<meta name="twitter:description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &#34;fmt&#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&#34;name&#34;] = &#34;小叶&#34; mapA[&#34;age&#34;] = 25 mapB[&#34;mapA&#34;] = mapA for k,"/>
+<meta name="twitter:description" content="简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &#34;fmt&#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&#34;name&#34;] = &#34;大叶&#34; mapA[&#34;age&#34;] = 25 mapB[&#34;mapA&#34;] = mapA for k,"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -446,7 +446,7 @@ if (!doNotTrack) {
 <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
     <span style="color:#a6e22e">mapA</span> <span style="color:#f92672">:=</span> make([<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{})
     <span style="color:#a6e22e">mapB</span> <span style="color:#f92672">:=</span> make([<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{})
-    <span style="color:#a6e22e">mapA</span>[<span style="color:#e6db74">&#34;name&#34;</span>] = <span style="color:#e6db74">&#34;小叶&#34;</span> 
+    <span style="color:#a6e22e">mapA</span>[<span style="color:#e6db74">&#34;name&#34;</span>] = <span style="color:#e6db74">&#34;大叶&#34;</span> 
     <span style="color:#a6e22e">mapA</span>[<span style="color:#e6db74">&#34;age&#34;</span>]  = <span style="color:#ae81ff">25</span>
     <span style="color:#a6e22e">mapB</span>[<span style="color:#e6db74">&#34;mapA&#34;</span>] = <span style="color:#a6e22e">mapA</span>
     <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">k</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">mapB</span> {

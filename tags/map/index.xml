@@ -13,7 +13,7 @@
       <pubDate>Wed, 11 Mar 2020 16:09:12 +0800</pubDate>
       
       <guid>https://daryeon.github.io/post/go-map-to-interface/</guid>
-      <description>简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &amp;#34;fmt&amp;#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&amp;#34;name&amp;#34;] = &amp;#34;小叶&amp;#34; mapA[&amp;#34;age&amp;#34;] = 25 mapB[&amp;#34;mapA&amp;#34;] = mapA for k,</description>
+      <description>简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &amp;#34;fmt&amp;#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&amp;#34;name&amp;#34;] = &amp;#34;大叶&amp;#34; mapA[&amp;#34;age&amp;#34;] = 25 mapB[&amp;#34;mapA&amp;#34;] = mapA for k,</description>
     </item>
     
   </channel>
