@@ -220,27 +220,34 @@
   
   <url>
     <loc>https://daryeon.github.io/tags/autoload/</loc>
-    <lastmod>2018-01-15T08:51:34+08:00</lastmod>
+    <lastmod>2018-02-03T08:51:34+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://daryeon.github.io/tags/composer/</loc>
-    <lastmod>2018-01-15T08:51:34+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://daryeon.github.io/post/composer-and-aotuload/</loc>
-    <lastmod>2018-01-15T08:51:34+08:00</lastmod>
+    <lastmod>2018-02-03T08:51:34+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://daryeon.github.io/categories/php/</loc>
+    <lastmod>2018-02-03T08:51:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/post/encode-introduce/</loc>
+    <lastmod>2018-02-03T08:51:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/post/composer-and-aotuload/</loc>
     <lastmod>2018-01-15T08:51:34+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

@@ -6,7 +6,16 @@
     <description>Recent content in autoload on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 15 Jan 2018 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/autoload/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 03 Feb 2018 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/autoload/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>unicode,ascii,utf-8编码的区别</title>
+      <link>https://daryeon.github.io/post/encode-introduce/</link>
+      <pubDate>Sat, 03 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/encode-introduce/</guid>
+      <description>简介 很久很久以前，有一群人，他们决定用8个可以开合的晶体管来组合成不同的状态，以表示世界上的万物。他们看到8个开关状态是好的，于是他们把这称</description>
+    </item>
+    
     <item>
       <title>Composer和自动加载学习分享</title>
       <link>https://daryeon.github.io/post/composer-and-aotuload/</link>
