@@ -71,6 +71,15 @@
     </item>
     
     <item>
+      <title>如何将Pjax整合进网站，实现全站无刷新加载？</title>
+      <link>https://daryeon.github.io/post/pjax-introduce/</link>
+      <pubDate>Tue, 02 Jan 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/pjax-introduce/</guid>
+      <description>简介 pjax 是 HTML5 pushState 以及 Ajax 两项技术的简称，综合这两个技术可以实现在不刷新页面的情况下载入HTML网页，带给你超快速的浏览器体验，而且有固定链接、标题</description>
+    </item>
+    
+    <item>
       <title>Shortcodes Notice Preview</title>
       <link>https://daryeon.github.io/post/shortcode-notice/</link>
       <pubDate>Mon, 01 Jan 2018 16:01:23 +0800</pubDate>

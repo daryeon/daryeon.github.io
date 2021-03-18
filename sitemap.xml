@@ -233,6 +233,13 @@
   </url>
   
   <url>
+    <loc>https://daryeon.github.io/post/pjax-introduce/</loc>
+    <lastmod>2018-01-02T08:51:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://daryeon.github.io/categories/docs/</loc>
     <lastmod>2018-01-01T16:01:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
