@@ -6,7 +6,7 @@
     <description>Recent content in Posts on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 20 Mar 2020 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 25 Mar 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Go实现常见排序算法</title>
       <link>https://daryeon.github.io/post/small-common-sort-func/</link>
@@ -23,6 +23,24 @@
       
       <guid>https://daryeon.github.io/post/go-small-details/</guid>
       <description>简介 GO的一些小细节分享。 map 无序性 map存储的数据并不保证有序性，通常可以把key写入一个slice切片，依靠slice切片的有序性来读取m</description>
+    </item>
+    
+    <item>
+      <title>网络流量抓包库gopacket介绍</title>
+      <link>https://daryeon.github.io/post/go-library-gopacket/</link>
+      <pubDate>Thu, 25 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-gopacket/</guid>
+      <description>简介 gopacket是什么？ gopacket是google出品的golang三方库，质量还是靠的住，项目地址为：github.com/goo</description>
+    </item>
+    
+    <item>
+      <title>分布式任务&#43;消息队列框架go-queue</title>
+      <link>https://daryeon.github.io/post/go-library-go-queue/</link>
+      <pubDate>Sun, 21 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-go-queue/</guid>
+      <description>为什么要写这个库？ 在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案： beanstalkd beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)</description>
     </item>
     
     <item>

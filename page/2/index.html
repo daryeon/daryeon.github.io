@@ -206,6 +206,27 @@ if (!doNotTrack) {
             
           </ul>
         
+      </li><li class="mobile-menu-item">
+        
+          
+          <div class="mobile-menu-parent">
+            <span class="mobile-submenu-open"></span>
+            <a href="https://daryeon.github.io/">
+              go-library
+            </a>
+          </div>
+          <ul class="mobile-submenu-list">
+            
+              <li>
+                <a href="https://daryeon.github.io/post/go-library-go-queue/">分布式任务&#43;消息队列框架go-queue</a>
+              </li>
+            
+              <li>
+                <a href="https://daryeon.github.io/post/go-library-gopacket/">网络流量抓包库gopacket介绍</a>
+              </li>
+            
+          </ul>
+        
       </li>
     
 
@@ -413,6 +434,26 @@ if (!doNotTrack) {
 
       </li>
     
+        <li class="menu-item">
+        
+          
+          <a class="menu-item-link menu-parent" href="https://daryeon.github.io/">go-library</a>
+          <ul class="submenu">
+            
+              <li>
+                <a href="https://daryeon.github.io/post/go-library-go-queue/">分布式任务&#43;消息队列框架go-queue</a>
+              </li>
+            
+              <li>
+                <a href="https://daryeon.github.io/post/go-library-gopacket/">网络流量抓包库gopacket介绍</a>
+              </li>
+            
+          </ul>
+
+        
+
+      </li>
+    
 
     
     
@@ -434,6 +475,76 @@ if (!doNotTrack) {
     
   
   
+  
+    <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/post/go-map-to-interface/">GO语言map类型interface{}转换踩坑小记</a>
+    </h1>
+    
+    <div class="post-meta">
+      <time datetime="2020-03-11" class="post-time">
+        2020-03-11
+      </time>
+      <div class="post-category">
+          <a href="https://daryeon.github.io/categories/map/"> map </a>
+          <a href="https://daryeon.github.io/categories/interface/"> interface </a>
+          
+        </div>
+      
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      简介 最近在学Go语言，在使用map的时候遇到一个小坑，记录一下。 代码介绍 package main import &#34;fmt&#34; func main(){ mapA := make([string]interface{}) mapB := make([string]interface{}) mapA[&#34;name&#34;] = &#34;大叶&#34; mapA[&#34;age&#34;] = 25 mapB[&#34;mapA&#34;] = mapA for k,
+    </div>
+    <div class="read-more">
+      <a href="/post/go-map-to-interface/" class="read-more-link">阅读全文</a>
+    </div>
+    
+  </div>
+</article>
+
+  
+    <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/post/golang-build-command/">Go的编译命令总结</a>
+    </h1>
+    
+    <div class="post-meta">
+      <time datetime="2020-02-06" class="post-time">
+        2020-02-06
+      </time>
+      <div class="post-category">
+          <a href="https://daryeon.github.io/categories/%E9%A6%96%E9%A1%B5/"> 首页 </a>
+          <a href="https://daryeon.github.io/categories/command/"> command </a>
+          
+        </div>
+      
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      理解Go的环境变量 Go的源码分类 go run 命令 go build go install 简介 go编译命令的一些总结。 理解Go的环境变量 GOROOT:Go语言的当前安装目录 GOPAT
+    </div>
+    <div class="read-more">
+      <a href="/post/golang-build-command/" class="read-more-link">阅读全文</a>
+    </div>
+    
+  </div>
+</article>
+
   
     <article class="post bg-white">
   <header class="post-header">
@@ -537,76 +648,6 @@ if (!doNotTrack) {
 </article>
 
   
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/base-on-php-_and_symbol-skill/">基于php&amp;运算符的巧妙应用</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2018-02-10" class="post-time">
-        2018-02-10
-      </time>
-      <div class="post-category">
-          <a href="https://daryeon.github.io/categories/php/"> php </a>
-          
-        </div>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      简介 &amp;:and，按位与。以$a &amp; $b为例，将$a和$b转化为二进制后，都为1的位设为1。 表达式 $a = 6; $b = 3; var_dump($a &amp; $b); 输出:int(2) 原
-    </div>
-    <div class="read-more">
-      <a href="/post/base-on-php-_and_symbol-skill/" class="read-more-link">阅读全文</a>
-    </div>
-    
-  </div>
-</article>
-
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/encode-introduce/">unicode,ascii,utf-8编码的区别</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2018-02-03" class="post-time">
-        2018-02-03
-      </time>
-      <div class="post-category">
-          <a href="https://daryeon.github.io/categories/utf8/"> utf8 </a>
-          <a href="https://daryeon.github.io/categories/utf16/"> utf16 </a>
-          <a href="https://daryeon.github.io/categories/unicode/"> unicode </a>
-          
-        </div>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      简介 很久很久以前，有一群人，他们决定用8个可以开合的晶体管来组合成不同的状态，以表示世界上的万物。他们看到8个开关状态是好的，于是他们把这称
-    </div>
-    <div class="read-more">
-      <a href="/post/encode-introduce/" class="read-more-link">阅读全文</a>
-    </div>
-    
-  </div>
-</article>
-
-  
 </section>
 
 
@@ -642,6 +683,10 @@ if (!doNotTrack) {
       
       <li >
         <a href="/page/3/">3</a>
+      </li>
+      
+      <li >
+        <a href="/page/4/">4</a>
       </li>
       
     </ul>

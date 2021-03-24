@@ -6,7 +6,16 @@
     <description>Recent content in Tags on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 20 Mar 2020 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 25 Mar 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>library</title>
+      <link>https://daryeon.github.io/tags/library/</link>
+      <pubDate>Thu, 25 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/tags/library/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>go</title>
       <link>https://daryeon.github.io/tags/go/</link>
@@ -175,15 +184,6 @@
       <pubDate>Mon, 01 Jan 2018 16:01:23 +0800</pubDate>
       
       <guid>https://daryeon.github.io/tags/preview/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>shortcodes</title>
-      <link>https://daryeon.github.io/tags/shortcodes/</link>
-      <pubDate>Mon, 01 Jan 2018 16:01:23 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/tags/shortcodes/</guid>
       <description></description>
     </item>
     

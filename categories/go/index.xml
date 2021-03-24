@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>go on 大叶的博客</title>
+    <link>https://daryeon.github.io/categories/go/</link>
+    <description>Recent content in go on 大叶的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 25 Mar 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>网络流量抓包库gopacket介绍</title>
+      <link>https://daryeon.github.io/post/go-library-gopacket/</link>
+      <pubDate>Thu, 25 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-gopacket/</guid>
+      <description>简介 gopacket是什么？ gopacket是google出品的golang三方库，质量还是靠的住，项目地址为：github.com/goo</description>
+    </item>
+    
+    <item>
+      <title>分布式任务&#43;消息队列框架go-queue</title>
+      <link>https://daryeon.github.io/post/go-library-go-queue/</link>
+      <pubDate>Sun, 21 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-go-queue/</guid>
+      <description>为什么要写这个库？ 在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案： beanstalkd beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)</description>
+    </item>
+    
+  </channel>
+</rss>

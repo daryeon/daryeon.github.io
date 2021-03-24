@@ -6,7 +6,7 @@
     <description>Recent content on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 20 Mar 2020 08:51:34 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 25 Mar 2021 06:56:44 +0800</lastBuildDate>
     
         <atom:link href="https://daryeon.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -521,6 +521,645 @@ defer2由于返回的不是匿名变量，所以不会创建中间变量，defer
 &lt;li&gt;web服务端开发，Phper, Gopher。&lt;/li&gt;
 &lt;li&gt;兴趣爱好广泛，喜欢Go，算法等。平时喜欢做 LeetCode 算法题。&lt;/li&gt;
 &lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>网络流量抓包库gopacket介绍</title>
+      <link>https://daryeon.github.io/post/go-library-gopacket/</link>
+      <pubDate>Thu, 25 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-gopacket/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;gopacket是什么？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;gopacket是google出品的golang三方库，质量还是靠的住，项目地址为：github.com/google/gopacket&lt;/p&gt;
+&lt;p&gt;gopacket到底是什么呢？是个抓取网络数据包的库，这么说可能还有点抽象，但是抓包工具大家可能都使用过。&lt;/p&gt;
+&lt;p&gt;Windows平台下有Wireshark抓包工具，其底层抓包库是npcap（以前是winpcap）；&lt;/p&gt;
+&lt;p&gt;Linux平台下有Tcpdump，其抓包库是libpcap；&lt;/p&gt;
+&lt;p&gt;而gopacket库可以说是libpcap和npcap的go封装，提供了更方便的go语言操作接口。&lt;/p&gt;
+&lt;p&gt;对于抓包库来说，常规功能就是抓包，而网络抓包有以下几个步骤：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1、枚举主机上网络设备的接口&lt;/li&gt;
+&lt;li&gt;2、针对某一网口进行抓包&lt;/li&gt;
+&lt;li&gt;3、解析数据包的mac层、ip层、tcp/udp层字段等&lt;/li&gt;
+&lt;li&gt;4、ip分片重组，或tcp分段重组成上层协议如http协议的数据&lt;/li&gt;
+&lt;li&gt;5、对上层协议进行头部解析和负载部分解析&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;应用场景有哪些？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;场景1：网络流量分析&lt;/p&gt;
+&lt;p&gt;对网络设备流量进行实时采集以及数据包分析。&lt;/p&gt;
+&lt;p&gt;场景2：伪造数据包&lt;/p&gt;
+&lt;p&gt;不少网络安全工具，需要伪造网络数据包，填充上必要的协议字段后发送给对端设备，从而达到一些目的。&lt;/p&gt;
+&lt;p&gt;场景3：离线pcap文件的读取和写入&lt;/p&gt;
+&lt;h3 id=&#34;安装部署&#34;&gt;安装部署&lt;/h3&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;安装libpcap或npcap三方库&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在使用gopacket包时，首先要确保在windows平台下安装了npcap或winpcap，或者是在linux平台下安装了libpcap库。&lt;/p&gt;
+&lt;p&gt;npcap下载地址：&lt;a href=&#34;https://nmap.org/npcap/&#34;&gt;https://nmap.org/npcap/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;libpcap下载地址: &lt;a href=&#34;https://www.tcpdump.org/&#34;&gt;https://www.tcpdump.org/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;下载自己电脑对应的操作系统版本的库&lt;/p&gt;
+&lt;p&gt;如果不想从官网下载libpcap库的话，也可以采用centos的yum命令或ubuntu的apt get命令来进行安装。&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;安装gopacket库&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;go get github.com/google/gopacket
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;使用方法&#34;&gt;使用方法&lt;/h3&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;枚举网络设备&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; (
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;log&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket/pcap&amp;#34;&lt;/span&gt;
+)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#75715e&#34;&gt;// 得到所有的(网络)设备
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;devices&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pcap&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;FindAllDevs&lt;/span&gt;()
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fatal&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#75715e&#34;&gt;// 打印设备信息
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Devices found:&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;device&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;devices&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;\nName: &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;device&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Name&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Description: &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;device&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Description&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Devices addresses: &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;device&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Description&lt;/span&gt;)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;address&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;device&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Addresses&lt;/span&gt; {
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;- IP address: &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;address&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;IP&lt;/span&gt;)
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;- Subnet mask: &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;address&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Netmask&lt;/span&gt;)
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;先调用pcap.FindAllDevs()获取当前主机所有的网络设备，网络设备有哪些属性呢？&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// Interface describes a single network interface on a machine.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Interface&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;Name&lt;/span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;//设备名称
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Description&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;//设备描述信息
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Flags&lt;/span&gt;       &lt;span style=&#34;color:#66d9ef&#34;&gt;uint32&lt;/span&gt; 
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;Addresses&lt;/span&gt;   []&lt;span style=&#34;color:#a6e22e&#34;&gt;InterfaceAddress&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;//网口的地址信息列表
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}
+&lt;span style=&#34;color:#75715e&#34;&gt;// InterfaceAddress describes an address associated with an Interface.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// Currently, it&amp;#39;s IPv4/6 specific.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;InterfaceAddress&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;IP&lt;/span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;IP&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;Netmask&lt;/span&gt;   &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;IPMask&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;// Netmask may be nil if we were unable to retrieve it.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Broadaddr&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;IP&lt;/span&gt;     &lt;span style=&#34;color:#75715e&#34;&gt;// Broadcast address for this IP may be nil
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;P2P&lt;/span&gt;       &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;IP&lt;/span&gt;     &lt;span style=&#34;color:#75715e&#34;&gt;// P2P destination address for this IP may be nil
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;6&#34;&gt;
+&lt;li&gt;打开一个设备进行抓包&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; (
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket/pcap&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;log&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;time&amp;#34;&lt;/span&gt;
+)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; (
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;device&lt;/span&gt;       &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;eth0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;snapshot_len&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int32&lt;/span&gt;  = &lt;span style=&#34;color:#ae81ff&#34;&gt;1024&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;promiscuous&lt;/span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;bool&lt;/span&gt;   = &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;          &lt;span style=&#34;color:#66d9ef&#34;&gt;error&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;timeout&lt;/span&gt;      &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Duration&lt;/span&gt; = &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Second&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;       &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;pcap&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Handle&lt;/span&gt;
+)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#75715e&#34;&gt;// 打开某一网络设备
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;pcap&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;OpenLive&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;device&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;snapshot_len&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;promiscuous&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;timeout&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {&lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fatal&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;) }
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Close&lt;/span&gt;()
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Use the handle as a packet source to process all packets
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;packetSource&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewPacketSource&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LinkType&lt;/span&gt;())
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packetSource&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Packets&lt;/span&gt;() {
+        &lt;span style=&#34;color:#75715e&#34;&gt;// Process packet here
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;6.1. 实时捕获&lt;/p&gt;
+&lt;p&gt;3.0节中我们枚举了当前主机的所有网络设备，现在需要打开网络设备并进行实时捕获数据包，需调用pcap.OpenLive来打开网络设备，其函数原型如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;OpenLive&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;device&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;snaplen&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int32&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;promisc&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;bool&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;timeout&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Duration&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;Handle&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;error&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;device:网络设备的名称，如eth0,也可以填充pcap.FindAllDevs()返回的设备的Name&lt;/p&gt;
+&lt;p&gt;snaplen: 每个数据包读取的最大长度 the maximum size to read for each packet&lt;/p&gt;
+&lt;p&gt;promisc:是否将网口设置为混杂模式,即是否接收目的地址不为本机的包&lt;/p&gt;
+&lt;p&gt;timeout:设置抓到包返回的超时。如果设置成30s，那么每30s才会刷新一次数据包；设置成负数，会立刻刷新数据包，即不做等待&lt;/p&gt;
+&lt;p&gt;函数返回值：是一个*Handle类型的返回值，可能作为gopacket其他函数调用时作为函数参数来传递。&lt;/p&gt;
+&lt;p&gt;注意事项：&lt;/p&gt;
+&lt;p&gt;一定要记得释放掉handle，如文中的defer handle.Close()。&lt;/p&gt;
+&lt;p&gt;6.2. 创建数据包源&lt;/p&gt;
+&lt;p&gt;packetSource := gopacket.NewPacketSource(handle, handle.LinkType())&lt;/p&gt;
+&lt;p&gt;第一个参数为OpenLive的返回值，指向Handle类型的指针变量handle。&lt;/p&gt;
+&lt;p&gt;第二个参数为handle.LinkType()此参数默认是以太网链路，一般我们抓包，也是从2层以太网链路上抓取。&lt;/p&gt;
+&lt;p&gt;6.3. 读取数据包&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//packetSource.Packets()是个channel类型，此处是从channel类型的数据通道中持续的读取网络数据包
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packetSource&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Packets&lt;/span&gt;() {
+  &lt;span style=&#34;color:#75715e&#34;&gt;// Process packet here
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;7&#34;&gt;
+&lt;li&gt;解码数据包的各层&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;我们可以获取原始数据包，并尝试将其强制转换为已知格式。如ethernet、IP和TCP层。&lt;/p&gt;
+&lt;p&gt;Layers包是gopacket的Go库中的新功能，在底层libpcap库中不存在。它是gopacket库的非常有用的一部分。它允许我们轻松地识别数据包是否包含特定类型的层。这个代码示例将演示如何使用layers包来查看包是否是ethernet、IP和TCP，以及如何轻松访问这些头中的字段。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; (
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket/layers&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket/pcap&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;log&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;strings&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;time&amp;#34;&lt;/span&gt;
+)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; (
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;device&lt;/span&gt;      &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;eth0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;snapshotLen&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int32&lt;/span&gt;  = &lt;span style=&#34;color:#ae81ff&#34;&gt;1024&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;promiscuous&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;bool&lt;/span&gt;   = &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;         &lt;span style=&#34;color:#66d9ef&#34;&gt;error&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;timeout&lt;/span&gt;     &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Duration&lt;/span&gt; = &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Second&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;pcap&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Handle&lt;/span&gt;
+)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Open device
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;pcap&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;OpenLive&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;device&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;snapshotLen&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;promiscuous&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;timeout&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {&lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fatal&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;) }
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Close&lt;/span&gt;()
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;packetSource&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewPacketSource&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LinkType&lt;/span&gt;())
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packetSource&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Packets&lt;/span&gt;() {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;printPacketInfo&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;)
+    }
+}
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;printPacketInfo&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Packet&lt;/span&gt;) {
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Let&amp;#39;s see if the packet is an ethernet packet
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;// 判断数据包是否为以太网数据包，可解析出源mac地址、目的mac地址、以太网类型（如ip类型）等
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;ethernetLayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Layer&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerTypeEthernet&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ethernetLayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Ethernet layer detected.&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;ethernetPacket&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ethernetLayer&lt;/span&gt;.(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Ethernet&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Source MAC: &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;ethernetPacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;SrcMAC&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Destination MAC: &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;ethernetPacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;DstMAC&lt;/span&gt;)
+        &lt;span style=&#34;color:#75715e&#34;&gt;// Ethernet type is typically IPv4 but could be ARP or other
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Ethernet type: &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;ethernetPacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;EthernetType&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;()
+    }
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Let&amp;#39;s see if the packet is IP (even though the ether type told us)
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;// 判断数据包是否为IP数据包，可解析出源ip、目的ip、协议号等
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;ipLayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Layer&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerTypeIPv4&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ipLayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;IPv4 layer detected.&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;ip&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ipLayer&lt;/span&gt;.(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;IPv4&lt;/span&gt;)
+        &lt;span style=&#34;color:#75715e&#34;&gt;// IP layer variables:
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;// Version (Either 4 or 6)
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;// IHL (IP Header Length in 32-bit words)
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;// TOS, Length, Id, Flags, FragOffset, TTL, Protocol (TCP?),
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;// Checksum, SrcIP, DstIP
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;From %s to %s\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;ip&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;SrcIP&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;ip&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;DstIP&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Protocol: &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;ip&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Protocol&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;()
+    }
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Let&amp;#39;s see if the packet is TCP
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;// 判断数据包是否为TCP数据包，可解析源端口、目的端口、seq序列号、tcp标志位等
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpLayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Layer&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerTypeTCP&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpLayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;TCP layer detected.&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;tcp&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpLayer&lt;/span&gt;.(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;TCP&lt;/span&gt;)
+        &lt;span style=&#34;color:#75715e&#34;&gt;// TCP layer variables:
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;// SrcPort, DstPort, Seq, Ack, DataOffset, Window, Checksum, Urgent
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;// Bool flags: FIN, SYN, RST, PSH, ACK, URG, ECE, CWR, NS
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;From port %d to %d\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;tcp&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;SrcPort&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;tcp&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;DstPort&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Sequence number: &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;tcp&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Seq&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;()
+    }
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Iterate over all layers, printing out each layer type
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;All packet layers:&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;layer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Layers&lt;/span&gt;() {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;- &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;layer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerType&lt;/span&gt;())
+    }
+    &lt;span style=&#34;color:#75715e&#34;&gt;///.......................................................
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;// Check for errors
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;// 判断layer是否存在错误
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;ErrorLayer&lt;/span&gt;(); &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Error decoding some part of the packet:&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;仅仅以此处tcp部分的代码详细解析下&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// 判断数据包是否为TCP数据包，可解析源端口、目的端口、seq序列号、tcp标志位等
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpLayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Layer&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerTypeTCP&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpLayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;TCP layer detected.&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;tcp&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpLayer&lt;/span&gt;.(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;TCP&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;From port %d to %d\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;tcp&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;SrcPort&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;tcp&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;DstPort&lt;/span&gt;)
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;此处需要研究下源代码中数据结构，以防理解错误&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Packet&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt; {
+ &lt;span style=&#34;color:#75715e&#34;&gt;// Layer returns the first layer in this packet of the given type, or nil
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Layer&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerType&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;Layer&lt;/span&gt;   &lt;span style=&#34;color:#75715e&#34;&gt;//根据给定的类型，在数据包中寻找其第一个层
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}
+&lt;span style=&#34;color:#75715e&#34;&gt;//看看Layer的结构
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;interface&lt;/span&gt; {
+ &lt;span style=&#34;color:#75715e&#34;&gt;// LayerType is the gopacket type for this layer.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;LayerType&lt;/span&gt;() &lt;span style=&#34;color:#a6e22e&#34;&gt;LayerType&lt;/span&gt;
+ &lt;span style=&#34;color:#75715e&#34;&gt;// LayerContents returns the set of bytes that make up this layer.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;LayerContents&lt;/span&gt;() []&lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;
+ &lt;span style=&#34;color:#75715e&#34;&gt;// LayerPayload returns the set of bytes contained within this layer, not
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;// including the layer itself.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;LayerPayload&lt;/span&gt;() []&lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;
+}
+&lt;span style=&#34;color:#75715e&#34;&gt;//tcp数据包格式
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;TCP&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;BaseLayer&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;SrcPort&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;DstPort&lt;/span&gt;                           &lt;span style=&#34;color:#a6e22e&#34;&gt;TCPPort&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;Seq&lt;/span&gt;                                        &lt;span style=&#34;color:#66d9ef&#34;&gt;uint32&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;Ack&lt;/span&gt;                                        &lt;span style=&#34;color:#66d9ef&#34;&gt;uint32&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;DataOffset&lt;/span&gt;                                 &lt;span style=&#34;color:#66d9ef&#34;&gt;uint8&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;FIN&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;SYN&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;RST&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;PSH&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;ACK&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;URG&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;ECE&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;CWR&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;NS&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;bool&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;Window&lt;/span&gt;                                     &lt;span style=&#34;color:#66d9ef&#34;&gt;uint16&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;Checksum&lt;/span&gt;                                   &lt;span style=&#34;color:#66d9ef&#34;&gt;uint16&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;Urgent&lt;/span&gt;                                     &lt;span style=&#34;color:#66d9ef&#34;&gt;uint16&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;sPort&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;dPort&lt;/span&gt;                               []&lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;Options&lt;/span&gt;                                    []&lt;span style=&#34;color:#a6e22e&#34;&gt;TCPOption&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;Padding&lt;/span&gt;                                    []&lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;opts&lt;/span&gt;                                       [&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;]&lt;span style=&#34;color:#a6e22e&#34;&gt;TCPOption&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpipchecksum&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;TCP结构体是实现了Layer接口的，其实Ethernet，IPV4，UDP等结构体也实现了Layer接口&lt;/p&gt;
+&lt;p&gt;在上述代码中，我们调用函数时，传入的LayerType协议层的类型为layers.LayerTypeTCP，函数返回值为interface类型，必须转换成TCP结构体&lt;/p&gt;
+&lt;p&gt;tcp, _ := tcpLayer.(*layers.TCP)&lt;/p&gt;
+&lt;p&gt;tcp是layers.TCP这个具体类型的指针，通过tcp则可以获取数据包中tcp协议的相关字段。&lt;/p&gt;
+&lt;ol start=&#34;8&#34;&gt;
+&lt;li&gt;自定义层&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;自定义层有助于实现当前不包含在gopacket layers包中的协议。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; (
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket&amp;#34;&lt;/span&gt;
+)
+&lt;span style=&#34;color:#75715e&#34;&gt;// 创建自定义层数据结构，并实现Layer接口中的函数LayerType()、LayerContents()、LayerPayload()
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomLayer&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+    &lt;span style=&#34;color:#75715e&#34;&gt;// This layer just has two bytes at the front
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;SomeByte&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;AnotherByte&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;restOfData&lt;/span&gt;  []&lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;
+}
+&lt;span style=&#34;color:#75715e&#34;&gt;// 注册自定义层类型，然后我们才可以使用它
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// 第一个参数是ID. 自定义层使用大于2000的数字，它必须是唯一的
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomLayerType&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;RegisterLayerType&lt;/span&gt;(
+    &lt;span style=&#34;color:#ae81ff&#34;&gt;2001&lt;/span&gt;,
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerTypeMetadata&lt;/span&gt;{
+        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CustomLayerType&amp;#34;&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;DecodeFunc&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;decodeCustomLayer&lt;/span&gt;),
+    },
+)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;//自定义层实现LayerType
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomLayer&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;LayerType&lt;/span&gt;() &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerType&lt;/span&gt; {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomLayerType&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#75715e&#34;&gt;//自定义层实现LayerContents
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomLayer&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;LayerContents&lt;/span&gt;() []&lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt; {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; []&lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;{&lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;SomeByte&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;AnotherByte&lt;/span&gt;}
+}
+
+&lt;span style=&#34;color:#75715e&#34;&gt;//自定义层实现LayerPayload
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomLayer&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;LayerPayload&lt;/span&gt;() []&lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt; {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;restOfData&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#75715e&#34;&gt;//实现自定义的解码函数
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;decodeCustomLayer&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt; []&lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;PacketBuilder&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;error&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;AddLayer&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;CustomLayer&lt;/span&gt;{&lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt;[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;], &lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt;[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], &lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt;[&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;:]})
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NextDecoder&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerTypePayload&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;rawBytes&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; []&lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;{&lt;span style=&#34;color:#ae81ff&#34;&gt;0xF0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0x0F&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;65&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;65&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;66&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;68&lt;/span&gt;}
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewPacket&lt;/span&gt;(
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;rawBytes&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomLayerType&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Default&lt;/span&gt;,
+    )
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Created packet out of raw bytes.&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;)
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Decode the packet as our custom layer
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;customLayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Layer&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;CustomLayerType&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;customLayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Packet was successfully decoded with custom layer decoder.&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;customLayerContent&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;customLayer&lt;/span&gt;.(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;CustomLayer&lt;/span&gt;)
+        &lt;span style=&#34;color:#75715e&#34;&gt;// Now we can access the elements of the custom struct
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Payload: &amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;customLayerContent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerPayload&lt;/span&gt;())
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;SomeByte element:&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;customLayerContent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;SomeByte&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;AnotherByte element:&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;customLayerContent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;AnotherByte&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;结合上述代码可知，实现自定义的层需要3步：&lt;/p&gt;
+&lt;p&gt;1、创建自定义层的结构体，并实现Layer接口中的函数LayerType()、LayerContents()、LayerPayload()&lt;/p&gt;
+&lt;p&gt;2、按照解码函数签名来实现自定义解码函数，名称可自行命名。&lt;/p&gt;
+&lt;p&gt;解码函数签名如下：&lt;/p&gt;
+&lt;p&gt;type DecodeFunc func([]byte, PacketBuilder) error&lt;/p&gt;
+&lt;p&gt;3、使用gopacket.RegisterLayerType函数来注册自定义层&lt;/p&gt;
+&lt;ol start=&#34;9&#34;&gt;
+&lt;li&gt;TCP流重组&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;为什么需要tcp流重组？&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; (
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;bufio&amp;#34;&lt;/span&gt;
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;flag&amp;#34;&lt;/span&gt;
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;io&amp;#34;&lt;/span&gt;
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;log&amp;#34;&lt;/span&gt;
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;net/http&amp;#34;&lt;/span&gt;
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;time&amp;#34;&lt;/span&gt;
+
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket&amp;#34;&lt;/span&gt;
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket/examples/util&amp;#34;&lt;/span&gt;
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket/layers&amp;#34;&lt;/span&gt;
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket/pcap&amp;#34;&lt;/span&gt;
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket/tcpassembly&amp;#34;&lt;/span&gt;
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/google/gopacket/tcpassembly/tcpreader&amp;#34;&lt;/span&gt;
+)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;iface&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;flag&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;String&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;i&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;eth0&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Interface to get packets from&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;snaplen&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;flag&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Int&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;s&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1600&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;SnapLen for pcap packet capture&amp;#34;&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;// Build a simple HTTP request parser using tcpassembly.StreamFactory and tcpassembly.Stream interfaces
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;// httpStreamFactory implements tcpassembly.StreamFactory
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;httpStreamFactory&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt;{}
+
+&lt;span style=&#34;color:#75715e&#34;&gt;// httpStream will handle the actual decoding of http requests.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;httpStream&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;transport&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Flow&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt;              &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpreader&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;ReaderStream&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;httpStreamFactory&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;New&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;transport&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Flow&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpassembly&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Stream&lt;/span&gt; {
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;hstream&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;httpStream&lt;/span&gt;{
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;:       &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;,
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;transport&lt;/span&gt;: &lt;span style=&#34;color:#a6e22e&#34;&gt;transport&lt;/span&gt;,
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt;:         &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpreader&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewReaderStream&lt;/span&gt;(),
+ }
+ &lt;span style=&#34;color:#66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;hstream&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;run&lt;/span&gt;() &lt;span style=&#34;color:#75715e&#34;&gt;// Important... we must guarantee that data from the reader stream is read.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+ &lt;span style=&#34;color:#75715e&#34;&gt;// ReaderStream implements tcpassembly.Stream, so we can return a pointer to it.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;hstream&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;httpStream&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;run&lt;/span&gt;() {
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;buf&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;bufio&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewReader&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt;)
+ &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;http&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;ReadRequest&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;buf&lt;/span&gt;)
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;io&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;EOF&lt;/span&gt; {
+   &lt;span style=&#34;color:#75715e&#34;&gt;// We must read until we see an EOF... very important!
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;   &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt;
+  } &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+   &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Error reading stream&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;transport&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;:&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+  } &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; {
+   &lt;span style=&#34;color:#a6e22e&#34;&gt;bodyBytes&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpreader&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;DiscardBytesToEOF&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Body&lt;/span&gt;)
+   &lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Body&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Close&lt;/span&gt;()
+   &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Received request from stream&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;transport&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;:&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;with&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;bodyBytes&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;bytes in request body&amp;#34;&lt;/span&gt;)
+  }
+ }
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
+ &lt;span style=&#34;color:#66d9ef&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;util&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Run&lt;/span&gt;()()
+ &lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;pcap&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Handle&lt;/span&gt;
+ &lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;error&lt;/span&gt;
+
+ &lt;span style=&#34;color:#75715e&#34;&gt;// Set up pcap packet capture
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;pcap&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;OpenLive&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;iface&lt;/span&gt;, int32(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;snaplen&lt;/span&gt;), &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pcap&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;BlockForever&lt;/span&gt;)
+ &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fatal&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+ }
+
+ &lt;span style=&#34;color:#75715e&#34;&gt;// Set up assembly
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;streamFactory&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;httpStreamFactory&lt;/span&gt;{}
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;streamPool&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpassembly&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewStreamPool&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;streamFactory&lt;/span&gt;)
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;assembler&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpassembly&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewAssembler&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;streamPool&lt;/span&gt;)
+
+ &lt;span style=&#34;color:#75715e&#34;&gt;// Read in packets, pass to assembler.
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packetSource&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gopacket&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewPacketSource&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;handle&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LinkType&lt;/span&gt;())
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;packets&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packetSource&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Packets&lt;/span&gt;()
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;ticker&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Tick&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Minute&lt;/span&gt;)
+ &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; {
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;select&lt;/span&gt; {
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;packets&lt;/span&gt;:
+   &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NetworkLayer&lt;/span&gt;() &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;TransportLayer&lt;/span&gt;() &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;TransportLayer&lt;/span&gt;().&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerType&lt;/span&gt;() &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;LayerTypeTCP&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Unusable packet&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+   }
+   &lt;span style=&#34;color:#a6e22e&#34;&gt;tcp&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;TransportLayer&lt;/span&gt;().(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;TCP&lt;/span&gt;)
+   &lt;span style=&#34;color:#75715e&#34;&gt;//将数据包进行重组
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;   &lt;span style=&#34;color:#a6e22e&#34;&gt;assembler&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;AssembleWithTimestamp&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NetworkLayer&lt;/span&gt;().&lt;span style=&#34;color:#a6e22e&#34;&gt;NetworkFlow&lt;/span&gt;(), &lt;span style=&#34;color:#a6e22e&#34;&gt;tcp&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Metadata&lt;/span&gt;().&lt;span style=&#34;color:#a6e22e&#34;&gt;Timestamp&lt;/span&gt;)
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;ticker&lt;/span&gt;:
+   &lt;span style=&#34;color:#75715e&#34;&gt;//每隔一分钟，刷新之前两分钟内不活动的连接
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;   &lt;span style=&#34;color:#a6e22e&#34;&gt;assembler&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;FlushOlderThan&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Now&lt;/span&gt;().&lt;span style=&#34;color:#a6e22e&#34;&gt;Add&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Minute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;))
+  }
+ }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;基本步骤如下：&lt;/p&gt;
+&lt;p&gt;1、创建httpStreamFactory结构体，实现tcpassembly.StreamFactory接口&lt;/p&gt;
+&lt;p&gt;2、创建连接池&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;streamPool&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpassembly&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewStreamPool&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;streamFactory&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;3、创建重组器&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;assembler&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tcpassembly&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewAssembler&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;streamPool&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;4、将数据包添加到重组器中&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;assembler&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;AssembleWithTimestamp&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NetworkLayer&lt;/span&gt;().&lt;span style=&#34;color:#a6e22e&#34;&gt;NetworkFlow&lt;/span&gt;(), &lt;span style=&#34;color:#a6e22e&#34;&gt;tcp&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;packet&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Metadata&lt;/span&gt;().&lt;span style=&#34;color:#a6e22e&#34;&gt;Timestamp&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;总结&#34;&gt;总结&lt;/h3&gt;
+&lt;p&gt;首先，gopacket库是google大厂背书，从使用文档、质量、社区活跃度来说都很不错&lt;/p&gt;
+&lt;p&gt;其次，使用方式简单，扩展性好。gopacket提供了自定义的接口，可根据自身需要进行定制化开发&lt;/p&gt;
+&lt;p&gt;最后，gopacket定义的layers齐全，如果是实时捕获数据后进行协议解析，采用其内置的layer即可，无需自己手动去解析繁杂的协议了。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>分布式任务&#43;消息队列框架go-queue</title>
+      <link>https://daryeon.github.io/post/go-library-go-queue/</link>
+      <pubDate>Sun, 21 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-go-queue/</guid>
+      
+        <description>&lt;h3 id=&#34;为什么要写这个库&#34;&gt;为什么要写这个库？&lt;/h3&gt;
+&lt;p&gt;在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;beanstalkd&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)、超时重发 (time-to-run) 和预留 (buried)，能够很好的支持分布式的后台任务和定时任务处理。如下是 beanstalkd 基本部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;job：任务单元；&lt;/li&gt;
+&lt;li&gt;tube：任务队列，存储统一类型 job。producer 和 consumer 操作对象；&lt;/li&gt;
+&lt;li&gt;job 生产者，通过 put 将 job 加入一个 tube；&lt;/li&gt;
+&lt;li&gt;job 消费者，通过 reserve/release/bury/delete 来获取 job 或改变 job 的状态；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;很幸运的是官方提供了 go client：https://github.com/beanstalkd/go-beanstalk。&lt;/p&gt;
+&lt;p&gt;但是这对不熟悉 beanstalkd 操作的 go 开发者而言，需要学习成本。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;kafka&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;类似基于 kafka 消息队列作为存储的方案，存储单元是消息，如果要实现延时执行，可以想到的方案是以延时执行的时间作为 topic，这样在大型的消息系统中，充斥大量一次性的 topic（dq_1616324404788, dq_1616324417622），当时间分散，会容易造成磁盘随机写的情况。&lt;/p&gt;
+&lt;p&gt;而且在 go 生态中，&lt;/p&gt;
+&lt;p&gt;同时考虑以下因素：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;支持延时任务&lt;/li&gt;
+&lt;li&gt;高可用，保证数据不丢失&lt;/li&gt;
+&lt;li&gt;可扩展资源和性能&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以我们自己基于以上两个基础组件开发了 go-queue：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;基于 beanstalkd 开发了 dq，支持定时和延时操作。同时加入 redis 保证消费唯一性。&lt;/li&gt;
+&lt;li&gt;基于 kafka 开发了 kq，简化生产者和消费者的开发 API，同时在写入 kafka 使用批量写，节省 IO。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;整体设计如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://daryeon.github.io/images/go_queue/01.png&#34; alt=&#34;整体设计过程&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;应用场景&#34;&gt;应用场景&lt;/h3&gt;
+&lt;p&gt;首先在消费场景来说，一个是针对任务队列，一个是消息队列。而两者最大的区别：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;任务是没有顺序约束；消息需要；&lt;/li&gt;
+&lt;li&gt;任务在加入中，或者是等待中，可能存在状态更新（或是取消）；消息则是单一的存储即可；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以在背后的基础设施选型上，也是基于这种消费场景。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;dq：依赖于beanstalkd ，适合延时、定时任务执行；&lt;/li&gt;
+&lt;li&gt;kq：依赖于 kafka ，适用于异步、批量任务执行；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;而从其中 dq的 API 中也可以看出：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// 延迟任务执行
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dq&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Delay&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;msg&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;delayTime&lt;/span&gt;);
+
+&lt;span style=&#34;color:#75715e&#34;&gt;// 定时任务执行
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dq&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;At&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;msg&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;atTime&lt;/span&gt;);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;而在我们内部：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果是 异步消息消费/推送 ，则会选择使用kq：kq.Push(msg)；&lt;/li&gt;
+&lt;li&gt;如果是 15 分钟提醒/ 明天中午发送短信 等，则使用 dq；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;如何使用&#34;&gt;如何使用&lt;/h3&gt;
+&lt;p&gt;分别介绍dq和 kq的使用方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;dq&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// [Producer]
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;producer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dq&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewProducer&lt;/span&gt;([]&lt;span style=&#34;color:#a6e22e&#34;&gt;dq&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Beanstalk&lt;/span&gt;{
+    {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Endpoint&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;localhost:11300&amp;#34;&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Tube&lt;/span&gt;:     &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tube&amp;#34;&lt;/span&gt;,
+    },
+    {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Endpoint&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;localhost:11301&amp;#34;&lt;/span&gt;,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Tube&lt;/span&gt;:     &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tube&amp;#34;&lt;/span&gt;,
+    },
+})  
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;; &lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt; &amp;lt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1005&lt;/span&gt;; &lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;producer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Delay&lt;/span&gt;([]byte(&lt;span style=&#34;color:#a6e22e&#34;&gt;strconv&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Itoa&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt;)), &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Second&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// [Consumer]
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;consumer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dq&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewConsumer&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;dq&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;DqConf&lt;/span&gt;{
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;Beanstalks&lt;/span&gt;: []&lt;span style=&#34;color:#a6e22e&#34;&gt;dq&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Beanstalk&lt;/span&gt;{
+    {
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;Endpoint&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;localhost:11300&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;Tube&lt;/span&gt;:     &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tube&amp;#34;&lt;/span&gt;,
+    },
+    {
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;Endpoint&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;localhost:11301&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;Tube&lt;/span&gt;:     &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tube&amp;#34;&lt;/span&gt;,
+    },
+  },
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;Redis&lt;/span&gt;: &lt;span style=&#34;color:#a6e22e&#34;&gt;redis&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;RedisConf&lt;/span&gt;{
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;Host&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;localhost:6379&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;Type&lt;/span&gt;: &lt;span style=&#34;color:#a6e22e&#34;&gt;redis&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NodeType&lt;/span&gt;,
+  },
+})
+&lt;span style=&#34;color:#a6e22e&#34;&gt;consumer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Consume&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;body&lt;/span&gt; []&lt;span style=&#34;color:#66d9ef&#34;&gt;byte&lt;/span&gt;) {
+  &lt;span style=&#34;color:#75715e&#34;&gt;// your consume logic
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(string(&lt;span style=&#34;color:#a6e22e&#34;&gt;body&lt;/span&gt;))
+})
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;和普通的 生产者 - 消费者 模型类似，开发者也只需要关注以下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;开发者只需要关注自己的任务类型「延时/定时」&lt;/li&gt;
+&lt;li&gt;消费端的消费逻辑&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;kq&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;producer.go:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// message structure
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;message&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;Key&lt;/span&gt;     &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;`json:&amp;#34;key&amp;#34;`&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;Value&lt;/span&gt;   &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;`json:&amp;#34;value&amp;#34;`&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;Payload&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;`json:&amp;#34;message&amp;#34;`&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;pusher&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;kq&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewPusher&lt;/span&gt;([]&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;{
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;127.0.0.1:19092&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;127.0.0.1:19093&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;127.0.0.1:19094&amp;#34;&lt;/span&gt;,
+}, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;kq&amp;#34;&lt;/span&gt;)
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;ticker&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewTicker&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Millisecond&lt;/span&gt;)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;round&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;; &lt;span style=&#34;color:#a6e22e&#34;&gt;round&lt;/span&gt; &amp;lt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;; &lt;span style=&#34;color:#a6e22e&#34;&gt;round&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt; {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;select&lt;/span&gt; {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;ticker&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;C&lt;/span&gt;:
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;count&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rand&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Intn&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;)
+    &lt;span style=&#34;color:#75715e&#34;&gt;// 准备消息
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;message&lt;/span&gt;{
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;Key&lt;/span&gt;:     &lt;span style=&#34;color:#a6e22e&#34;&gt;strconv&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;FormatInt&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Now&lt;/span&gt;().&lt;span style=&#34;color:#a6e22e&#34;&gt;UnixNano&lt;/span&gt;(), &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;),
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;Value&lt;/span&gt;:   &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Sprintf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%d,%d&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;round&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;count&lt;/span&gt;),
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;Payload&lt;/span&gt;: &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Sprintf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%d,%d&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;round&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;count&lt;/span&gt;),
+        }
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;body&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;json&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Marshal&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt;)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fatal&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+        }
+
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(string(&lt;span style=&#34;color:#a6e22e&#34;&gt;body&lt;/span&gt;))
+    &lt;span style=&#34;color:#75715e&#34;&gt;// push to kafka broker
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pusher&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Push&lt;/span&gt;(string(&lt;span style=&#34;color:#a6e22e&#34;&gt;body&lt;/span&gt;)); &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fatal&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;config.yaml：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;Name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;kq&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;Brokers&lt;/span&gt;:
+  - &lt;span style=&#34;color:#ae81ff&#34;&gt;127.0.0.1&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;19092&lt;/span&gt;
+  - &lt;span style=&#34;color:#ae81ff&#34;&gt;127.0.0.1&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;19092&lt;/span&gt;
+  - &lt;span style=&#34;color:#ae81ff&#34;&gt;127.0.0.1&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;19092&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;Group&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;adhoc&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;Topic&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;kq&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;Offset&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;first&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;Consumers&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;consumer.go:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;kq&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;KqConf&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;conf&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;MustLoad&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;config.yaml&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;// WithHandle: 具体的处理msg的logic
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// 这也是开发者需要根据自己的业务定制化
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;q&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;kq&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;MustNewQueue&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;kq&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;WithHandle&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;error&lt;/span&gt; {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;=&amp;gt; %s\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt;)
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt;
+}))
+&lt;span style=&#34;color:#66d9ef&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;q&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Stop&lt;/span&gt;()
+&lt;span style=&#34;color:#a6e22e&#34;&gt;q&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Start&lt;/span&gt;()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;和 dq 不同的是：开发者不需要关注任务类型（在这里也没有任务的概念，传递的都是 message data）。&lt;/p&gt;
+&lt;p&gt;其他操作和 dq 类似，只是将 业务处理函数 当成配置直接传入消费者中。&lt;/p&gt;
+&lt;h3 id=&#34;总结&#34;&gt;总结&lt;/h3&gt;
+&lt;p&gt;在我们目前的场景中，kq 大量使用在我们的异步消息服务；而延时任务，我们除了 dq，还可以使用内存版的 TimingWheel「go-zero 生态组件」。&lt;/p&gt;
 </description>
       
     </item>
