@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>namespace on 大叶的博客</title>
+    <link>https://daryeon.github.io/tags/namespace/</link>
+    <description>Recent content in namespace on 大叶的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 25 Feb 2018 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/namespace/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PHP的命名空间讲解</title>
+      <link>https://daryeon.github.io/post/php-namespace/</link>
+      <pubDate>Sun, 25 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-namespace/</guid>
+      <description>简介 PHP命名空间是PHP5.3开始支持。本篇讲解PHP命名空间用法和PHP命名空间详解。它的诞生使的我们在一个文件中可以使用多个同名的类而</description>
+    </item>
+    
+  </channel>
+</rss>

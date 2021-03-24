@@ -650,6 +650,412 @@ defer2由于返回的不是匿名变量，所以不会创建中间变量，defer
     </item>
     
     <item>
+      <title>PHP的命名空间讲解</title>
+      <link>https://daryeon.github.io/post/php-namespace/</link>
+      <pubDate>Sun, 25 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-namespace/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;PHP命名空间是PHP5.3开始支持。本篇讲解PHP命名空间用法和PHP命名空间详解。它的诞生使的我们在一个文件中可以使用多个同名的类而不冲突。&lt;/p&gt;
+&lt;p&gt;好处：我们的项目有一个记录日志文件的类，叫做Log。然后我们又必须要引入另一个代码包，这个代码&lt;/p&gt;
+&lt;p&gt;包里也有一个叫做Log的类。那么在一个文件中，我们记录日志的又需要给两个类都写一条日志。可以类&lt;/p&gt;
+&lt;p&gt;同名了，怎么办？这个时候，命名空间应运而生。在Java等语言中命名空间是很早就已经提供了支持，&lt;/p&gt;
+&lt;p&gt;而我大PHP一直到5.3才对命名空间提供了支持。&lt;/p&gt;
+&lt;h3 id=&#34;示例一&#34;&gt;示例一&lt;/h3&gt;
+&lt;p&gt;文件index.php&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;test.php&amp;#39;&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;{
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;(){
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;basename&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;lt;br&amp;gt;&amp;#39;&lt;/span&gt;;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__CLASS__&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39; : &amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__METHOD__&lt;/span&gt;;
+    }
+}
+$obj &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;();
+$obj&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;();
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;lt;br&amp;gt;&amp;#39;&lt;/span&gt;;
+$obj1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test\index&lt;/span&gt;();
+$obj1&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;();
+&lt;span style=&#34;color:#75715e&#34;&gt;?&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;文件test.php&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;{
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;(){
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;basename&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;lt;br&amp;gt;&amp;#39;&lt;/span&gt;;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__CLASS__&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39; : &amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__METHOD__&lt;/span&gt;;
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我们给index.php不设置命名空间，对test.php设置命名空间，名为test。运行index.php。&lt;/p&gt;
+&lt;p&gt;结果：&lt;/p&gt;
+&lt;p&gt;index.php&lt;/p&gt;
+&lt;p&gt;index : index::a&lt;/p&gt;
+&lt;p&gt;test.php&lt;/p&gt;
+&lt;p&gt;test\index : test\index::a&lt;/p&gt;
+&lt;p&gt;我们看到了，同名的类也可以运行而不冲突了。&lt;/p&gt;
+&lt;h3 id=&#34;示例二&#34;&gt;示例二&lt;/h3&gt;
+&lt;p&gt;文件index.php&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;test.php&amp;#39;&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;{
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;(){
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;basename&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;lt;br&amp;gt;&amp;#39;&lt;/span&gt;;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__CLASS__&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39; : &amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__METHOD__&lt;/span&gt;;
+    }
+}
+$obj &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;();
+$obj&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;();
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;lt;br&amp;gt;&amp;#39;&lt;/span&gt;;
+$obj1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;\test\index&lt;/span&gt;();
+$obj1&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;();
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;文件test.php&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;{
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;(){
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;basename&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;lt;br&amp;gt;&amp;#39;&lt;/span&gt;;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__CLASS__&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39; : &amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__METHOD__&lt;/span&gt;;
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我们给index.php设置命名空间，名为index，对test.php设置命名空间，名为test。运行index.php。&lt;/p&gt;
+&lt;p&gt;结果：&lt;/p&gt;
+&lt;p&gt;index.php&lt;/p&gt;
+&lt;p&gt;index\index : index\index::a&lt;/p&gt;
+&lt;p&gt;test.php&lt;/p&gt;
+&lt;p&gt;test\index : test\index::a&lt;/p&gt;
+&lt;p&gt;比较示例一和二，不对index.php设置命名空间，即该文件是整个PHP全局命名空间下面的一个文件，那么使用test\index()即可，如果对index.php设置命名空间，即在其他的命名空间中使用命名空间，就要多一个“\”，就要使用\test\index()。&lt;/p&gt;
+&lt;h3 id=&#34;示例三&#34;&gt;示例三&lt;/h3&gt;
+&lt;p&gt;文件index.php&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;namespace.php&amp;#39;&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;\test\test1\test2&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test2&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;{
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;(){
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;basename&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;lt;br&amp;gt;&amp;#39;&lt;/span&gt;;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__CLASS__&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39; : &amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__METHOD__&lt;/span&gt;;
+    }
+}
+$obj &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;();
+$obj&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;();
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;lt;br&amp;gt;&amp;#39;&lt;/span&gt;;
+$obj1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;\test\test1\test2\index&lt;/span&gt;();
+$obj1&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;();
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;lt;br&amp;gt;&amp;#39;&lt;/span&gt;;
+$obj1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test2\index&lt;/span&gt;();
+$obj1&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;文件test.php&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test\test1\test2&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;{
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;(){
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;basename&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;lt;br&amp;gt;&amp;#39;&lt;/span&gt;;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__CLASS__&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39; : &amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;__METHOD__&lt;/span&gt;;
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;结果：&lt;/p&gt;
+&lt;p&gt;index.php&lt;/p&gt;
+&lt;p&gt;index\index : index\index::a&lt;/p&gt;
+&lt;p&gt;test.php&lt;/p&gt;
+&lt;p&gt;test\test1\test2\index : test\test1\test2\index::a&lt;/p&gt;
+&lt;p&gt;test.php&lt;/p&gt;
+&lt;p&gt;test\test1\test2\index : test\test1\test2\index::a&lt;/p&gt;
+&lt;p&gt;这说明了什么？别名！用过SQL吧。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;COUNT&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;`&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;`&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;`&lt;/span&gt;tebleName&lt;span style=&#34;color:#f92672&#34;&gt;`&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;嗯，一个意思。\test\test1\test2这个名字太长了，就别名为test2就好了。使用了use之后呢，这个命名空间就想到于是在index这个命名空间下面了，而不是全局命名空间的一员了，所以使用test2\index()，而不是\test2\index()。&lt;/p&gt;
+&lt;p&gt;别名时在PHP代码编译的时候执行的，而变量的解析则要更晚。也就是说不能对变量运用use关键字。示例如下（摘自官方手册示例）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;My\Full\Classname&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Another&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;My\Full\NSname&lt;/span&gt;;
+$obj &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Another&lt;/span&gt;; &lt;span style=&#34;color:#75715e&#34;&gt;// 实例化一个 My\Full\Classname 对象
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;$a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Another&amp;#39;&lt;/span&gt;;
+$obj &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; $a;      &lt;span style=&#34;color:#75715e&#34;&gt;// 实际化一个 Another 对象
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;待续&#34;&gt;待续···&lt;/h3&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>phpQuery—基于jQuery的PHP实现</title>
+      <link>https://daryeon.github.io/post/php-libraray-phpquery/</link>
+      <pubDate>Fri, 16 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-libraray-phpquery/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;Query的选择器之强大是有目共睹的，phpQuery 让php也拥有了这样的能力，它就相当于服务端的jQuery。&lt;/p&gt;
+&lt;p&gt;phpQuery is a server-side, chainable, CSS3 selector driven Document Object Model
+(DOM) API based on jQuery JavaScript Library.
+Library is written in PHP5 and provides additional Command Line Interface (CLI).&lt;/p&gt;
+&lt;h3 id=&#34;存在的意义&#34;&gt;存在的意义&lt;/h3&gt;
+&lt;p&gt;我们有时需要抓取一个网页的内容，但只需要特定部分的信息，通常会用正则来解决，这当然没有问题。正则是一个通用解决方案，但特定情况下，往往有更简单快 捷的方法。比如你想查询一个编程方面的问题，当然可以使用Google，但stackoverflow 作为一个专业的编程问答社区，会提供给你更多，更靠谱的答案。&lt;/p&gt;
+&lt;h3 id=&#34;对于html页面不应该使用正则的原因主要有3个&#34;&gt;对于html页面，不应该使用正则的原因主要有3个&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;编写条件表达式比较麻烦&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;尤其对于新手，看到一堆”不知所云”的字符评凑在一起，有种脑袋都要炸了的感觉。如果要分离的对象没有太明显的特征，正则写起来更是麻烦。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;效率不高&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;对于php来说，正则应该是没有办法的办法，能通过字符串函数解决的，就不要劳烦正则了。用正则去处理一个30多k的文件，效率不敢保证。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;有phpQuery&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;如果你使用过jQuery，想获取某个特定元素应该是轻而易举的事情，phpQuery让这成为了可能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;浅析phpquery&#34;&gt;浅析phpQuery&lt;/h3&gt;
+&lt;p&gt;phpQuery是基于php5新添加的DOMDocument。而DOMDocument则是专门用来处理html/xml。它提供了强大xpath选择器及其他很多html/xml操作函数，使得处理html/xml起来非常方便。那为什么不直接使用呢？这个，去看一下官网的函数列表就知道了，如果对自己的记忆力很有信心，不妨一试。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;  
+&lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;phpQuery.php&amp;#39;&lt;/span&gt;;  
+&lt;span style=&#34;color:#a6e22e&#34;&gt;phpQuery&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;newDocumentFile&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://job.blueidea.com&amp;#39;&lt;/span&gt;);  
+$companies &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pq&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;#hotcoms .coms&amp;#39;&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;find&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;div&amp;#39;&lt;/span&gt;);  
+&lt;span style=&#34;color:#66d9ef&#34;&gt;foreach&lt;/span&gt;($companies &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; $company)  
+{  
+   &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pq&lt;/span&gt;($company)&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;find&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;h3 a&amp;#39;&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;br&amp;gt;&amp;#34;&lt;/span&gt;;  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;小结&#34;&gt;小结&lt;/h3&gt;
+&lt;p&gt;pq()就像jQuery里的$()&lt;/p&gt;
+&lt;p&gt;基本上jQuery的选择器都可以用在phpQuery上，只要把’.&amp;lsquo;变成’-&amp;gt;’&lt;/p&gt;
+&lt;p&gt;phpQuery提供了好几种载入文件的方法，有的使用字符串，有的使用文件(包括url)，选 择的时候要注意&lt;/p&gt;
+&lt;p&gt;基本上这一页 就很能说明问题了&lt;/p&gt;
+&lt;h3 id=&#34;其他解析器&#34;&gt;其他解析器&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;simplehtmldom 也是个不错的html解析器，使用起来也挺方便，是基于正则的，所以没有phpQuery那么强大，如果没有太高的要求，也基本够用了。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;yql 是yahoo出的一款使用类似SQL的语言，来获取相应的数据，也很强大，无须任何类 库，可以直接调用，支持xpath，如果对SQL语句比较熟悉的话，可以考虑yql。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;待续&#34;&gt;待续···&lt;/h3&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>php获取当月天数及当月第一天及最后一天、上月第一天及最后一天实现方法</title>
+      <link>https://daryeon.github.io/post/php-date-function-used/</link>
+      <pubDate>Fri, 16 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-date-function-used/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;在做查询过程中,例如要实现查上个月从第一天到最后一天的佣金(提成),那我们在程序实现过程中就要让程序在上个月的范围内查询,第一天是比较好办,但最后一天就不定,要去写段函数进行月份及年份判断来得出上个月共有多少天.那就比麻烦,还有获取当前月份,当前年份等常规日期获取函数,以下代码都是经过测试后的正确代码,可以放心使用。&lt;/p&gt;
+&lt;h3 id=&#34;获取上个月第一天及最后一天&#34;&gt;获取上个月第一天及最后一天&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Y-m-01&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;strtotime&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-1 month&amp;#39;&lt;/span&gt;));
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;br/&amp;gt;&amp;#34;&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Y-m-t&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;strtotime&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-1 month&amp;#39;&lt;/span&gt;));
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;br/&amp;gt;&amp;#34;&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;获取当月第一天及最后一天&#34;&gt;获取当月第一天及最后一天&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;$beginDate&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Y-m-01&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;strtotime&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Y-m-d&amp;#34;&lt;/span&gt;)));
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; $beginDate;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;br/&amp;gt;&amp;#34;&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Y-m-d&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;strtotime&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;$beginDate&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; +1 month -1 day&amp;#34;&lt;/span&gt;));
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;br/&amp;gt;&amp;#34;&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;获取当天年份月份日及天数&#34;&gt;获取当天年份、月份、日及天数&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; 本月共有:&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;t&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;天&amp;#34;&lt;/span&gt;;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; 当前年份&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Y&amp;#39;&lt;/span&gt;);
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; 当前月份&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;m&amp;#39;&lt;/span&gt;);
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; 当前几号&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;d&amp;#39;&lt;/span&gt;);
+&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;br/&amp;gt;&amp;#34;&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;使用函数及数组来获取当月第一天及最后一天比较实用&#34;&gt;使用函数及数组来获取当月第一天及最后一天,比较实用&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getthemonth&lt;/span&gt;($date)
+{
+   $firstday &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Y-m-01&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;strtotime&lt;/span&gt;($date));
+   $lastday &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Y-m-d&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;strtotime&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;$firstday&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; +1 month -1 day&amp;#34;&lt;/span&gt;));
+   &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;array&lt;/span&gt;($firstday,$lastday);
+   }
+   $today &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Y-m-d&amp;#34;&lt;/span&gt;);
+   $day&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getthemonth&lt;/span&gt;($today);
+   &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;当月的第一天: &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;$day[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; 当月的最后一天: &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;$day[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;];
+   &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;br/&amp;gt;&amp;#34;&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;待续&#34;&gt;待续···&lt;/h3&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>基于php&amp;运算符的巧妙应用</title>
+      <link>https://daryeon.github.io/post/base-on-php-_and_symbol-skill/</link>
+      <pubDate>Sat, 10 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/base-on-php-_and_symbol-skill/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;&amp;amp;:and，按位与。以$a &amp;amp; $b为例，将$a和$b转化为二进制后，都为1的位设为1。&lt;/p&gt;
+&lt;h3 id=&#34;表达式&#34;&gt;表达式&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;$a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;;
+$b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;var_dump&lt;/span&gt;($a &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt; $b);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;输出:int(2)&lt;/p&gt;
+&lt;h3 id=&#34;原理&#34;&gt;原理&lt;/h3&gt;
+&lt;p&gt;$a = 6转化为2进制为110&lt;/p&gt;
+&lt;p&gt;$b = 3转化为2进制为11&lt;/p&gt;
+&lt;p&gt;$a &amp;amp; $b即是 110 与 11&lt;/p&gt;
+&lt;p&gt;将$a和$b中都为1的位设为1,位数不够的补0.即110 与 011&lt;/p&gt;
+&lt;p&gt;运算结果010,转化为十进制结果为2&lt;/p&gt;
+&lt;h3 id=&#34;应用&#34;&gt;应用&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;需求：
+这是一个设置消息提醒的功能。我们假设这是一个blog系统，用户希望有人收藏自己的文章后，可以得到一个消息提醒。 这里有三种提醒方式：邮箱提醒、短信提醒、微信公众号提醒。 这里用户可以通过开关按钮控制某种提醒方式是开启还是关闭。 可以参考以下表格：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;提醒操作&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;邮箱&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;短信&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;微信公众号&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;文章被收藏&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;开关按钮&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;开关按钮&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;开关按钮&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;被关注&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;开关按钮&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;开关按钮&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;开关按钮&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;有人评论&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;开关按钮&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;开关按钮&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;开关按钮&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;实现：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;数据库设计，表名（remind）：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;字段&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;数据类型&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;collection(文章被收藏)&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;int&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;default(0)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;followed(被关注)&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;int&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;default(0)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;commented(有人评论)&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;int&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;default(0)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;2. 在Remind Model中设置执行操作的提醒方式类型：&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;cosnt&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;REMIND_NO&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;;&lt;span style=&#34;color:#75715e&#34;&gt;//关闭所有的提醒 
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;cosnt&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;REMIND_EMAIL&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;;&lt;span style=&#34;color:#75715e&#34;&gt;//邮箱提醒 2的0次方  转化为二进制是：1
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;cosnt&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;REMIND_SMS&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;;&lt;span style=&#34;color:#75715e&#34;&gt;//短信提醒 2的1次方    转化为二进制是：10
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;cosnt&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;REMIND_WECHAT&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;;&lt;span style=&#34;color:#75715e&#34;&gt;//微信公众号提醒 2的2次方 转化为二进制是：100
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果有新的提醒方式值应为4、8、16，依次类推，2的n次方。&lt;/p&gt;
+&lt;h4 id=&#34;仔细观察二进制转化后&#34;&gt;仔细观察二进制转化后&lt;/h4&gt;
+&lt;p&gt;email第一位是1，sms第二位是1，wechat第三位是1.&lt;/p&gt;
+&lt;p&gt;即email占领了第一位、sms占领了第二位、wechat占领了第三位&lt;/p&gt;
+&lt;p&gt;1，代表开启提醒；0，代表关闭提醒&lt;/p&gt;
+&lt;p&gt;如果第一位是1，表示开启邮箱提醒；如果第一位是0，表示关闭邮箱提醒&lt;/p&gt;
+&lt;p&gt;假设用户希望有人评论他的文章时，收到来自系统的提醒&lt;/p&gt;
+&lt;p&gt;只开启邮箱提醒，那数据库中commented字段对应的值应是：1；转化为二进制：1&lt;/p&gt;
+&lt;p&gt;只开启短信提醒，那数据库中commented字段对应的值应是：2；转化为二进制：10&lt;/p&gt;
+&lt;p&gt;只开启微信公众号提醒，那数据库中commented字段对应的值应是：4；转化为二进制：100&lt;/p&gt;
+&lt;p&gt;如果开启邮箱提醒和短信提醒，那数据库中commented字段对应的值应是：1+2=3；转化为二进制：11&lt;/p&gt;
+&lt;p&gt;如果开启邮箱提醒和微信公众号提醒，那数据库中commented字段对应的值应是：1+4=5；转化为二进制：101&lt;/p&gt;
+&lt;p&gt;如果开启短信提醒和微信公众号提醒，那数据库中commented字段对应的值应是：2+4=6；转化为二进制：110&lt;/p&gt;
+&lt;p&gt;如果开启所有提醒，那数据库中commented字段对应的值应是：1+2+4=7；转化为二进制：111&lt;/p&gt;
+&lt;h4 id=&#34;重点来了前方高能请注意啦&#34;&gt;重点来了，前方高能，请注意啦&lt;/h4&gt;
+&lt;p&gt;3、控制器中写具体业务逻辑：&lt;/p&gt;
+&lt;p&gt;用户希望有人关注他后，可以通过邮箱提醒他，所以用户开启了邮箱提醒：&lt;/p&gt;
+&lt;p&gt;前端传值：[&amp;lsquo;option&amp;rsquo;=&amp;gt;&amp;lsquo;followed&amp;rsquo;,&amp;lsquo;type&amp;rsquo;=&amp;gt;&amp;lsquo;email&amp;rsquo;];&lt;/p&gt;
+&lt;p&gt;后端接收到参数，从数据库中找到当前用户的这一条数据,得知followed字段值为0；&lt;/p&gt;
+&lt;p&gt;email对应的值为1，进行&amp;amp;运算，判断email提醒是否开启&lt;/p&gt;
+&lt;p&gt;1&amp;amp;0=0,所以未开启，那我们要开启email提醒，此时followed＝0+1=1；&lt;/p&gt;
+&lt;h4 id=&#34;后来用户觉得短信提醒比较直接所以又开启了短信提醒&#34;&gt;后来用户觉得短信提醒比较直接，所以又开启了短信提醒：&lt;/h4&gt;
+&lt;p&gt;前端传值：[&amp;lsquo;option&amp;rsquo;=&amp;gt;&amp;lsquo;followed&amp;rsquo;,&amp;lsquo;type&amp;rsquo;=&amp;gt;&amp;lsquo;sms&amp;rsquo;];&lt;/p&gt;
+&lt;p&gt;后端接收到参数，从数据库中找到当前用户的这一条数据,得知followed字段值为1；&lt;/p&gt;
+&lt;p&gt;sms对应的值为2，进行&amp;amp;运算，判断sms提醒是否开启&lt;/p&gt;
+&lt;p&gt;2&amp;amp;1=0,所以未开启，那我们要开启sms提醒，此时followed＝2+1=3；&lt;/p&gt;
+&lt;h4 id=&#34;后来该用户越来越厉害每天关注他的人特别多每天都收到很多消息所以他又想关闭短信提醒&#34;&gt;后来该用户越来越厉害，每天关注他的人特别多，每天都收到很多消息，所以他又想关闭短信提醒：&lt;/h4&gt;
+&lt;p&gt;前端传值：[&amp;lsquo;option&amp;rsquo;=&amp;gt;&amp;lsquo;followed&amp;rsquo;,&amp;lsquo;type&amp;rsquo;=&amp;gt;&amp;lsquo;sms&amp;rsquo;];&lt;/p&gt;
+&lt;p&gt;后端接收到参数，从数据库中找到当前用户的这一条数据,得知followed字段值为3；&lt;/p&gt;
+&lt;p&gt;sms对应的值为2，进行&amp;amp;运算，判断sms提醒是否开启&lt;/p&gt;
+&lt;p&gt;2&amp;amp;3=2,所以已开启，那我们要关闭sms提醒，此时followed＝3-2=1；&lt;/p&gt;
+&lt;h3 id=&#34;部分程序代码&#34;&gt;部分程序代码：&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;$option &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;option&amp;#39;&lt;/span&gt;];&lt;span style=&#34;color:#75715e&#34;&gt;//提醒操作,由前端传来的值
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;$type &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;type&amp;#39;&lt;/span&gt;];&lt;span style=&#34;color:#75715e&#34;&gt;//提醒方式，由前端传来的值
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;$remind &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Remind&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;model&lt;/span&gt;()&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;find&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;);&lt;span style=&#34;color:#75715e&#34;&gt;//根据条件，在数据库中找到的一条记录
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// 如果是提醒方式一
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; ($type &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sms&amp;#34;&lt;/span&gt;) {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; ($remind－&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;$option &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Remind&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;REMIND_SMS&lt;/span&gt;) {
+        &lt;span style=&#34;color:#75715e&#34;&gt;// true 代表已开启sms提醒，此时应关闭sms提醒
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        $remind－&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;$option &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Remind&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;REMIND_SMS&lt;/span&gt;;
+    } &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;($remind－&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;$option &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Remind&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;REMIND_SMS&lt;/span&gt;)) {
+        &lt;span style=&#34;color:#75715e&#34;&gt;// false 代表已关闭sms提醒，此时应开启sms提醒
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        $remind－&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;$option &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Remind&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;REMIND_SMS&lt;/span&gt;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;总结&#34;&gt;总结&lt;/h3&gt;
+&lt;p&gt;采用&amp;amp;运算的好处：&lt;/p&gt;
+&lt;p&gt;减少了数据库设计的复杂性，一张表即可搞定；不用一张表纪录操作，另一张表纪录提醒方式，然后再关联；&lt;/p&gt;
+&lt;p&gt;减少前端的判断，前端只需将当前的操作和其对应的值传给后端即可。&lt;/p&gt;
+&lt;h3 id=&#34;扩展&#34;&gt;扩展&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;判断某int型变量是奇数还是偶数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以$a为例&lt;/p&gt;
+&lt;p&gt;$a &amp;amp; 1 ＝ 0，偶数&lt;/p&gt;
+&lt;p&gt;$a &amp;amp; 1 = 1,奇数&lt;/p&gt;
+&lt;p&gt;当$a ＝ 9时：&lt;/p&gt;
+&lt;p&gt;$a &amp;amp; 1转化为2进制，1001&amp;amp;0001&lt;/p&gt;
+&lt;p&gt;结果为0001,转化为十进制为，1，所以是奇数&lt;/p&gt;
+&lt;p&gt;当$a = 16时：&lt;/p&gt;
+&lt;p&gt;$a &amp;amp; 1转化为2进制，10000&amp;amp;00001&lt;/p&gt;
+&lt;p&gt;结果为00000,转化为十进制为，0，所以是偶数&lt;/p&gt;
+&lt;h4 id=&#34;仔细观察将十进制转化为二进制当第一位为1的都是奇数第一位为0的都是偶数&#34;&gt;仔细观察，将十进制转化为二进制，当第一位为1的都是奇数，第一位为0的都是偶数&lt;/h4&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>unicode,ascii,utf-8编码的区别</title>
       <link>https://daryeon.github.io/post/encode-introduce/</link>
       <pubDate>Sat, 03 Feb 2018 08:51:34 +0800</pubDate>

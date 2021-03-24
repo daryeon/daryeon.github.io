@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>function on 大叶的博客</title>
+    <link>https://daryeon.github.io/tags/function/</link>
+    <description>Recent content in function on 大叶的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 16 Feb 2018 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/function/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>php获取当月天数及当月第一天及最后一天、上月第一天及最后一天实现方法</title>
+      <link>https://daryeon.github.io/post/php-date-function-used/</link>
+      <pubDate>Fri, 16 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-date-function-used/</guid>
+      <description>简介 在做查询过程中,例如要实现查上个月从第一天到最后一天的佣金(提成),那我们在程序实现过程中就要让程序在上个月的范围内查询,第一天是比较好</description>
+    </item>
+    
+  </channel>
+</rss>

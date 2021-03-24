@@ -6,7 +6,43 @@
     <description>Recent content in php on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 15 Jan 2018 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/categories/php/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 25 Feb 2018 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/categories/php/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PHP的命名空间讲解</title>
+      <link>https://daryeon.github.io/post/php-namespace/</link>
+      <pubDate>Sun, 25 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-namespace/</guid>
+      <description>简介 PHP命名空间是PHP5.3开始支持。本篇讲解PHP命名空间用法和PHP命名空间详解。它的诞生使的我们在一个文件中可以使用多个同名的类而</description>
+    </item>
+    
+    <item>
+      <title>phpQuery—基于jQuery的PHP实现</title>
+      <link>https://daryeon.github.io/post/php-libraray-phpquery/</link>
+      <pubDate>Fri, 16 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-libraray-phpquery/</guid>
+      <description>简介 Query的选择器之强大是有目共睹的，phpQuery 让php也拥有了这样的能力，它就相当于服务端的jQuery。 phpQuery is a server-side, chainable, CSS3 selector driven Document Object Model</description>
+    </item>
+    
+    <item>
+      <title>php获取当月天数及当月第一天及最后一天、上月第一天及最后一天实现方法</title>
+      <link>https://daryeon.github.io/post/php-date-function-used/</link>
+      <pubDate>Fri, 16 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-date-function-used/</guid>
+      <description>简介 在做查询过程中,例如要实现查上个月从第一天到最后一天的佣金(提成),那我们在程序实现过程中就要让程序在上个月的范围内查询,第一天是比较好</description>
+    </item>
+    
+    <item>
+      <title>基于php&amp;运算符的巧妙应用</title>
+      <link>https://daryeon.github.io/post/base-on-php-_and_symbol-skill/</link>
+      <pubDate>Sat, 10 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/base-on-php-_and_symbol-skill/</guid>
+      <description>简介 &amp;amp;:and，按位与。以$a &amp;amp; $b为例，将$a和$b转化为二进制后，都为1的位设为1。 表达式 $a = 6; $b = 3; var_dump($a &amp;amp; $b); 输出:int(2) 原</description>
+    </item>
+    
     <item>
       <title>Composer和自动加载学习分享</title>
       <link>https://daryeon.github.io/post/composer-and-aotuload/</link>

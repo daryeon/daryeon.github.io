@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>symbol on 大叶的博客</title>
+    <link>https://daryeon.github.io/tags/symbol/</link>
+    <description>Recent content in symbol on 大叶的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 10 Feb 2018 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/symbol/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基于php&amp;运算符的巧妙应用</title>
+      <link>https://daryeon.github.io/post/base-on-php-_and_symbol-skill/</link>
+      <pubDate>Sat, 10 Feb 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/base-on-php-_and_symbol-skill/</guid>
+      <description>简介 &amp;amp;:and，按位与。以$a &amp;amp; $b为例，将$a和$b转化为二进制后，都为1的位设为1。 表达式 $a = 6; $b = 3; var_dump($a &amp;amp; $b); 输出:int(2) 原</description>
+    </item>
+    
+  </channel>
+</rss>
