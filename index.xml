@@ -1165,6 +1165,159 @@ defer2由于返回的不是匿名变量，所以不会创建中间变量，defer
     </item>
     
     <item>
+      <title>Go语言中的指针介绍</title>
+      <link>https://daryeon.github.io/post/go-zhizhen-introduce/</link>
+      <pubDate>Fri, 20 Mar 2020 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-zhizhen-introduce/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;指针是一种数据类型，用来存储值的内存地址，为了便于理解，我们也可以把指针理解为内存地址，指针类型只占用内存 4 个或 8 个字节，在 Golang 语言中，类型名称前加 * 表示该类型的指针类型。&lt;/p&gt;
+&lt;p&gt;指针类型变量也需要一块内存空间存储值，指针变量的值就是它所指向数据的内存地址，而普通变量的值就是具体存放的数据。不同的指针类型变量之间无法互相赋值，在 Golang 语言中，指针不支持运算，也不能获取常量的指针。&lt;/p&gt;
+&lt;h3 id=&#34;指针定义&#34;&gt;指针定义&lt;/h3&gt;
+&lt;p&gt;在 Golang 语言中，指针定义有 3 种方式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;使用取地址符 &amp;amp; 获取变量的指针（内存地址）；&lt;/li&gt;
+&lt;li&gt;使用 var 关键字声明指针变量，使用 var 关键字声明的变量不能直接赋值和取值，因为它还没有内存地址，它的值是 nil；&lt;/li&gt;
+&lt;li&gt;使用内置的 new 函数来声明指针类型的变量，new 函数接收一个参数，可以传递类型给它，返回值是传递类型的指针类型。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;示例代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt; () {
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 方式 1
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;// 定义普通变量 a
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 定义指针变量 p
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;变量 a 的值为：&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) &lt;span style=&#34;color:#75715e&#34;&gt;// 1
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;变量 a 的内存地址为：&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt;) &lt;span style=&#34;color:#75715e&#34;&gt;// 0xc0000ae008
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;变量 a 的类型为：%T\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) &lt;span style=&#34;color:#75715e&#34;&gt;// int
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;变量 p 的类型为：%T\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt;) &lt;span style=&#34;color:#75715e&#34;&gt;// *int
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 方式 2
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;str&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;
+ &lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt;
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 不同指针类型变量之间无法互相赋值
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;p1&lt;/span&gt; = &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;str&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;// ./main.go:29:5: cannot use &amp;amp;str (type *string) as type *int in assignment
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 方式 3
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; new(&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt;)
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%v %T\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;p2&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;p2&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;指针操作&#34;&gt;指针操作&lt;/h3&gt;
+&lt;p&gt;在 Golang 语言中，指针操作包括取值和修改。取值就是获取指针指向的值，只需在指针变量前加 *；修改就是修改指针指向的值，需要注意的是使用 var 关键字声明的指针变量不能直接赋值和取值，因为它还没有分配内存，它的值为 nil，可以使用内置函数 new 给它分配内存。&lt;/p&gt;
+&lt;p&gt;示例代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt; () {
+  &lt;span style=&#34;color:#75715e&#34;&gt;// 获取指针指向的值
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;p3&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;val&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;p3&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;变量 val 的值为：&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;val&lt;/span&gt;)
+
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 修改指针指向的值
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;// 给 *p3 赋值，*p3 指向的值也被修改，因为 p3 指向的内存就是变量 b 的内存地址。
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;p3&lt;/span&gt; = &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;*p3 指针指向的值为：&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;p3&lt;/span&gt;)
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;变量 b 的值为：&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;)
+  
+ &lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p4&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; = new(&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt;)
+ &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;p4&lt;/span&gt; = &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;p4&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;指针应用&#34;&gt;指针应用&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;指针参数：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在 Golang 语言中，函数传递参数只有值传递，传递的实参都是参数原始值的拷贝副本，所以我们传递值类型的参数时，修改参数的值，原始数据不会被修改。但是，如果是指针类型的参数，修改参数的值，原始数据也会被修改，原因是指针类型的参数存储的是内存地址，并且和实参的内存地址相同。&lt;/p&gt;
+&lt;p&gt;示例代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt; () {
+  &lt;span style=&#34;color:#75715e&#34;&gt;// 值类型参数，实参的值未改变
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;mySalary&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;80000&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;变量 mySalary 的内存地址为：%p\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;mySalary&lt;/span&gt;)
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;modifySalary&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;mySalary&lt;/span&gt;)
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;mySalary&lt;/span&gt;)
+
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 指针类型参数，实参的值被改变
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;modifySalary2&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;mySalary&lt;/span&gt;)
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;mySalary&lt;/span&gt;)
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;modifySalary&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt;) {
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;参数变量的内存地址为：%p\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt;)
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt; = &lt;span style=&#34;color:#ae81ff&#34;&gt;100000&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;modifySalary2&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt;) {
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;参数变量的内存地址为：%p\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt;)
+ &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt; = &lt;span style=&#34;color:#ae81ff&#34;&gt;100000&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;指针接收者：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在 Golang 语言中，定义一个方法，接收者可以是值类型和指针类型，二者都可以调用方法，因为 Golang 编译器会自动转换，所以二者是等价的。&lt;/p&gt;
+&lt;p&gt;示例代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;worker&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;uint&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;worker&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;raise&lt;/span&gt; () {
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;worker&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;raise1&lt;/span&gt; () {
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt; () {
+  &lt;span style=&#34;color:#75715e&#34;&gt;// 值类型调用者
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;worker&lt;/span&gt;{
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;frank&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;5000&lt;/span&gt;,
+ }
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 指针类型接收者
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;raise&lt;/span&gt;()
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;w 的姓名是 %s，薪水是每月 %d\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt;)
+
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 值类型调用者
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;worker&lt;/span&gt;{
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;frank1&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;5000&lt;/span&gt;,
+ }
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 值类型接收者
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w1&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;raise1&lt;/span&gt;()
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;w1 的姓名是 %s，薪水是每月 %d\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;w1&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;w1&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt;)
+
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 指针类型调用者
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;worker&lt;/span&gt;{
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lucy&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;5000&lt;/span&gt;,
+ }
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 指针类型接收者
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w2&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;raise&lt;/span&gt;()
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;w2 的姓名是 %s，薪水是每月 %d\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;w2&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;w2&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt;)
+
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 指针类型调用者
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w3&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;worker&lt;/span&gt;{
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lucy1&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;5000&lt;/span&gt;,
+ }
+ &lt;span style=&#34;color:#75715e&#34;&gt;// 值类型接收者
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w3&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;raise1&lt;/span&gt;()
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;w3 的姓名是 %s，薪水是每月 %d\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;w3&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;w3&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;salary&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;那么，应该在什么时候使用指针接收者呢？&lt;/p&gt;
+&lt;p&gt;我总结了以下两点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果需要修改接收者，可以使用指针修改指针指向数据的值。&lt;/li&gt;
+&lt;li&gt;如果接收者是非 map、slice 和 channel 类型，并且数据比较大，可以使用指针来节省内存。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;总结&#34;&gt;总结&lt;/h3&gt;
+&lt;p&gt;本文我们介绍了 Golang 语言中的指针，和指针定义与操作，并且介绍了指针作为指针参数和指针接收者的应用区别。使用指针虽然可以修改数据的值和节省内存，但是也给开发带来了复杂性，所以为了开发简单，在开发中除了必须使用指针类型外，尽量使用值类型，比如数据小的类型 int、bool 和需要并发安全的代码其实没有必要使用指针。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>简单总结下并发编程模式</title>
       <link>https://daryeon.github.io/post/go-bingfa-programing/</link>
       <pubDate>Fri, 20 Mar 2020 08:51:34 +0800</pubDate>

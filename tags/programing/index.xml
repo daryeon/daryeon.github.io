@@ -8,6 +8,15 @@
     <language>zh-cn</language>
     <lastBuildDate>Fri, 20 Mar 2020 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/programing/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Go语言中的指针介绍</title>
+      <link>https://daryeon.github.io/post/go-zhizhen-introduce/</link>
+      <pubDate>Fri, 20 Mar 2020 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-zhizhen-introduce/</guid>
+      <description>简介 指针是一种数据类型，用来存储值的内存地址，为了便于理解，我们也可以把指针理解为内存地址，指针类型只占用内存 4 个或 8 个字节，在 Golang 语言中，类</description>
+    </item>
+    
+    <item>
       <title>简单总结下并发编程模式</title>
       <link>https://daryeon.github.io/post/go-bingfa-programing/</link>
       <pubDate>Fri, 20 Mar 2020 08:51:34 +0800</pubDate>

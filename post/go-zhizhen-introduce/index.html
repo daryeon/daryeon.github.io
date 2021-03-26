@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>分布式任务&#43;消息队列框架go-queue - 大叶的博客</title>
+  <title>Go语言中的指针介绍 - 大叶的博客</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="darye" />
-  <meta name="description" content="为什么要写这个库？ 在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案： beanstalkd beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)" />
+  <meta name="description" content="简介 指针是一种数据类型，用来存储值的内存地址，为了便于理解，我们也可以把指针理解为内存地址，指针类型只占用内存 4 个或 8 个字节，在 Golang 语言中，类" />
 
   <meta name="keywords" content="darye, blog, golang" />
 
@@ -35,7 +35,7 @@
 <meta name="generator" content="Hugo 0.81.0" />
 
 
-<link rel="canonical" href="https://daryeon.github.io/post/go-library-go-queue/" />
+<link rel="canonical" href="https://daryeon.github.io/post/go-zhizhen-introduce/" />
 
 
 
@@ -61,20 +61,20 @@
 <link rel="stylesheet" href="/css/global.css">
 
 
-<meta property="og:title" content="分布式任务&#43;消息队列框架go-queue" />
-<meta property="og:description" content="为什么要写这个库？ 在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案： beanstalkd beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)" />
+<meta property="og:title" content="Go语言中的指针介绍" />
+<meta property="og:description" content="简介 指针是一种数据类型，用来存储值的内存地址，为了便于理解，我们也可以把指针理解为内存地址，指针类型只占用内存 4 个或 8 个字节，在 Golang 语言中，类" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daryeon.github.io/post/go-library-go-queue/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-03-21T06:56:44&#43;08:00" />
-<meta property="article:modified_time" content="2021-03-21T06:56:44&#43;08:00" />
+<meta property="og:url" content="https://daryeon.github.io/post/go-zhizhen-introduce/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-03-20T08:51:34&#43;08:00" />
+<meta property="article:modified_time" content="2020-03-20T08:51:34&#43;08:00" />
 
-<meta itemprop="name" content="分布式任务&#43;消息队列框架go-queue">
-<meta itemprop="description" content="为什么要写这个库？ 在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案： beanstalkd beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)"><meta itemprop="datePublished" content="2021-03-21T06:56:44&#43;08:00" />
-<meta itemprop="dateModified" content="2021-03-21T06:56:44&#43;08:00" />
-<meta itemprop="wordCount" content="1343">
-<meta itemprop="keywords" content="library," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="分布式任务&#43;消息队列框架go-queue"/>
-<meta name="twitter:description" content="为什么要写这个库？ 在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案： beanstalkd beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)"/>
+<meta itemprop="name" content="Go语言中的指针介绍">
+<meta itemprop="description" content="简介 指针是一种数据类型，用来存储值的内存地址，为了便于理解，我们也可以把指针理解为内存地址，指针类型只占用内存 4 个或 8 个字节，在 Golang 语言中，类"><meta itemprop="datePublished" content="2020-03-20T08:51:34&#43;08:00" />
+<meta itemprop="dateModified" content="2020-03-20T08:51:34&#43;08:00" />
+<meta itemprop="wordCount" content="1682">
+<meta itemprop="keywords" content="programing," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go语言中的指针介绍"/>
+<meta name="twitter:description" content="简介 指针是一种数据类型，用来存储值的内存地址，为了便于理解，我们也可以把指针理解为内存地址，指针类型只占用内存 4 个或 8 个字节，在 Golang 语言中，类"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -400,7 +400,7 @@ if (!doNotTrack) {
 
       </li>
     
-        <li class="menu-item">
+        <li class="menu-item active">
         
           
           <a class="menu-item-link menu-parent" href="https://daryeon.github.io/">docs</a>
@@ -448,7 +448,7 @@ if (!doNotTrack) {
 
       </li>
     
-        <li class="menu-item active">
+        <li class="menu-item">
         
           
           <a class="menu-item-link menu-parent" href="https://daryeon.github.io/">go-library</a>
@@ -485,11 +485,11 @@ if (!doNotTrack) {
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">分布式任务&#43;消息队列框架go-queue</h1>
+      <h1 class="post-title">Go语言中的指针介绍</h1>
       
       <div class="post-meta">
-        <time datetime="2021-03-21" class="post-time">
-          2021-03-21
+        <time datetime="2020-03-20" class="post-time">
+          2020-03-20
         </time>
         <div class="post-category">
             <a href="https://daryeon.github.io/categories/go/"> go </a>
@@ -514,9 +514,10 @@ if (!doNotTrack) {
   <ul>
     <li>
       <ul>
-        <li><a href="#为什么要写这个库">为什么要写这个库？</a></li>
-        <li><a href="#应用场景">应用场景</a></li>
-        <li><a href="#如何使用">如何使用</a></li>
+        <li><a href="#简介">简介</a></li>
+        <li><a href="#指针定义">指针定义</a></li>
+        <li><a href="#指针操作">指针操作</a></li>
+        <li><a href="#指针应用">指针应用</a></li>
         <li><a href="#总结">总结</a></li>
       </ul>
     </li>
@@ -527,175 +528,148 @@ if (!doNotTrack) {
 
     
     <div class="post-content">
-      <h3 id="为什么要写这个库">为什么要写这个库？</h3>
-<p>在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案：</p>
+      <h3 id="简介">简介</h3>
+<p>指针是一种数据类型，用来存储值的内存地址，为了便于理解，我们也可以把指针理解为内存地址，指针类型只占用内存 4 个或 8 个字节，在 Golang 语言中，类型名称前加 * 表示该类型的指针类型。</p>
+<p>指针类型变量也需要一块内存空间存储值，指针变量的值就是它所指向数据的内存地址，而普通变量的值就是具体存放的数据。不同的指针类型变量之间无法互相赋值，在 Golang 语言中，指针不支持运算，也不能获取常量的指针。</p>
+<h3 id="指针定义">指针定义</h3>
+<p>在 Golang 语言中，指针定义有 3 种方式：</p>
 <ol>
-<li>beanstalkd</li>
+<li>使用取地址符 &amp; 获取变量的指针（内存地址）；</li>
+<li>使用 var 关键字声明指针变量，使用 var 关键字声明的变量不能直接赋值和取值，因为它还没有内存地址，它的值是 nil；</li>
+<li>使用内置的 new 函数来声明指针类型的变量，new 函数接收一个参数，可以传递类型给它，返回值是传递类型的指针类型。</li>
 </ol>
-<p>beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)、超时重发 (time-to-run) 和预留 (buried)，能够很好的支持分布式的后台任务和定时任务处理。如下是 beanstalkd 基本部分：</p>
-<ul>
-<li>job：任务单元；</li>
-<li>tube：任务队列，存储统一类型 job。producer 和 consumer 操作对象；</li>
-<li>job 生产者，通过 put 将 job 加入一个 tube；</li>
-<li>job 消费者，通过 reserve/release/bury/delete 来获取 job 或改变 job 的状态；</li>
-</ul>
-<p>很幸运的是官方提供了 go client：https://github.com/beanstalkd/go-beanstalk。</p>
-<p>但是这对不熟悉 beanstalkd 操作的 go 开发者而言，需要学习成本。</p>
-<ol start="2">
-<li>kafka</li>
-</ol>
-<p>类似基于 kafka 消息队列作为存储的方案，存储单元是消息，如果要实现延时执行，可以想到的方案是以延时执行的时间作为 topic，这样在大型的消息系统中，充斥大量一次性的 topic（dq_1616324404788, dq_1616324417622），当时间分散，会容易造成磁盘随机写的情况。</p>
-<p>而且在 go 生态中，</p>
-<p>同时考虑以下因素：</p>
-<ul>
-<li>支持延时任务</li>
-<li>高可用，保证数据不丢失</li>
-<li>可扩展资源和性能</li>
-</ul>
-<p>所以我们自己基于以上两个基础组件开发了 go-queue：</p>
-<ul>
-<li>基于 beanstalkd 开发了 dq，支持定时和延时操作。同时加入 redis 保证消费唯一性。</li>
-<li>基于 kafka 开发了 kq，简化生产者和消费者的开发 API，同时在写入 kafka 使用批量写，节省 IO。</li>
-</ul>
-<p>整体设计如下：</p>
-<p><img src="/images/go_queue/01.png" alt="整体设计过程"></p>
-<h3 id="应用场景">应用场景</h3>
-<p>首先在消费场景来说，一个是针对任务队列，一个是消息队列。而两者最大的区别：</p>
-<ul>
-<li>任务是没有顺序约束；消息需要；</li>
-<li>任务在加入中，或者是等待中，可能存在状态更新（或是取消）；消息则是单一的存储即可；</li>
-</ul>
-<p>所以在背后的基础设施选型上，也是基于这种消费场景。</p>
-<ul>
-<li>dq：依赖于beanstalkd ，适合延时、定时任务执行；</li>
-<li>kq：依赖于 kafka ，适用于异步、批量任务执行；</li>
-</ul>
-<p>而从其中 dq的 API 中也可以看出：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 延迟任务执行
-</span><span style="color:#75715e"></span><span style="color:#f92672">-</span> <span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">Delay</span>(<span style="color:#a6e22e">msg</span>, <span style="color:#a6e22e">delayTime</span>);
-
-<span style="color:#75715e">// 定时任务执行
-</span><span style="color:#75715e"></span><span style="color:#f92672">-</span> <span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">At</span>(<span style="color:#a6e22e">msg</span>, <span style="color:#a6e22e">atTime</span>);
-</code></pre></div><p>而在我们内部：</p>
-<ul>
-<li>如果是 异步消息消费/推送 ，则会选择使用kq：kq.Push(msg)；</li>
-<li>如果是 15 分钟提醒/ 明天中午发送短信 等，则使用 dq；</li>
-</ul>
-<h3 id="如何使用">如何使用</h3>
-<p>分别介绍dq和 kq的使用方式：</p>
-<ul>
-<li>dq</li>
-</ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// [Producer]
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">producer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">NewProducer</span>([]<span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">Beanstalk</span>{
-    {
-        <span style="color:#a6e22e">Endpoint</span>: <span style="color:#e6db74">&#34;localhost:11300&#34;</span>,
-        <span style="color:#a6e22e">Tube</span>:     <span style="color:#e6db74">&#34;tube&#34;</span>,
-    },
-    {
-        <span style="color:#a6e22e">Endpoint</span>: <span style="color:#e6db74">&#34;localhost:11301&#34;</span>,
-        <span style="color:#a6e22e">Tube</span>:     <span style="color:#e6db74">&#34;tube&#34;</span>,
-    },
-})  
-
-<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1000</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">1005</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-    <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">producer</span>.<span style="color:#a6e22e">Delay</span>([]byte(<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">i</span>)), <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span><span style="color:#f92672">*</span><span style="color:#ae81ff">5</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
-    }
+<p>示例代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span> () {
+ <span style="color:#75715e">// 方式 1
+</span><span style="color:#75715e"></span> <span style="color:#75715e">// 定义普通变量 a
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>
+ <span style="color:#75715e">// 定义指针变量 p
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;变量 a 的值为：&#34;</span>, <span style="color:#a6e22e">a</span>) <span style="color:#75715e">// 1
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;变量 a 的内存地址为：&#34;</span>, <span style="color:#a6e22e">p</span>) <span style="color:#75715e">// 0xc0000ae008
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;变量 a 的类型为：%T\n&#34;</span>, <span style="color:#a6e22e">a</span>) <span style="color:#75715e">// int
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;变量 p 的类型为：%T\n&#34;</span>, <span style="color:#a6e22e">p</span>) <span style="color:#75715e">// *int
+</span><span style="color:#75715e"></span>  
+ <span style="color:#75715e">// 方式 2
+</span><span style="color:#75715e"></span> <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">str</span> <span style="color:#66d9ef">string</span>
+ <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">p1</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>
+ <span style="color:#75715e">// 不同指针类型变量之间无法互相赋值
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">p1</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">str</span> <span style="color:#75715e">// ./main.go:29:5: cannot use &amp;str (type *string) as type *int in assignment
+</span><span style="color:#75715e"></span>
+ <span style="color:#75715e">// 方式 3
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">p2</span> <span style="color:#f92672">:=</span> new(<span style="color:#66d9ef">int</span>)
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%v %T\n&#34;</span>, <span style="color:#a6e22e">p2</span>, <span style="color:#a6e22e">p2</span>)
 }
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// [Consumer]
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">consumer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">NewConsumer</span>(<span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">DqConf</span>{
-  <span style="color:#a6e22e">Beanstalks</span>: []<span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">Beanstalk</span>{
-    {
-      <span style="color:#a6e22e">Endpoint</span>: <span style="color:#e6db74">&#34;localhost:11300&#34;</span>,
-      <span style="color:#a6e22e">Tube</span>:     <span style="color:#e6db74">&#34;tube&#34;</span>,
-    },
-    {
-      <span style="color:#a6e22e">Endpoint</span>: <span style="color:#e6db74">&#34;localhost:11301&#34;</span>,
-      <span style="color:#a6e22e">Tube</span>:     <span style="color:#e6db74">&#34;tube&#34;</span>,
-    },
-  },
-  <span style="color:#a6e22e">Redis</span>: <span style="color:#a6e22e">redis</span>.<span style="color:#a6e22e">RedisConf</span>{
-    <span style="color:#a6e22e">Host</span>: <span style="color:#e6db74">&#34;localhost:6379&#34;</span>,
-    <span style="color:#a6e22e">Type</span>: <span style="color:#a6e22e">redis</span>.<span style="color:#a6e22e">NodeType</span>,
-  },
-})
-<span style="color:#a6e22e">consumer</span>.<span style="color:#a6e22e">Consume</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">body</span> []<span style="color:#66d9ef">byte</span>) {
-  <span style="color:#75715e">// your consume logic
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">body</span>))
-})
-</code></pre></div><p>和普通的 生产者 - 消费者 模型类似，开发者也只需要关注以下：</p>
-<ol>
-<li>开发者只需要关注自己的任务类型「延时/定时」</li>
-<li>消费端的消费逻辑</li>
-</ol>
+</code></pre></div><h3 id="指针操作">指针操作</h3>
+<p>在 Golang 语言中，指针操作包括取值和修改。取值就是获取指针指向的值，只需在指针变量前加 *；修改就是修改指针指向的值，需要注意的是使用 var 关键字声明的指针变量不能直接赋值和取值，因为它还没有分配内存，它的值为 nil，可以使用内置函数 new 给它分配内存。</p>
+<p>示例代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span> () {
+  <span style="color:#75715e">// 获取指针指向的值
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">2</span>
+ <span style="color:#a6e22e">p3</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">b</span>
+ <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">p3</span>
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;变量 val 的值为：&#34;</span>, <span style="color:#a6e22e">val</span>)
+
+ <span style="color:#75715e">// 修改指针指向的值
+</span><span style="color:#75715e"></span> <span style="color:#75715e">// 给 *p3 赋值，*p3 指向的值也被修改，因为 p3 指向的内存就是变量 b 的内存地址。
+</span><span style="color:#75715e"></span> <span style="color:#f92672">*</span><span style="color:#a6e22e">p3</span> = <span style="color:#ae81ff">3</span>
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;*p3 指针指向的值为：&#34;</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">p3</span>)
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;变量 b 的值为：&#34;</span>, <span style="color:#a6e22e">b</span>)
+  
+ <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">p4</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span> = new(<span style="color:#66d9ef">int</span>)
+ <span style="color:#f92672">*</span><span style="color:#a6e22e">p4</span> = <span style="color:#ae81ff">4</span>
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">p4</span>)
+}
+</code></pre></div><h3 id="指针应用">指针应用</h3>
 <ul>
-<li>kq</li>
+<li>指针参数：</li>
 </ul>
-<p>producer.go:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// message structure
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">message</span> <span style="color:#66d9ef">struct</span> {
-    <span style="color:#a6e22e">Key</span>     <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;key&#34;`</span>
-    <span style="color:#a6e22e">Value</span>   <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;value&#34;`</span>
-    <span style="color:#a6e22e">Payload</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;message&#34;`</span>
+<p>在 Golang 语言中，函数传递参数只有值传递，传递的实参都是参数原始值的拷贝副本，所以我们传递值类型的参数时，修改参数的值，原始数据不会被修改。但是，如果是指针类型的参数，修改参数的值，原始数据也会被修改，原因是指针类型的参数存储的是内存地址，并且和实参的内存地址相同。</p>
+<p>示例代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span> () {
+  <span style="color:#75715e">// 值类型参数，实参的值未改变
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">mySalary</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">80000</span>
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;变量 mySalary 的内存地址为：%p\n&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">mySalary</span>)
+ <span style="color:#a6e22e">modifySalary</span>(<span style="color:#a6e22e">mySalary</span>)
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">mySalary</span>)
+
+ <span style="color:#75715e">// 指针类型参数，实参的值被改变
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">modifySalary2</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">mySalary</span>)
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">mySalary</span>)
 }
 
-<span style="color:#a6e22e">pusher</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">kq</span>.<span style="color:#a6e22e">NewPusher</span>([]<span style="color:#66d9ef">string</span>{
-    <span style="color:#e6db74">&#34;127.0.0.1:19092&#34;</span>,
-    <span style="color:#e6db74">&#34;127.0.0.1:19093&#34;</span>,
-    <span style="color:#e6db74">&#34;127.0.0.1:19094&#34;</span>,
-}, <span style="color:#e6db74">&#34;kq&#34;</span>)
-
-<span style="color:#a6e22e">ticker</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">NewTicker</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Millisecond</span>)
-<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">round</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">round</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">round</span><span style="color:#f92672">++</span> {
-    <span style="color:#66d9ef">select</span> {
-    <span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ticker</span>.<span style="color:#a6e22e">C</span>:
-        <span style="color:#a6e22e">count</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">100</span>)
-    <span style="color:#75715e">// 准备消息
-</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">m</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">message</span>{
-            <span style="color:#a6e22e">Key</span>:     <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">UnixNano</span>(), <span style="color:#ae81ff">10</span>),
-            <span style="color:#a6e22e">Value</span>:   <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d,%d&#34;</span>, <span style="color:#a6e22e">round</span>, <span style="color:#a6e22e">count</span>),
-            <span style="color:#a6e22e">Payload</span>: <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d,%d&#34;</span>, <span style="color:#a6e22e">round</span>, <span style="color:#a6e22e">count</span>),
-        }
-        <span style="color:#a6e22e">body</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">m</span>)
-        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-        }
-
-        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">body</span>))
-    <span style="color:#75715e">// push to kafka broker
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">pusher</span>.<span style="color:#a6e22e">Push</span>(string(<span style="color:#a6e22e">body</span>)); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-        }
-    }
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">modifySalary</span> (<span style="color:#a6e22e">salary</span> <span style="color:#66d9ef">int</span>) {
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;参数变量的内存地址为：%p\n&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">salary</span>)
+ <span style="color:#a6e22e">salary</span> = <span style="color:#ae81ff">100000</span>
 }
-</code></pre></div><p>config.yaml：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">Name</span>: <span style="color:#ae81ff">kq</span>
-<span style="color:#f92672">Brokers</span>:
-  - <span style="color:#ae81ff">127.0.0.1</span>:<span style="color:#ae81ff">19092</span>
-  - <span style="color:#ae81ff">127.0.0.1</span>:<span style="color:#ae81ff">19092</span>
-  - <span style="color:#ae81ff">127.0.0.1</span>:<span style="color:#ae81ff">19092</span>
-<span style="color:#f92672">Group</span>: <span style="color:#ae81ff">adhoc</span>
-<span style="color:#f92672">Topic</span>: <span style="color:#ae81ff">kq</span>
-<span style="color:#f92672">Offset</span>: <span style="color:#ae81ff">first</span>
-<span style="color:#f92672">Consumers</span>: <span style="color:#ae81ff">1</span>
-</code></pre></div><p>consumer.go:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">c</span> <span style="color:#a6e22e">kq</span>.<span style="color:#a6e22e">KqConf</span>
-<span style="color:#a6e22e">conf</span>.<span style="color:#a6e22e">MustLoad</span>(<span style="color:#e6db74">&#34;config.yaml&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">c</span>)
 
-<span style="color:#75715e">// WithHandle: 具体的处理msg的logic
-</span><span style="color:#75715e">// 这也是开发者需要根据自己的业务定制化
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">q</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">kq</span>.<span style="color:#a6e22e">MustNewQueue</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">kq</span>.<span style="color:#a6e22e">WithHandle</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">k</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
-  <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;=&gt; %s\n&#34;</span>, <span style="color:#a6e22e">v</span>)
-  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-}))
-<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">q</span>.<span style="color:#a6e22e">Stop</span>()
-<span style="color:#a6e22e">q</span>.<span style="color:#a6e22e">Start</span>()
-</code></pre></div><p>和 dq 不同的是：开发者不需要关注任务类型（在这里也没有任务的概念，传递的都是 message data）。</p>
-<p>其他操作和 dq 类似，只是将 业务处理函数 当成配置直接传入消费者中。</p>
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">modifySalary2</span> (<span style="color:#a6e22e">salary</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>) {
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;参数变量的内存地址为：%p\n&#34;</span>, <span style="color:#a6e22e">salary</span>)
+ <span style="color:#f92672">*</span><span style="color:#a6e22e">salary</span> = <span style="color:#ae81ff">100000</span>
+}
+</code></pre></div><ul>
+<li>指针接收者：</li>
+</ul>
+<p>在 Golang 语言中，定义一个方法，接收者可以是值类型和指针类型，二者都可以调用方法，因为 Golang 编译器会自动转换，所以二者是等价的。</p>
+<p>示例代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">worker</span> <span style="color:#66d9ef">struct</span> {
+ <span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>
+ <span style="color:#a6e22e">salary</span> <span style="color:#66d9ef">uint</span>
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">w</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">worker</span>) <span style="color:#a6e22e">raise</span> () {
+ <span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">salary</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1000</span>
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">worker</span>) <span style="color:#a6e22e">raise1</span> () {
+ <span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">salary</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1000</span>
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span> () {
+  <span style="color:#75715e">// 值类型调用者
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">w</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">worker</span>{
+  <span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;frank&#34;</span>,
+  <span style="color:#a6e22e">salary</span>: <span style="color:#ae81ff">5000</span>,
+ }
+ <span style="color:#75715e">// 指针类型接收者
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">raise</span>()
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;w 的姓名是 %s，薪水是每月 %d\n&#34;</span>, <span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">salary</span>)
+
+ <span style="color:#75715e">// 值类型调用者
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">w1</span> <span style="color:#f92672">:=</span><span style="color:#a6e22e">worker</span>{
+  <span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;frank1&#34;</span>,
+  <span style="color:#a6e22e">salary</span>: <span style="color:#ae81ff">5000</span>,
+ }
+ <span style="color:#75715e">// 值类型接收者
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">w1</span>.<span style="color:#a6e22e">raise1</span>()
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;w1 的姓名是 %s，薪水是每月 %d\n&#34;</span>, <span style="color:#a6e22e">w1</span>.<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">w1</span>.<span style="color:#a6e22e">salary</span>)
+
+ <span style="color:#75715e">// 指针类型调用者
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">w2</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">worker</span>{
+  <span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;lucy&#34;</span>,
+  <span style="color:#a6e22e">salary</span>: <span style="color:#ae81ff">5000</span>,
+ }
+ <span style="color:#75715e">// 指针类型接收者
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">w2</span>.<span style="color:#a6e22e">raise</span>()
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;w2 的姓名是 %s，薪水是每月 %d\n&#34;</span>, <span style="color:#a6e22e">w2</span>.<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">w2</span>.<span style="color:#a6e22e">salary</span>)
+
+ <span style="color:#75715e">// 指针类型调用者
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">w3</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">worker</span>{
+  <span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;lucy1&#34;</span>,
+  <span style="color:#a6e22e">salary</span>: <span style="color:#ae81ff">5000</span>,
+ }
+ <span style="color:#75715e">// 值类型接收者
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">w3</span>.<span style="color:#a6e22e">raise1</span>()
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;w3 的姓名是 %s，薪水是每月 %d\n&#34;</span>, <span style="color:#a6e22e">w3</span>.<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">w3</span>.<span style="color:#a6e22e">salary</span>)
+}
+</code></pre></div><p>那么，应该在什么时候使用指针接收者呢？</p>
+<p>我总结了以下两点：</p>
+<ul>
+<li>如果需要修改接收者，可以使用指针修改指针指向数据的值。</li>
+<li>如果接收者是非 map、slice 和 channel 类型，并且数据比较大，可以使用指针来节省内存。</li>
+</ul>
 <h3 id="总结">总结</h3>
-<p>在我们目前的场景中，kq 大量使用在我们的异步消息服务；而延时任务，我们除了 dq，还可以使用内存版的 TimingWheel「go-zero 生态组件」。</p>
+<p>本文我们介绍了 Golang 语言中的指针，和指针定义与操作，并且介绍了指针作为指针参数和指针接收者的应用区别。使用指针虽然可以修改数据的值和节省内存，但是也给开发带来了复杂性，所以为了开发简单，在开发中除了必须使用指针类型外，尽量使用值类型，比如数据小的类型 int、bool 和需要并发安全的代码其实没有必要使用指针。</p>
 
     </div>
 
@@ -709,7 +683,7 @@ if (!doNotTrack) {
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-      2021-03-21
+      2020-03-20
       
     </span>
   </p>
@@ -726,14 +700,14 @@ if (!doNotTrack) {
 
     <footer class="post-footer">
       <div class="post-tags">
-          <a href="https://daryeon.github.io/tags/library/">library</a>
+          <a href="https://daryeon.github.io/tags/programing/">programing</a>
           
         </div>
 
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/go-library-gopacket/">
+          <a class="prev" href="/post/go-library-go-queue/">
             
             <i class="iconfont">
               <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -743,12 +717,12 @@ if (!doNotTrack) {
 </svg>
 
             </i>
-            <span class="prev-text nav-default">网络流量抓包库gopacket介绍</span>
+            <span class="prev-text nav-default">分布式任务&#43;消息队列框架go-queue</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
         
-          <a class="next" href="/post/go-zhizhen-introduce/">
-            <span class="next-text nav-default">Go语言中的指针介绍</span>
+          <a class="next" href="/post/go-bingfa-programing/">
+            <span class="next-text nav-default">简单总结下并发编程模式</span>
             <span class="prev-text nav-mobile">下一篇</span>
             
             <i class="iconfont">
