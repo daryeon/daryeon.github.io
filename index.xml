@@ -6,7 +6,7 @@
     <description>Recent content on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 25 Mar 2021 06:56:44 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 26 Mar 2021 06:56:44 +0800</lastBuildDate>
     
         <atom:link href="https://daryeon.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -521,6 +521,70 @@ defer2由于返回的不是匿名变量，所以不会创建中间变量，defer
 &lt;li&gt;web服务端开发，Phper, Gopher。&lt;/li&gt;
 &lt;li&gt;兴趣爱好广泛，喜欢Go，算法等。平时喜欢做 LeetCode 算法题。&lt;/li&gt;
 &lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>日志切割组件库lumberjack介绍</title>
+      <link>https://daryeon.github.io/post/go-library-lumberjack/</link>
+      <pubDate>Fri, 26 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-lumberjack/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;Golang 语言标准库的 log 包不支持日志切割，然而如果我们业务每天产生海量日志，日志文件就会越来越大，甚至会触发磁盘空间不足的报警，此时如果我们移动或者删除日志文件，需要先将业务停止写日志，很不方便。&lt;/p&gt;
+&lt;p&gt;而且大日志文件也不方便查询，多少有点失去日志的意义。在实际业务开发中，我们通常会按照日志文件大小或者日期进行日志切割。&lt;/p&gt;
+&lt;p&gt;常见的日志切割方式是由系统 Crontab 计划任务执行 Shell 文件进行日志切割或者由业务本身进行日志切割。&lt;/p&gt;
+&lt;p&gt;Golang 语言三方库 lumberjack 的作用就是进行日志切割，下面我们来介绍一下 lumberjack。&lt;/p&gt;
+&lt;h3 id=&#34;lumberjack-使用&#34;&gt;lumberjack 使用&lt;/h3&gt;
+&lt;p&gt;lumberjack 提供了一个滚动记录器 logger，它是一个控制写入日志的文件的日志组件，目前最新版本是 v2.0，需要使用 gopkg.in 导入。&lt;/p&gt;
+&lt;p&gt;安装方式：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;go get -u github.com/natefinch/lumberjack
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;导入方式：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import &amp;quot;gopkg.in/natefinch/lumberjack.v2&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;要将 lumberjack 与标准库的 log 包一起使用，只需在应用程序启动时将它传递到 SetOutput 函数。&lt;/p&gt;
+&lt;p&gt;示例代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;SetOutput&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;lumberjack&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Logger&lt;/span&gt;{
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;Filename&lt;/span&gt;:   &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/var/log/myapp/foo.log&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;MaxSize&lt;/span&gt;:    &lt;span style=&#34;color:#ae81ff&#34;&gt;500&lt;/span&gt;, &lt;span style=&#34;color:#75715e&#34;&gt;// megabytes
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;MaxBackups&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;,
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;MaxAge&lt;/span&gt;:     &lt;span style=&#34;color:#ae81ff&#34;&gt;28&lt;/span&gt;, &lt;span style=&#34;color:#75715e&#34;&gt;//days
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;Compress&lt;/span&gt;:   &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#75715e&#34;&gt;// disabled by default
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;})
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;lumberjack 的 Logger 结构体，是一个写入指定文件的 io.WriteCloser。Logger 在第一次写入时打开或创建日志文件。如果文件存在且小于 MaxSize 的值，lumberjack 将打开并追加到该文件。如果文件存在且其 size 的值为大于等于 MaxSize，文件通过将当前时间作为文件名的一部分进行重命名文件，然后使用原始文件名创建新的日志文件。&lt;/p&gt;
+&lt;p&gt;每当写入会导致当前日志文件超过 MaxSize 的值时，当前文件将关闭和重命名，并且使用原始名称创建的新日志文件。因此，您给 Logger 的文件名始终是当前日志文件。&lt;/p&gt;
+&lt;p&gt;备份使用给定给 Logger 的日志文件名，其中名称是没有扩展名的文件名，时间戳是日志与时间一起旋转的时间。时间格式是 2006-01-02T15-04-05.000，扩展是原始扩展。例如，如果您的 Logger.Filename 是 /var/log/foo/server.log，那么 2016 年 11 月 11 日下午 6：30 创建的备份将使用 filenam 是 /var/log/foo/server-2016-11-04T18-30-00.000.log。&lt;/p&gt;
+&lt;h3 id=&#34;清理旧日志文件&#34;&gt;清理旧日志文件&lt;/h3&gt;
+&lt;p&gt;每当创建新的日志文件时，旧日志文件可能会被删除。将保留根据编码时间戳保存的最新文件，文件数量最多等于 Maxbackups 的值，如果 Maxbackups 是 0，将删除所有文件。&lt;/p&gt;
+&lt;p&gt;无论 MaxBackups 值是什么，任何编码时间戳超过 MaxAge 值的文件都将被删除。&lt;/p&gt;
+&lt;p&gt;请注意，在时间戳中编码的时间是旋转时间，可能与上次写入该文件的时间不同。&lt;/p&gt;
+&lt;p&gt;如果 MaxBackups 和 MaxAge 都是 0，则不会删除任何旧日志文件。&lt;/p&gt;
+&lt;h3 id=&#34;logger-方法&#34;&gt;Logger 方法&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;func (l *Logger) Close() error&lt;/li&gt;
+&lt;li&gt;func (l *Logger) Rotate() error&lt;/li&gt;
+&lt;li&gt;func (l *Logger) Write(p []byte) (n int, err error)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;其中 Close 替代 io.Closer，关闭当前日志文件。&lt;/p&gt;
+&lt;p&gt;其中 Rotate 会导致记录器关闭现有日志文件并立即创建新日志文件。对于想要在正常 rotation 规则之外启动 rotation 的应用程序，这是一个 helper 函数，例如对 SIGHUP 的回应。&lt;/p&gt;
+&lt;p&gt;执行 Rotate 方法后，这将根据正常规则启动旧日志文件的清理。&lt;/p&gt;
+&lt;p&gt;示例代码：如何执行 Rotate 方法后，以响应 SIGHUP 的示例。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;lumberjack&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Logger&lt;/span&gt;{}
+&lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;SetOutput&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt;)
+&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; make(&lt;span style=&#34;color:#66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;os&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Signal&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+&lt;span style=&#34;color:#a6e22e&#34;&gt;signal&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Notify&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;syscall&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;SIGHUP&lt;/span&gt;)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt;() {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; {
+        &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Rotate&lt;/span&gt;()
+    }
+}()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中 Write 替代 io.Writer，如果写入会导致日志文件大于 MaxSize 的值，将关闭文件，重命名文件为包含当前时间的时间戳，并使用原始日志文件名创建新的日志文件。&lt;/p&gt;
+&lt;p&gt;如果写入长度大于 MaxSize 的值，则返回错误。&lt;/p&gt;
+&lt;h3 id=&#34;总结&#34;&gt;总结&lt;/h3&gt;
+&lt;p&gt;本文主要是介绍三方库 lumberjack 日志切割组件，包括安装、导入和使用方法。通常在实际项目开发中，用于替代 io.Writer&lt;/p&gt;
 </description>
       
     </item>
@@ -1167,7 +1231,7 @@ defer2由于返回的不是匿名变量，所以不会创建中间变量，defer
     <item>
       <title>Go语言中的指针介绍</title>
       <link>https://daryeon.github.io/post/go-zhizhen-introduce/</link>
-      <pubDate>Fri, 20 Mar 2020 08:51:34 +0800</pubDate>
+      <pubDate>Fri, 03 Apr 2020 08:51:34 +0800</pubDate>
       
       <guid>https://daryeon.github.io/post/go-zhizhen-introduce/</guid>
       

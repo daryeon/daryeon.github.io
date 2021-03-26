@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>大叶的博客</title>
+  <title>日志切割组件库lumberjack介绍 - 大叶的博客</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="darye" />
-  <meta name="description" content="darye blog site." />
+  <meta name="description" content="简介 Golang 语言标准库的 log 包不支持日志切割，然而如果我们业务每天产生海量日志，日志文件就会越来越大，甚至会触发磁盘空间不足的报警，此时如果我们移动" />
+
   <meta name="keywords" content="darye, blog, golang" />
 
 
@@ -34,8 +35,8 @@
 <meta name="generator" content="Hugo 0.81.0" />
 
 
-<link rel="canonical" href="https://daryeon.github.io/" />
-<link href="/index.xml" rel="alternate" type="application/rss+xml" title="大叶的博客" />
+<link rel="canonical" href="https://daryeon.github.io/post/go-library-lumberjack/" />
+
 
 
 
@@ -60,15 +61,20 @@
 <link rel="stylesheet" href="/css/global.css">
 
 
-<meta property="og:title" content="大叶的博客" />
-<meta property="og:description" content="darye blog site." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://daryeon.github.io/" />
+<meta property="og:title" content="日志切割组件库lumberjack介绍" />
+<meta property="og:description" content="简介 Golang 语言标准库的 log 包不支持日志切割，然而如果我们业务每天产生海量日志，日志文件就会越来越大，甚至会触发磁盘空间不足的报警，此时如果我们移动" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://daryeon.github.io/post/go-library-lumberjack/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-03-26T06:56:44&#43;08:00" />
+<meta property="article:modified_time" content="2021-03-26T06:56:44&#43;08:00" />
 
-<meta itemprop="name" content="大叶的博客">
-<meta itemprop="description" content="darye blog site."><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="大叶的博客"/>
-<meta name="twitter:description" content="darye blog site."/>
+<meta itemprop="name" content="日志切割组件库lumberjack介绍">
+<meta itemprop="description" content="简介 Golang 语言标准库的 log 包不支持日志切割，然而如果我们业务每天产生海量日志，日志文件就会越来越大，甚至会触发磁盘空间不足的报警，此时如果我们移动"><meta itemprop="datePublished" content="2021-03-26T06:56:44&#43;08:00" />
+<meta itemprop="dateModified" content="2021-03-26T06:56:44&#43;08:00" />
+<meta itemprop="wordCount" content="1267">
+<meta itemprop="keywords" content="library," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="日志切割组件库lumberjack介绍"/>
+<meta name="twitter:description" content="简介 Golang 语言标准库的 log 包不支持日志切割，然而如果我们业务每天产生海量日志，日志文件就会越来越大，甚至会触发磁盘空间不足的报警，此时如果我们移动"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -320,7 +326,7 @@ if (!doNotTrack) {
   <ul id="menu" class="menu">
     
     
-        <li class="menu-item active">
+        <li class="menu-item">
         
           
           
@@ -446,7 +452,7 @@ if (!doNotTrack) {
 
       </li>
     
-        <li class="menu-item">
+        <li class="menu-item active">
         
           
           <a class="menu-item-link menu-parent" href="https://daryeon.github.io/">go-library</a>
@@ -484,236 +490,193 @@ if (!doNotTrack) {
     <main id="main" class="main bg-llight">
       <div class="content-wrapper">
         <div id="content" class="content container">
-          
-<section id="posts" class="posts">
-  
-  
+          <article class="post bg-white">
     
-  
-  
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
+    <header class="post-header">
+      <h1 class="post-title">日志切割组件库lumberjack介绍</h1>
       
-      <a class="post-link" href="/post/php-libraray-phpquery/">phpQuery—基于jQuery的PHP实现</a>
-    </h1>
+      <div class="post-meta">
+        <time datetime="2021-03-26" class="post-time">
+          2021-03-26
+        </time>
+        <div class="post-category">
+            <a href="https://daryeon.github.io/categories/go/"> go </a>
+            
+          </div>
+        
+
+        
+        
+
+        
+        
+      </div>
+    </header>
+
     
-    <div class="post-meta">
-      <time datetime="2018-02-16" class="post-time">
-        2018-02-16
-      </time>
-      <div class="post-category">
-          <a href="https://daryeon.github.io/categories/php/"> php </a>
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#简介">简介</a></li>
+        <li><a href="#lumberjack-使用">lumberjack 使用</a></li>
+        <li><a href="#清理旧日志文件">清理旧日志文件</a></li>
+        <li><a href="#logger-方法">Logger 方法</a></li>
+        <li><a href="#总结">总结</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <h3 id="简介">简介</h3>
+<p>Golang 语言标准库的 log 包不支持日志切割，然而如果我们业务每天产生海量日志，日志文件就会越来越大，甚至会触发磁盘空间不足的报警，此时如果我们移动或者删除日志文件，需要先将业务停止写日志，很不方便。</p>
+<p>而且大日志文件也不方便查询，多少有点失去日志的意义。在实际业务开发中，我们通常会按照日志文件大小或者日期进行日志切割。</p>
+<p>常见的日志切割方式是由系统 Crontab 计划任务执行 Shell 文件进行日志切割或者由业务本身进行日志切割。</p>
+<p>Golang 语言三方库 lumberjack 的作用就是进行日志切割，下面我们来介绍一下 lumberjack。</p>
+<h3 id="lumberjack-使用">lumberjack 使用</h3>
+<p>lumberjack 提供了一个滚动记录器 logger，它是一个控制写入日志的文件的日志组件，目前最新版本是 v2.0，需要使用 gopkg.in 导入。</p>
+<p>安装方式：</p>
+<pre><code>go get -u github.com/natefinch/lumberjack
+</code></pre><p>导入方式：</p>
+<pre><code>import &quot;gopkg.in/natefinch/lumberjack.v2&quot;
+</code></pre><p>要将 lumberjack 与标准库的 log 包一起使用，只需在应用程序启动时将它传递到 SetOutput 函数。</p>
+<p>示例代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">SetOutput</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lumberjack</span>.<span style="color:#a6e22e">Logger</span>{
+    <span style="color:#a6e22e">Filename</span>:   <span style="color:#e6db74">&#34;/var/log/myapp/foo.log&#34;</span>,
+    <span style="color:#a6e22e">MaxSize</span>:    <span style="color:#ae81ff">500</span>, <span style="color:#75715e">// megabytes
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">MaxBackups</span>: <span style="color:#ae81ff">3</span>,
+    <span style="color:#a6e22e">MaxAge</span>:     <span style="color:#ae81ff">28</span>, <span style="color:#75715e">//days
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Compress</span>:   <span style="color:#66d9ef">true</span>, <span style="color:#75715e">// disabled by default
+</span><span style="color:#75715e"></span>})
+</code></pre></div><p>lumberjack 的 Logger 结构体，是一个写入指定文件的 io.WriteCloser。Logger 在第一次写入时打开或创建日志文件。如果文件存在且小于 MaxSize 的值，lumberjack 将打开并追加到该文件。如果文件存在且其 size 的值为大于等于 MaxSize，文件通过将当前时间作为文件名的一部分进行重命名文件，然后使用原始文件名创建新的日志文件。</p>
+<p>每当写入会导致当前日志文件超过 MaxSize 的值时，当前文件将关闭和重命名，并且使用原始名称创建的新日志文件。因此，您给 Logger 的文件名始终是当前日志文件。</p>
+<p>备份使用给定给 Logger 的日志文件名，其中名称是没有扩展名的文件名，时间戳是日志与时间一起旋转的时间。时间格式是 2006-01-02T15-04-05.000，扩展是原始扩展。例如，如果您的 Logger.Filename 是 /var/log/foo/server.log，那么 2016 年 11 月 11 日下午 6：30 创建的备份将使用 filenam 是 /var/log/foo/server-2016-11-04T18-30-00.000.log。</p>
+<h3 id="清理旧日志文件">清理旧日志文件</h3>
+<p>每当创建新的日志文件时，旧日志文件可能会被删除。将保留根据编码时间戳保存的最新文件，文件数量最多等于 Maxbackups 的值，如果 Maxbackups 是 0，将删除所有文件。</p>
+<p>无论 MaxBackups 值是什么，任何编码时间戳超过 MaxAge 值的文件都将被删除。</p>
+<p>请注意，在时间戳中编码的时间是旋转时间，可能与上次写入该文件的时间不同。</p>
+<p>如果 MaxBackups 和 MaxAge 都是 0，则不会删除任何旧日志文件。</p>
+<h3 id="logger-方法">Logger 方法</h3>
+<ul>
+<li>func (l *Logger) Close() error</li>
+<li>func (l *Logger) Rotate() error</li>
+<li>func (l *Logger) Write(p []byte) (n int, err error)</li>
+</ul>
+<p>其中 Close 替代 io.Closer，关闭当前日志文件。</p>
+<p>其中 Rotate 会导致记录器关闭现有日志文件并立即创建新日志文件。对于想要在正常 rotation 规则之外启动 rotation 的应用程序，这是一个 helper 函数，例如对 SIGHUP 的回应。</p>
+<p>执行 Rotate 方法后，这将根据正常规则启动旧日志文件的清理。</p>
+<p>示例代码：如何执行 Rotate 方法后，以响应 SIGHUP 的示例。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lumberjack</span>.<span style="color:#a6e22e">Logger</span>{}
+<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">SetOutput</span>(<span style="color:#a6e22e">l</span>)
+<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Signal</span>, <span style="color:#ae81ff">1</span>)
+<span style="color:#a6e22e">signal</span>.<span style="color:#a6e22e">Notify</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">syscall</span>.<span style="color:#a6e22e">SIGHUP</span>)
+
+<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+    <span style="color:#66d9ef">for</span> {
+        <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">c</span>
+        <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Rotate</span>()
+    }
+}()
+</code></pre></div><p>其中 Write 替代 io.Writer，如果写入会导致日志文件大于 MaxSize 的值，将关闭文件，重命名文件为包含当前时间的时间戳，并使用原始日志文件名创建新的日志文件。</p>
+<p>如果写入长度大于 MaxSize 的值，则返回错误。</p>
+<h3 id="总结">总结</h3>
+<p>本文主要是介绍三方库 lumberjack 日志切割组件，包括安装、导入和使用方法。通常在实际项目开发中，用于替代 io.Writer</p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">darye</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2021-03-26
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a href="https://github.com/gohugoio/hugoBasicExample" rel="noopener" target="_blank">See origin</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://daryeon.github.io/tags/library/">library</a>
           
         </div>
+
       
-      
-      
-    </div>
-  </header>
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/go-small-details/">
+            
+            <i class="iconfont">
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+</svg>
+
+            </i>
+            <span class="prev-text nav-default">Go的一些小细节</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/go-library-gopacket/">
+            <span class="next-text nav-default">网络流量抓包库gopacket介绍</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
   
-  <div class="post-content">
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
     
-    <div class="post-summary">
-      简介 Query的选择器之强大是有目共睹的，phpQuery 让php也拥有了这样的能力，它就相当于服务端的jQuery。 phpQuery is a server-side, chainable, CSS3 selector driven Document Object Model
-    </div>
-    <div class="read-more">
-      <a href="/post/php-libraray-phpquery/" class="read-more-link">阅读全文</a>
-    </div>
-    
-  </div>
-</article>
 
   
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/php-date-function-used/">php获取当月天数及当月第一天及最后一天、上月第一天及最后一天实现方法</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2018-02-16" class="post-time">
-        2018-02-16
-      </time>
-      <div class="post-category">
-          <a href="https://daryeon.github.io/categories/php/"> php </a>
-          
-        </div>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      简介 在做查询过程中,例如要实现查上个月从第一天到最后一天的佣金(提成),那我们在程序实现过程中就要让程序在上个月的范围内查询,第一天是比较好
-    </div>
-    <div class="read-more">
-      <a href="/post/php-date-function-used/" class="read-more-link">阅读全文</a>
-    </div>
-    
-  </div>
-</article>
-
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/base-on-php-_and_symbol-skill/">基于php&amp;运算符的巧妙应用</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2018-02-10" class="post-time">
-        2018-02-10
-      </time>
-      <div class="post-category">
-          <a href="https://daryeon.github.io/categories/php/"> php </a>
-          
-        </div>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      简介 &amp;:and，按位与。以$a &amp; $b为例，将$a和$b转化为二进制后，都为1的位设为1。 表达式 $a = 6; $b = 3; var_dump($a &amp; $b); 输出:int(2) 原
-    </div>
-    <div class="read-more">
-      <a href="/post/base-on-php-_and_symbol-skill/" class="read-more-link">阅读全文</a>
-    </div>
-    
-  </div>
-</article>
-
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/encode-introduce/">unicode,ascii,utf-8编码的区别</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2018-02-03" class="post-time">
-        2018-02-03
-      </time>
-      <div class="post-category">
-          <a href="https://daryeon.github.io/categories/utf8/"> utf8 </a>
-          <a href="https://daryeon.github.io/categories/utf16/"> utf16 </a>
-          <a href="https://daryeon.github.io/categories/unicode/"> unicode </a>
-          
-        </div>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      简介 很久很久以前，有一群人，他们决定用8个可以开合的晶体管来组合成不同的状态，以表示世界上的万物。他们看到8个开关状态是好的，于是他们把这称
-    </div>
-    <div class="read-more">
-      <a href="/post/encode-introduce/" class="read-more-link">阅读全文</a>
-    </div>
-    
-  </div>
-</article>
-
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/post/composer-and-aotuload/">Composer和自动加载学习分享</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2018-01-15" class="post-time">
-        2018-01-15
-      </time>
-      <div class="post-category">
-          <a href="https://daryeon.github.io/categories/php/"> php </a>
-          
-        </div>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      简介 分享composer和自动加载相关介绍 概念 composer：是PHP用来管理依赖（dependency）关系的工具 对于现代语言而言，包管
-    </div>
-    <div class="read-more">
-      <a href="/post/composer-and-aotuload/" class="read-more-link">阅读全文</a>
-    </div>
-    
-  </div>
-</article>
-
-  
-</section>
-
-
-
-
-
-
-  
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
-  <nav class="pagination">
-    <ul>
-      
-      <li >
-        <a href="/">1</a>
-      </li>
-      
-      <li >
-        <a href="/page/2/">2</a>
-      </li>
-      
-      <li  class="active" >
-        <a href="/page/3/">3</a>
-      </li>
-      
-      <li >
-        <a href="/page/4/">4</a>
-      </li>
-      
-    </ul>
-  </nav>
-
-  
-  
-
-
-
-
 
         </div>
       </div>
@@ -818,6 +781,13 @@ if (!doNotTrack) {
 
 
 
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 
 

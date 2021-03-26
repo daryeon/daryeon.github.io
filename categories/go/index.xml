@@ -6,7 +6,16 @@
     <description>Recent content in go on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 25 Mar 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 26 Mar 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>日志切割组件库lumberjack介绍</title>
+      <link>https://daryeon.github.io/post/go-library-lumberjack/</link>
+      <pubDate>Fri, 26 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-lumberjack/</guid>
+      <description>简介 Golang 语言标准库的 log 包不支持日志切割，然而如果我们业务每天产生海量日志，日志文件就会越来越大，甚至会触发磁盘空间不足的报警，此时如果我们移动</description>
+    </item>
+    
     <item>
       <title>网络流量抓包库gopacket介绍</title>
       <link>https://daryeon.github.io/post/go-library-gopacket/</link>
@@ -28,7 +37,7 @@
     <item>
       <title>Go语言中的指针介绍</title>
       <link>https://daryeon.github.io/post/go-zhizhen-introduce/</link>
-      <pubDate>Fri, 20 Mar 2020 08:51:34 +0800</pubDate>
+      <pubDate>Fri, 03 Apr 2020 08:51:34 +0800</pubDate>
       
       <guid>https://daryeon.github.io/post/go-zhizhen-introduce/</guid>
       <description>简介 指针是一种数据类型，用来存储值的内存地址，为了便于理解，我们也可以把指针理解为内存地址，指针类型只占用内存 4 个或 8 个字节，在 Golang 语言中，类</description>
