@@ -6,7 +6,7 @@
     <description>Recent content on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 26 Mar 2021 06:56:44 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 29 Mar 2021 06:56:44 +0800</lastBuildDate>
     
         <atom:link href="https://daryeon.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -520,6 +520,113 @@ defer2由于返回的不是匿名变量，所以不会创建中间变量，defer
         <description>&lt;ul&gt;
 &lt;li&gt;web服务端开发，Phper, Gopher。&lt;/li&gt;
 &lt;li&gt;兴趣爱好广泛，喜欢Go，算法等。平时喜欢做 LeetCode 算法题。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Goroutine泄漏防治神器goleak介绍</title>
+      <link>https://daryeon.github.io/post/go-library-goleak/</link>
+      <pubDate>Mon, 29 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-goleak/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;goroutine 作为 golang 并发实现的核心组成部分，非常容易上手使用，但却很难驾驭得好。我们经常会遭遇各种形式的 goroutine 泄漏，这些泄漏的 goroutine 会一直存活直到进程终结。它们的占用的栈内存一直无法释放、关联的堆内存也不能被 GC 清理，系统的可用内存会随泄漏 goroutine 的增多越来越少，直至崩溃！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://daryeon.github.io/images/goleak/20210329155830_01.png&#34; alt=&#34;goroutine&#34;&gt;&lt;/p&gt;
+&lt;p&gt;goroutine 的泄漏通常伴随着复杂的协程间通信，代码评审和常规的单元测试通常更专注于业务逻辑正确，很难完全覆盖 goroutine 泄漏的场景；而 pprof 等性能分析工具更多是作用于监控报警/故障之后的复盘。我们需要一款能在编译部署前识别 goroutine 泄漏的工具，从更上游把控工程质量。&lt;/p&gt;
+&lt;p&gt;goleak(&lt;a href=&#34;https://github.com/uber-go/goleak&#34;&gt;https://github.com/uber-go/goleak&lt;/a&gt; MIT 许可协议) 是 Uber 团队开源的一款 goroutine 泄漏检测工具，它可以非常轻量地集成到测试中，对于 goroutine 泄漏的防治和工程鲁棒性的提升很有帮助。&lt;/p&gt;
+&lt;h3 id=&#34;防范胜于救灾-goroutine-泄漏举例&#34;&gt;防范胜于救灾 goroutine 泄漏举例&lt;/h3&gt;
+&lt;p&gt;先举个 goroutine 泄漏的例子；如下所示，leak 方法中的 ch 永远没有写操作且不会关闭，读取 ch 的 goroutine 一直处于阻塞状态，这是一种很典型的 goroutine 泄漏。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;leak&lt;/span&gt;() {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;ch&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; make(&lt;span style=&#34;color:#66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt;{})
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt;() {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;ch&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt;{}{}
+    }()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;通常我们会为 leak方法写类似下面的测试：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;TestLeak&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;t&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;testing&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;T&lt;/span&gt;) {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;leak&lt;/span&gt;()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;用 go test 执行测试看看结果：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ go test -v -run ^TestLeak$
+&lt;span style=&#34;color:#f92672&#34;&gt;===&lt;/span&gt; RUN   TestLeak
+--- PASS: TestLeak &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0.00s&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+PASS
+ok      cool-go.gocn.vip/goleak 0.007s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;测试不出意外地顺利通过了，go 内置的测试显然无法帮我们识别 leak中的 goroutine 泄漏。&lt;/p&gt;
+&lt;h3 id=&#34;集成-goleak-测试&#34;&gt;集成 goleak 测试&lt;/h3&gt;
+&lt;p&gt;goleak 暴露的方法特别精简，通常我们只需关注 VerifyNone 和 VerifyTestMain 两个方法，它们也对应了 goleak 的两种集成方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;逐用例集成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在现有测试的首行添加 defer goleak.VerifyNone(t)，即可集成 goleak 泄漏检测：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;TestLeakWithGoleak&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;t&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;testing&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;T&lt;/span&gt;) {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;goleak&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;VerifyNone&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;t&lt;/span&gt;)
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;leak&lt;/span&gt;()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这次的 go test 失败了：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ go test -v -run ^TestLeakWithGoleak$
+&lt;span style=&#34;color:#f92672&#34;&gt;===&lt;/span&gt; RUN   TestLeakWithGoleak
+    leaks.go:78: found unexpected goroutines:
+        &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Goroutine &lt;span style=&#34;color:#ae81ff&#34;&gt;19&lt;/span&gt; in state chan send, with cool-go.gocn.vip/goleak.leak.func1 on top of the stack:
+        goroutine &lt;span style=&#34;color:#ae81ff&#34;&gt;19&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;chan send&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;:
+        cool-go.gocn.vip/goleak.leak.func1&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0xc00008c420&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+                /Users/blanet/gocn/goleak/main.go:24 +0x35
+        created by cool-go.gocn.vip/goleak.leak
+                /Users/blanet/gocn/goleak/main.go:23 +0x4e
+        &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+--- FAIL: TestLeakWithGoleak &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0.45s&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+FAIL
+exit status &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+FAIL    cool-go.gocn.vip/goleak 0.459s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;测试报告显示名为 leak.func1 的 goroutine 发生了泄漏（leak.func1 在这里指的是 leak 方法中的第一个匿名方法），并将测试结果置为失败。我们成功通过 goleak 找到了 goroutine 泄漏。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;通过 TestMain 集成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果觉得逐用例集成 goleak 的方式太过繁琐或 “入侵” 性太强，不妨试试完全不改变原有测试用例，通过在 TestMain中添加 goleak.VerifyTestMain(m) 的方式集成 goleak：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;TestMain&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;testing&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;M&lt;/span&gt;) {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;goleak&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;VerifyTestMain&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这次的 go test 输出如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ go test -v -run ^TestLeak$
+&lt;span style=&#34;color:#f92672&#34;&gt;===&lt;/span&gt; RUN   TestLeak
+--- PASS: TestLeak &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0.00s&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+PASS
+goleak: Errors on successful test run: found unexpected goroutines:
+&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Goroutine &lt;span style=&#34;color:#ae81ff&#34;&gt;19&lt;/span&gt; in state chan send, with cool-go.gocn.vip/goleak.leak.func1 on top of the stack:
+goroutine &lt;span style=&#34;color:#ae81ff&#34;&gt;19&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;chan send&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;:
+cool-go.gocn.vip/goleak.leak.func1&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0xc00008c2a0&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+        /Users/blanet/gocn/goleak/main.go:24 +0x35
+created by cool-go.gocn.vip/goleak.leak
+        /Users/blanet/gocn/goleak/main.go:23 +0x4e
+&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+exit status &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+FAIL    cool-go.gocn.vip/goleak 0.455s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可见，goleak 再次成功检测到了 goroutine 泄漏，但与逐用例集成不同的是，goleak.VerifyTestMain会先报告用例执行的结果，然后再进行泄漏分析。如果单次测试执行了多个用例且最终发生泄漏，那么以 TestMain 方式集成的 goleak 并不能精准定位发生 goroutine 泄漏的用例，还需进一步分析。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;goleak 提供了如下脚本用于进一步推断具体发生 goroutine 泄漏的用例，其本质是逐一执行所有用例进行分析：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create a test binary which will be used to run each test individually&lt;/span&gt;
+$ go test -c -o tests
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Run each test individually, printing &amp;#34;.&amp;#34; for successful tests, or the test name&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# for failing tests.&lt;/span&gt;
+$ &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; test in &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;go test -list . | grep -E &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;^(Test|Example)&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+    ./tests -test.run &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;^&lt;/span&gt;$test&lt;span style=&#34;color:#e6db74&#34;&gt;\$&amp;#34;&lt;/span&gt; &amp;amp;&amp;gt;/dev/null &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; echo -n &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;.&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;||&lt;/span&gt; echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;\n&lt;/span&gt;$test&lt;span style=&#34;color:#e6db74&#34;&gt; failed&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;总结&#34;&gt;总结&lt;/h3&gt;
+&lt;p&gt;goleak 通过对运行时的栈分析获取 goroutine 状态，并设计了非常简洁易用的接口与测试框架进行对接，是一款小巧强悍的 goroutine 泄漏防治利器。&lt;/p&gt;
+&lt;p&gt;当然，完备的测试用例支持是 goleak 发挥作用的基础，大家还是要老老实实写测试，稳稳当当搞生产！&lt;/p&gt;
+&lt;h3 id=&#34;参考资料&#34;&gt;参考资料&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/uber-go/goleak&#34;&gt;https://github.com/uber-go/goleak&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://pkg.go.dev/go.uber.org/goleak&#34;&gt;https://pkg.go.dev/go.uber.org/goleak&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://rakyll.org/leakingctx/&#34;&gt;https://rakyll.org/leakingctx/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/golang/go/issues/6705&#34;&gt;https://github.com/golang/go/issues/6705&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/golangspec/goroutine-leak-400063aef468&#34;&gt;https://medium.com/golangspec/goroutine-leak-400063aef468&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dave.cheney.net/2016/12/22/never-start-a-goroutine-without-knowing-how-it-will-stop&#34;&gt;https://dave.cheney.net/2016/12/22/never-start-a-goroutine-without-knowing-how-it-will-stop&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
       

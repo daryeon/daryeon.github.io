@@ -6,7 +6,16 @@
     <description>Recent content in go on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 26 Mar 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 29 Mar 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Goroutine泄漏防治神器goleak介绍</title>
+      <link>https://daryeon.github.io/post/go-library-goleak/</link>
+      <pubDate>Mon, 29 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-goleak/</guid>
+      <description>简介 goroutine 作为 golang 并发实现的核心组成部分，非常容易上手使用，但却很难驾驭得好。我们经常会遭遇各种形式的 goroutine 泄漏，这些泄漏的 goroutine 会一直存活直到进程终结。</description>
+    </item>
+    
     <item>
       <title>日志切割组件库lumberjack介绍</title>
       <link>https://daryeon.github.io/post/go-library-lumberjack/</link>

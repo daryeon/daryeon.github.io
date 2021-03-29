@@ -6,7 +6,7 @@
     <description>Recent content in Posts on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 26 Mar 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 29 Mar 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Go实现常见排序算法</title>
       <link>https://daryeon.github.io/post/small-common-sort-func/</link>
@@ -23,6 +23,15 @@
       
       <guid>https://daryeon.github.io/post/go-small-details/</guid>
       <description>简介 GO的一些小细节分享。 map 无序性 map存储的数据并不保证有序性，通常可以把key写入一个slice切片，依靠slice切片的有序性来读取m</description>
+    </item>
+    
+    <item>
+      <title>Goroutine泄漏防治神器goleak介绍</title>
+      <link>https://daryeon.github.io/post/go-library-goleak/</link>
+      <pubDate>Mon, 29 Mar 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-goleak/</guid>
+      <description>简介 goroutine 作为 golang 并发实现的核心组成部分，非常容易上手使用，但却很难驾驭得好。我们经常会遭遇各种形式的 goroutine 泄漏，这些泄漏的 goroutine 会一直存活直到进程终结。</description>
     </item>
     
     <item>
