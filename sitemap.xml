@@ -219,14 +219,35 @@
   </url>
   
   <url>
-    <loc>https://daryeon.github.io/tags/namespace/</loc>
-    <lastmod>2018-02-25T08:51:34+08:00</lastmod>
+    <loc>https://daryeon.github.io/tags/distributed/</loc>
+    <lastmod>2018-03-05T08:51:34+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://daryeon.github.io/categories/php/</loc>
+    <lastmod>2018-03-05T08:51:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/tags/redis/</loc>
+    <lastmod>2018-03-05T08:51:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/post/php-redis-distributed-lock/</loc>
+    <lastmod>2018-03-05T08:51:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/tags/namespace/</loc>
     <lastmod>2018-02-25T08:51:34+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

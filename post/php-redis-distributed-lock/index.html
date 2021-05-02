@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>分布式任务&#43;消息队列框架go-queue - 大叶的博客</title>
+  <title>基于redis实现分布式锁 - 大叶的博客</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="darye" />
-  <meta name="description" content="为什么要写这个库？ 在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案： beanstalkd beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)" />
+  <meta name="description" content="简介 我们在做业务开发时候，经常遇到一些多进程/线程对同一数据修改而产生竞态条件，为了避免修改冲突覆盖，常常用锁机制来保证数据的正常性。同一进" />
 
   <meta name="keywords" content="darye, blog, golang" />
 
@@ -35,7 +35,7 @@
 <meta name="generator" content="Hugo 0.81.0" />
 
 
-<link rel="canonical" href="https://daryeon.github.io/post/go-library-go-queue/" />
+<link rel="canonical" href="https://daryeon.github.io/post/php-redis-distributed-lock/" />
 
 
 
@@ -61,20 +61,20 @@
 <link rel="stylesheet" href="/css/global.css">
 
 
-<meta property="og:title" content="分布式任务&#43;消息队列框架go-queue" />
-<meta property="og:description" content="为什么要写这个库？ 在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案： beanstalkd beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)" />
+<meta property="og:title" content="基于redis实现分布式锁" />
+<meta property="og:description" content="简介 我们在做业务开发时候，经常遇到一些多进程/线程对同一数据修改而产生竞态条件，为了避免修改冲突覆盖，常常用锁机制来保证数据的正常性。同一进" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://daryeon.github.io/post/go-library-go-queue/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-03-21T06:56:44&#43;08:00" />
-<meta property="article:modified_time" content="2021-03-21T06:56:44&#43;08:00" />
+<meta property="og:url" content="https://daryeon.github.io/post/php-redis-distributed-lock/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2018-03-05T08:51:34&#43;08:00" />
+<meta property="article:modified_time" content="2018-03-05T08:51:34&#43;08:00" />
 
-<meta itemprop="name" content="分布式任务&#43;消息队列框架go-queue">
-<meta itemprop="description" content="为什么要写这个库？ 在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案： beanstalkd beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)"><meta itemprop="datePublished" content="2021-03-21T06:56:44&#43;08:00" />
-<meta itemprop="dateModified" content="2021-03-21T06:56:44&#43;08:00" />
-<meta itemprop="wordCount" content="1343">
-<meta itemprop="keywords" content="library," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="分布式任务&#43;消息队列框架go-queue"/>
-<meta name="twitter:description" content="为什么要写这个库？ 在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案： beanstalkd beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)"/>
+<meta itemprop="name" content="基于redis实现分布式锁">
+<meta itemprop="description" content="简介 我们在做业务开发时候，经常遇到一些多进程/线程对同一数据修改而产生竞态条件，为了避免修改冲突覆盖，常常用锁机制来保证数据的正常性。同一进"><meta itemprop="datePublished" content="2018-03-05T08:51:34&#43;08:00" />
+<meta itemprop="dateModified" content="2018-03-05T08:51:34&#43;08:00" />
+<meta itemprop="wordCount" content="704">
+<meta itemprop="keywords" content="distributed,redis," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="基于redis实现分布式锁"/>
+<meta name="twitter:description" content="简介 我们在做业务开发时候，经常遇到一些多进程/线程对同一数据修改而产生竞态条件，为了避免修改冲突覆盖，常常用锁机制来保证数据的正常性。同一进"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -412,7 +412,7 @@ if (!doNotTrack) {
 
       </li>
     
-        <li class="menu-item">
+        <li class="menu-item active">
         
           
           <a class="menu-item-link menu-parent" href="https://daryeon.github.io/">docs</a>
@@ -464,7 +464,7 @@ if (!doNotTrack) {
 
       </li>
     
-        <li class="menu-item active">
+        <li class="menu-item">
         
           
           <a class="menu-item-link menu-parent" href="https://daryeon.github.io/">go-library</a>
@@ -509,14 +509,14 @@ if (!doNotTrack) {
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">分布式任务&#43;消息队列框架go-queue</h1>
+      <h1 class="post-title">基于redis实现分布式锁</h1>
       
       <div class="post-meta">
-        <time datetime="2021-03-21" class="post-time">
-          2021-03-21
+        <time datetime="2018-03-05" class="post-time">
+          2018-03-05
         </time>
         <div class="post-category">
-            <a href="https://daryeon.github.io/categories/go/"> go </a>
+            <a href="https://daryeon.github.io/categories/php/"> php </a>
             
           </div>
         
@@ -538,10 +538,10 @@ if (!doNotTrack) {
   <ul>
     <li>
       <ul>
-        <li><a href="#为什么要写这个库">为什么要写这个库？</a></li>
-        <li><a href="#应用场景">应用场景</a></li>
-        <li><a href="#如何使用">如何使用</a></li>
-        <li><a href="#总结">总结</a></li>
+        <li><a href="#简介">简介</a></li>
+        <li><a href="#获取锁">获取锁</a></li>
+        <li><a href="#解除锁">解除锁</a></li>
+        <li><a href="#待续">待续···</a></li>
       </ul>
     </li>
   </ul>
@@ -551,175 +551,47 @@ if (!doNotTrack) {
 
     
     <div class="post-content">
-      <h3 id="为什么要写这个库">为什么要写这个库？</h3>
-<p>在开始自研 go-queue 之前，针对以下我们调研目前的开源队列方案：</p>
-<ol>
-<li>beanstalkd</li>
+      <h3 id="简介">简介</h3>
+<p>我们在做业务开发时候，经常遇到一些多进程/线程对同一数据修改而产生竞态条件，为了避免修改冲突覆盖，常常用锁机制来保证数据的正常性。同一进程内多线程并发可以用语言特性实现比如java的synchronized或GO的sync同步代码包或者直接利用本地文件锁实现。但是在分布式环境中，我们需要用到分布式锁。分布式锁的实现方式有很多，比如mysql,zookereper和redis。本文就讲讲最简单的redis分布式锁实现方式（代码示例基于php）。</p>
+<h3 id="获取锁">获取锁</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">$key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;redis_lock&#34;</span>;
+$value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;550e8400-e29b-41d4-a716-446655440000&#34;</span>;
+$ttl <span style="color:#f92672">=</span> <span style="color:#ae81ff">5000</span>;
+$redisIns<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">set</span>($key, $value, <span style="color:#e6db74">&#39;NX&#39;</span>, <span style="color:#e6db74">&#39;PX&#39;</span>, $ttl);
+</code></pre></div><ol>
+<li>$key自定义锁名，应该保证唯一性</li>
+<li>$ttl 过期时间，保证不会因某进程得到锁却意外退出导致死锁</li>
+<li>set参数nx实现效果等于setnx+expire操作，但是set是原子性操作而setnx+expire是非原子的，所以应使用set完成加锁操作</li>
+<li>根据返回值判断是否加锁成功，如果加锁失败可以直接丢错误码给前台或用自旋锁来竞争加锁</li>
+<li>$ttl尽量要大于该进程的操作时间，避免因操作太久但是到期导致锁解除。在操作中可以通过expire进行锁续命</li>
+<li>$value uuid或其它方式生成一个分布式环境下全局唯一的字符串。删除锁时候需要重新获取下该key的value，判断是否与生成的一致，如若一致，则可以删除，避免因锁提前过期导致删除掉别的进程持有的锁。</li>
 </ol>
-<p>beanstalkd 有一些特殊好用功能：支持任务 priority、延时 (delay)、超时重发 (time-to-run) 和预留 (buried)，能够很好的支持分布式的后台任务和定时任务处理。如下是 beanstalkd 基本部分：</p>
-<ul>
-<li>job：任务单元；</li>
-<li>tube：任务队列，存储统一类型 job。producer 和 consumer 操作对象；</li>
-<li>job 生产者，通过 put 将 job 加入一个 tube；</li>
-<li>job 消费者，通过 reserve/release/bury/delete 来获取 job 或改变 job 的状态；</li>
-</ul>
-<p>很幸运的是官方提供了 go client：https://github.com/beanstalkd/go-beanstalk。</p>
-<p>但是这对不熟悉 beanstalkd 操作的 go 开发者而言，需要学习成本。</p>
-<ol start="2">
-<li>kafka</li>
-</ol>
-<p>类似基于 kafka 消息队列作为存储的方案，存储单元是消息，如果要实现延时执行，可以想到的方案是以延时执行的时间作为 topic，这样在大型的消息系统中，充斥大量一次性的 topic（dq_1616324404788, dq_1616324417622），当时间分散，会容易造成磁盘随机写的情况。</p>
-<p>而且在 go 生态中，</p>
-<p>同时考虑以下因素：</p>
-<ul>
-<li>支持延时任务</li>
-<li>高可用，保证数据不丢失</li>
-<li>可扩展资源和性能</li>
-</ul>
-<p>所以我们自己基于以上两个基础组件开发了 go-queue：</p>
-<ul>
-<li>基于 beanstalkd 开发了 dq，支持定时和延时操作。同时加入 redis 保证消费唯一性。</li>
-<li>基于 kafka 开发了 kq，简化生产者和消费者的开发 API，同时在写入 kafka 使用批量写，节省 IO。</li>
-</ul>
-<p>整体设计如下：</p>
-<p><img src="/images/go_queue/01.png" alt="整体设计过程"></p>
-<h3 id="应用场景">应用场景</h3>
-<p>首先在消费场景来说，一个是针对任务队列，一个是消息队列。而两者最大的区别：</p>
-<ul>
-<li>任务是没有顺序约束；消息需要；</li>
-<li>任务在加入中，或者是等待中，可能存在状态更新（或是取消）；消息则是单一的存储即可；</li>
-</ul>
-<p>所以在背后的基础设施选型上，也是基于这种消费场景。</p>
-<ul>
-<li>dq：依赖于beanstalkd ，适合延时、定时任务执行；</li>
-<li>kq：依赖于 kafka ，适用于异步、批量任务执行；</li>
-</ul>
-<p>而从其中 dq的 API 中也可以看出：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 延迟任务执行
-</span><span style="color:#75715e"></span><span style="color:#f92672">-</span> <span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">Delay</span>(<span style="color:#a6e22e">msg</span>, <span style="color:#a6e22e">delayTime</span>);
-
-<span style="color:#75715e">// 定时任务执行
-</span><span style="color:#75715e"></span><span style="color:#f92672">-</span> <span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">At</span>(<span style="color:#a6e22e">msg</span>, <span style="color:#a6e22e">atTime</span>);
-</code></pre></div><p>而在我们内部：</p>
-<ul>
-<li>如果是 异步消息消费/推送 ，则会选择使用kq：kq.Push(msg)；</li>
-<li>如果是 15 分钟提醒/ 明天中午发送短信 等，则使用 dq；</li>
-</ul>
-<h3 id="如何使用">如何使用</h3>
-<p>分别介绍dq和 kq的使用方式：</p>
-<ul>
-<li>dq</li>
-</ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// [Producer]
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">producer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">NewProducer</span>([]<span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">Beanstalk</span>{
-    {
-        <span style="color:#a6e22e">Endpoint</span>: <span style="color:#e6db74">&#34;localhost:11300&#34;</span>,
-        <span style="color:#a6e22e">Tube</span>:     <span style="color:#e6db74">&#34;tube&#34;</span>,
-    },
-    {
-        <span style="color:#a6e22e">Endpoint</span>: <span style="color:#e6db74">&#34;localhost:11301&#34;</span>,
-        <span style="color:#a6e22e">Tube</span>:     <span style="color:#e6db74">&#34;tube&#34;</span>,
-    },
-})  
-
-<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1000</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">1005</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-    <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">producer</span>.<span style="color:#a6e22e">Delay</span>([]byte(<span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">i</span>)), <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span><span style="color:#f92672">*</span><span style="color:#ae81ff">5</span>)
-    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+<h3 id="解除锁">解除锁</h3>
+<p>由于删除锁时候需要先重新获取下该key的value，判断是否与生成的一致，如若一致，才可以删除，而get和del并非原子性，所以需要用lua脚本或事务实现，保证其原子性。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lua" data-lang="lua">
+<span style="color:#f92672">//</span><span style="color:#960050;background-color:#1e0010">基于</span>lua脚本
+<span style="color:#960050;background-color:#1e0010">$</span>script <span style="color:#f92672">=</span> <span style="color:#f92672">&lt;&lt;&lt;</span>LUA
+<span style="color:#66d9ef">if</span> redis.call(<span style="color:#e6db74">&#34;get&#34;</span>,KEYS[<span style="color:#ae81ff">1</span>]) <span style="color:#f92672">==</span> ARGV[<span style="color:#ae81ff">1</span>]
+<span style="color:#66d9ef">then</span>
+    <span style="color:#66d9ef">return</span> redis.call(<span style="color:#e6db74">&#34;del&#34;</span>,KEYS[<span style="color:#ae81ff">1</span>])
+<span style="color:#66d9ef">else</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+<span style="color:#66d9ef">end</span>
+LUA;
+<span style="color:#960050;background-color:#1e0010">$</span>redisIns<span style="color:#f92672">-&gt;</span>eval(<span style="color:#960050;background-color:#1e0010">$</span>script, <span style="color:#ae81ff">1</span>, <span style="color:#960050;background-color:#1e0010">$</span>key, <span style="color:#960050;background-color:#1e0010">$</span>value);
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">//基于事务
+</span><span style="color:#75715e"></span>$options <span style="color:#f92672">=</span> <span style="color:#66d9ef">array</span>(
+    <span style="color:#e6db74">&#39;cas&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">true</span>,
+    <span style="color:#e6db74">&#39;watch&#39;</span> <span style="color:#f92672">=&gt;</span> $key,
+    <span style="color:#e6db74">&#39;retry&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">3</span>,
+);
+$redisIns<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">transaction</span>($options, <span style="color:#66d9ef">function</span> ($tx) <span style="color:#66d9ef">use</span> ($key, $value) {
+    $tx<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">multi</span>();
+    <span style="color:#66d9ef">if</span> ($tx<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">get</span>($key) <span style="color:#f92672">==</span> $value) {
+        $tx<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">del</span>($key);
     }
-}
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// [Consumer]
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">consumer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">NewConsumer</span>(<span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">DqConf</span>{
-  <span style="color:#a6e22e">Beanstalks</span>: []<span style="color:#a6e22e">dq</span>.<span style="color:#a6e22e">Beanstalk</span>{
-    {
-      <span style="color:#a6e22e">Endpoint</span>: <span style="color:#e6db74">&#34;localhost:11300&#34;</span>,
-      <span style="color:#a6e22e">Tube</span>:     <span style="color:#e6db74">&#34;tube&#34;</span>,
-    },
-    {
-      <span style="color:#a6e22e">Endpoint</span>: <span style="color:#e6db74">&#34;localhost:11301&#34;</span>,
-      <span style="color:#a6e22e">Tube</span>:     <span style="color:#e6db74">&#34;tube&#34;</span>,
-    },
-  },
-  <span style="color:#a6e22e">Redis</span>: <span style="color:#a6e22e">redis</span>.<span style="color:#a6e22e">RedisConf</span>{
-    <span style="color:#a6e22e">Host</span>: <span style="color:#e6db74">&#34;localhost:6379&#34;</span>,
-    <span style="color:#a6e22e">Type</span>: <span style="color:#a6e22e">redis</span>.<span style="color:#a6e22e">NodeType</span>,
-  },
-})
-<span style="color:#a6e22e">consumer</span>.<span style="color:#a6e22e">Consume</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">body</span> []<span style="color:#66d9ef">byte</span>) {
-  <span style="color:#75715e">// your consume logic
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">body</span>))
-})
-</code></pre></div><p>和普通的 生产者 - 消费者 模型类似，开发者也只需要关注以下：</p>
-<ol>
-<li>开发者只需要关注自己的任务类型「延时/定时」</li>
-<li>消费端的消费逻辑</li>
-</ol>
-<ul>
-<li>kq</li>
-</ul>
-<p>producer.go:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// message structure
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">message</span> <span style="color:#66d9ef">struct</span> {
-    <span style="color:#a6e22e">Key</span>     <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;key&#34;`</span>
-    <span style="color:#a6e22e">Value</span>   <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;value&#34;`</span>
-    <span style="color:#a6e22e">Payload</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;message&#34;`</span>
-}
-
-<span style="color:#a6e22e">pusher</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">kq</span>.<span style="color:#a6e22e">NewPusher</span>([]<span style="color:#66d9ef">string</span>{
-    <span style="color:#e6db74">&#34;127.0.0.1:19092&#34;</span>,
-    <span style="color:#e6db74">&#34;127.0.0.1:19093&#34;</span>,
-    <span style="color:#e6db74">&#34;127.0.0.1:19094&#34;</span>,
-}, <span style="color:#e6db74">&#34;kq&#34;</span>)
-
-<span style="color:#a6e22e">ticker</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">NewTicker</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Millisecond</span>)
-<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">round</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">round</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">round</span><span style="color:#f92672">++</span> {
-    <span style="color:#66d9ef">select</span> {
-    <span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ticker</span>.<span style="color:#a6e22e">C</span>:
-        <span style="color:#a6e22e">count</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#ae81ff">100</span>)
-    <span style="color:#75715e">// 准备消息
-</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">m</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">message</span>{
-            <span style="color:#a6e22e">Key</span>:     <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatInt</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">UnixNano</span>(), <span style="color:#ae81ff">10</span>),
-            <span style="color:#a6e22e">Value</span>:   <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d,%d&#34;</span>, <span style="color:#a6e22e">round</span>, <span style="color:#a6e22e">count</span>),
-            <span style="color:#a6e22e">Payload</span>: <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d,%d&#34;</span>, <span style="color:#a6e22e">round</span>, <span style="color:#a6e22e">count</span>),
-        }
-        <span style="color:#a6e22e">body</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">m</span>)
-        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-        }
-
-        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(string(<span style="color:#a6e22e">body</span>))
-    <span style="color:#75715e">// push to kafka broker
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">pusher</span>.<span style="color:#a6e22e">Push</span>(string(<span style="color:#a6e22e">body</span>)); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-        }
-    }
-}
-</code></pre></div><p>config.yaml：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">Name</span>: <span style="color:#ae81ff">kq</span>
-<span style="color:#f92672">Brokers</span>:
-  - <span style="color:#ae81ff">127.0.0.1</span>:<span style="color:#ae81ff">19092</span>
-  - <span style="color:#ae81ff">127.0.0.1</span>:<span style="color:#ae81ff">19092</span>
-  - <span style="color:#ae81ff">127.0.0.1</span>:<span style="color:#ae81ff">19092</span>
-<span style="color:#f92672">Group</span>: <span style="color:#ae81ff">adhoc</span>
-<span style="color:#f92672">Topic</span>: <span style="color:#ae81ff">kq</span>
-<span style="color:#f92672">Offset</span>: <span style="color:#ae81ff">first</span>
-<span style="color:#f92672">Consumers</span>: <span style="color:#ae81ff">1</span>
-</code></pre></div><p>consumer.go:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">c</span> <span style="color:#a6e22e">kq</span>.<span style="color:#a6e22e">KqConf</span>
-<span style="color:#a6e22e">conf</span>.<span style="color:#a6e22e">MustLoad</span>(<span style="color:#e6db74">&#34;config.yaml&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">c</span>)
-
-<span style="color:#75715e">// WithHandle: 具体的处理msg的logic
-</span><span style="color:#75715e">// 这也是开发者需要根据自己的业务定制化
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">q</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">kq</span>.<span style="color:#a6e22e">MustNewQueue</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">kq</span>.<span style="color:#a6e22e">WithHandle</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">k</span>, <span style="color:#a6e22e">v</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
-  <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;=&gt; %s\n&#34;</span>, <span style="color:#a6e22e">v</span>)
-  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-}))
-<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">q</span>.<span style="color:#a6e22e">Stop</span>()
-<span style="color:#a6e22e">q</span>.<span style="color:#a6e22e">Start</span>()
-</code></pre></div><p>和 dq 不同的是：开发者不需要关注任务类型（在这里也没有任务的概念，传递的都是 message data）。</p>
-<p>其他操作和 dq 类似，只是将 业务处理函数 当成配置直接传入消费者中。</p>
-<h3 id="总结">总结</h3>
-<p>在我们目前的场景中，kq 大量使用在我们的异步消息服务；而延时任务，我们除了 dq，还可以使用内存版的 TimingWheel「go-zero 生态组件」。</p>
+});
+</code></pre></div><h3 id="待续">待续···</h3>
 
     </div>
 
@@ -733,7 +605,7 @@ if (!doNotTrack) {
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-      2021-03-21
+      2018-03-05
       
     </span>
   </p>
@@ -750,14 +622,15 @@ if (!doNotTrack) {
 
     <footer class="post-footer">
       <div class="post-tags">
-          <a href="https://daryeon.github.io/tags/library/">library</a>
+          <a href="https://daryeon.github.io/tags/distributed/">distributed</a>
+          <a href="https://daryeon.github.io/tags/redis/">redis</a>
           
         </div>
 
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/go-library-gopacket/">
+          <a class="prev" href="/post/golang-build-command/">
             
             <i class="iconfont">
               <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -767,12 +640,12 @@ if (!doNotTrack) {
 </svg>
 
             </i>
-            <span class="prev-text nav-default">网络流量抓包库gopacket介绍</span>
+            <span class="prev-text nav-default">Go的编译命令总结</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
         
-          <a class="next" href="/post/go-zhizhen-introduce/">
-            <span class="next-text nav-default">Go语言中的指针介绍</span>
+          <a class="next" href="/post/php-namespace/">
+            <span class="next-text nav-default">PHP的命名空间讲解</span>
             <span class="prev-text nav-mobile">下一篇</span>
             
             <i class="iconfont">

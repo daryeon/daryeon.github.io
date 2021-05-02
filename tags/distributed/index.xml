@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>distributed on 大叶的博客</title>
+    <link>https://daryeon.github.io/tags/distributed/</link>
+    <description>Recent content in distributed on 大叶的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 05 Mar 2018 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/distributed/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基于redis实现分布式锁</title>
+      <link>https://daryeon.github.io/post/php-redis-distributed-lock/</link>
+      <pubDate>Mon, 05 Mar 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-redis-distributed-lock/</guid>
+      <description>简介 我们在做业务开发时候，经常遇到一些多进程/线程对同一数据修改而产生竞态条件，为了避免修改冲突覆盖，常常用锁机制来保证数据的正常性。同一进</description>
+    </item>
+    
+  </channel>
+</rss>

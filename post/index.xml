@@ -98,6 +98,15 @@
     </item>
     
     <item>
+      <title>基于redis实现分布式锁</title>
+      <link>https://daryeon.github.io/post/php-redis-distributed-lock/</link>
+      <pubDate>Mon, 05 Mar 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-redis-distributed-lock/</guid>
+      <description>简介 我们在做业务开发时候，经常遇到一些多进程/线程对同一数据修改而产生竞态条件，为了避免修改冲突覆盖，常常用锁机制来保证数据的正常性。同一进</description>
+    </item>
+    
+    <item>
       <title>PHP的命名空间讲解</title>
       <link>https://daryeon.github.io/post/php-namespace/</link>
       <pubDate>Sun, 25 Feb 2018 08:51:34 +0800</pubDate>
