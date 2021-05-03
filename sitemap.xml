@@ -219,14 +219,35 @@
   </url>
   
   <url>
-    <loc>https://daryeon.github.io/tags/distributed/</loc>
-    <lastmod>2018-03-05T08:51:34+08:00</lastmod>
+    <loc>https://daryeon.github.io/tags/curl/</loc>
+    <lastmod>2018-03-08T08:51:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/post/curl-error-code-77/</loc>
+    <lastmod>2018-03-08T08:51:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/tags/errorcode/</loc>
+    <lastmod>2018-03-08T08:51:34+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://daryeon.github.io/categories/php/</loc>
+    <lastmod>2018-03-08T08:51:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://daryeon.github.io/tags/distributed/</loc>
     <lastmod>2018-03-05T08:51:34+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

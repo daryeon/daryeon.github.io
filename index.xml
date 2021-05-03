@@ -1613,6 +1613,30 @@ $ &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; test in &lt;span st
     </item>
     
     <item>
+      <title>curl请求HTTPS网站时返回false,错误码为77</title>
+      <link>https://daryeon.github.io/post/curl-error-code-77/</link>
+      <pubDate>Thu, 08 Mar 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/curl-error-code-77/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;在curl请求一个HTTPS网站时，没有返回内容，curl_error没有返回错误信息，curl_errno返回错误码为77。&lt;/p&gt;
+&lt;p&gt;发生这种问题是因为本地服务器的ca证书有问题。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-other&#34; data-lang=&#34;other&#34;&gt;CURLE_SSL_CACERT_BADFILE (77) – 读取 SSL CA 证书时遇到问题（可能是路径错误或访问权限问题）
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;解决方法&#34;&gt;解决方法&lt;/h3&gt;
+&lt;p&gt;重新安装下ca证书&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo yum install ca-certificates
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;重启php-fpm&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;/etc/init.d/php-fpm restart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;更改下发送curl的代码&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;curl_setopt&lt;/span&gt;($ch, &lt;span style=&#34;color:#a6e22e&#34;&gt;CURLOPT_SSL_VERIFYPEER&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;);
+&lt;span style=&#34;color:#a6e22e&#34;&gt;curl_setopt&lt;/span&gt;($ch, &lt;span style=&#34;color:#a6e22e&#34;&gt;CURLOPT_SSL_VERIFYHOST&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;待续&#34;&gt;待续···&lt;/h3&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>基于redis实现分布式锁</title>
       <link>https://daryeon.github.io/post/php-redis-distributed-lock/</link>
       <pubDate>Mon, 05 Mar 2018 08:51:34 +0800</pubDate>
@@ -2391,44 +2415,6 @@ pjax.js提供了两个api：&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&#34;待续&#34;&gt;待续···&lt;/h3&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>Shortcodes Notice Preview</title>
-      <link>https://daryeon.github.io/post/shortcode-notice/</link>
-      <pubDate>Mon, 01 Jan 2018 16:01:23 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/post/shortcode-notice/</guid>
-      
-        <description>&lt;h2 id=&#34;normal-use&#34;&gt;normal use&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;Note&lt;/code&gt; example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice note %}}
-A notice disclaimer
-{{% /notice %}}
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Result:&lt;/strong&gt;&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;You could &lt;strong&gt;custom title&lt;/strong&gt; :&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice note 笔记 %}}
-A notice disclaimer
-{{% /notice %}}
-&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;tip&#34;&gt;tip&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice tip %}}
-A tip disclaimer
-{{% /tip %}}
-&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;info&#34;&gt;info&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice info %}}
-A info disclaimer
-{{% /notice %}}
-&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;warning&#34;&gt;warning&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&#34;language-shortcode&#34; data-lang=&#34;shortcode&#34;&gt;{{% notice warning %}}
-A warning disclaimer
-{{% /notice %}}
-&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
 </description>
       
     </item>

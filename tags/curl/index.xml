@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>curl on 大叶的博客</title>
+    <link>https://daryeon.github.io/tags/curl/</link>
+    <description>Recent content in curl on 大叶的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 08 Mar 2018 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/curl/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>curl请求HTTPS网站时返回false,错误码为77</title>
+      <link>https://daryeon.github.io/post/curl-error-code-77/</link>
+      <pubDate>Thu, 08 Mar 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/curl-error-code-77/</guid>
+      <description>简介 在curl请求一个HTTPS网站时，没有返回内容，curl_error没有返回错误信息，curl_errno返回错误码为77。 发生这种问</description>
+    </item>
+    
+  </channel>
+</rss>

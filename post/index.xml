@@ -98,6 +98,15 @@
     </item>
     
     <item>
+      <title>curl请求HTTPS网站时返回false,错误码为77</title>
+      <link>https://daryeon.github.io/post/curl-error-code-77/</link>
+      <pubDate>Thu, 08 Mar 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/curl-error-code-77/</guid>
+      <description>简介 在curl请求一个HTTPS网站时，没有返回内容，curl_error没有返回错误信息，curl_errno返回错误码为77。 发生这种问</description>
+    </item>
+    
+    <item>
       <title>基于redis实现分布式锁</title>
       <link>https://daryeon.github.io/post/php-redis-distributed-lock/</link>
       <pubDate>Mon, 05 Mar 2018 08:51:34 +0800</pubDate>
@@ -176,16 +185,6 @@
       
       <guid>https://daryeon.github.io/post/shortcode-notice/</guid>
       <description>normal use Note example: {{% notice note %}} A notice disclaimer {{% /notice %}} Result: You could custom title : {{% notice note 笔记 %}} A notice disclaimer {{% /notice %}} tip {{% notice tip %}} A tip disclaimer {{% /tip %}} info {{% notice info %}} A info disclaimer {{% /notice %}} warning {{% notice warning %}} A warning disclaimer {{% /notice %}}</description>
-    </item>
-    
-    <item>
-      <title>(Hu)go Template Primer</title>
-      <link>https://daryeon.github.io/post/goisforlovers/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://daryeon.github.io/post/goisforlovers/</guid>
-      <description>+++ description = &amp;quot;&amp;quot; tags = [ &amp;ldquo;go&amp;rdquo;, &amp;ldquo;golang&amp;rdquo;, &amp;ldquo;templates&amp;rdquo;, &amp;ldquo;themes&amp;rdquo;, &amp;ldquo;development&amp;rdquo;, ] date = &amp;ldquo;2014-04-02&amp;rdquo; categories = [ &amp;ldquo;Development&amp;rdquo;, &amp;ldquo;golang&amp;rdquo;, &amp;ldquo;index&amp;rdquo;, ] +++
-Hugo uses the excellent go html/template library for its template engine. It is an extremely lightweight engine that provides a very small amount of logic. In our experience that it is just the right amount of logic to be able to create a good static website. If you have used other template systems from different languages or frameworks you will find a lot of similarities in go templates.</description>
     </item>
     
   </channel>
