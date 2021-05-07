@@ -98,6 +98,15 @@
     </item>
     
     <item>
+      <title>PHP修改文件但是不生效，可能是opcache的问题</title>
+      <link>https://daryeon.github.io/post/php-modify-file-opcache/</link>
+      <pubDate>Sat, 10 Mar 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-modify-file-opcache/</guid>
+      <description>简介 开发中，有时候更新文件，但是可能会发现没有效果更新。应该先检查是否有代码逻辑层的缓存和框架的缓存，如果都没有，重启下php-fpm试试，</description>
+    </item>
+    
+    <item>
       <title>curl请求HTTPS网站时返回false,错误码为77</title>
       <link>https://daryeon.github.io/post/curl-error-code-77/</link>
       <pubDate>Thu, 08 Mar 2018 08:51:34 +0800</pubDate>
@@ -176,15 +185,6 @@
       
       <guid>https://daryeon.github.io/post/pjax-introduce/</guid>
       <description>简介 pjax 是 HTML5 pushState 以及 Ajax 两项技术的简称，综合这两个技术可以实现在不刷新页面的情况下载入HTML网页，带给你超快速的浏览器体验，而且有固定链接、标题</description>
-    </item>
-    
-    <item>
-      <title>Shortcodes Notice Preview</title>
-      <link>https://daryeon.github.io/post/shortcode-notice/</link>
-      <pubDate>Mon, 01 Jan 2018 16:01:23 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/post/shortcode-notice/</guid>
-      <description>normal use Note example: {{% notice note %}} A notice disclaimer {{% /notice %}} Result: You could custom title : {{% notice note 笔记 %}} A notice disclaimer {{% /notice %}} tip {{% notice tip %}} A tip disclaimer {{% /tip %}} info {{% notice info %}} A info disclaimer {{% /notice %}} warning {{% notice warning %}} A warning disclaimer {{% /notice %}}</description>
     </item>
     
   </channel>

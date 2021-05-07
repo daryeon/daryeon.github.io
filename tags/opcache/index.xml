@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>opcache on 大叶的博客</title>
+    <link>https://daryeon.github.io/tags/opcache/</link>
+    <description>Recent content in opcache on 大叶的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 10 Mar 2018 08:51:34 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/opcache/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PHP修改文件但是不生效，可能是opcache的问题</title>
+      <link>https://daryeon.github.io/post/php-modify-file-opcache/</link>
+      <pubDate>Sat, 10 Mar 2018 08:51:34 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/php-modify-file-opcache/</guid>
+      <description>简介 开发中，有时候更新文件，但是可能会发现没有效果更新。应该先检查是否有代码逻辑层的缓存和框架的缓存，如果都没有，重启下php-fpm试试，</description>
+    </item>
+    
+  </channel>
+</rss>
