@@ -6,7 +6,16 @@
     <description>Recent content in library on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 29 Mar 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/library/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 02 Apr 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/tags/library/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go 正则表达式库之 commonregex</title>
+      <link>https://daryeon.github.io/post/go-library-commonregex/</link>
+      <pubDate>Fri, 02 Apr 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-commonregex/</guid>
+      <description>简介 Go 正则表达式库之 commonregex 为什么使用 commonregex? 在开发的时候，我们会遇到一些需要使用字符串的匹配和查找的任务。我们可以使用正则表达式去提取感兴趣的数据，如</description>
+    </item>
+    
     <item>
       <title>Goroutine泄漏防治神器goleak介绍</title>
       <link>https://daryeon.github.io/post/go-library-goleak/</link>

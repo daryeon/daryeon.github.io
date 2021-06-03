@@ -6,7 +6,7 @@
     <description>Recent content in Posts on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 29 Mar 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 02 Apr 2021 06:56:44 +0800</lastBuildDate><atom:link href="https://daryeon.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Go实现常见排序算法</title>
       <link>https://daryeon.github.io/post/small-common-sort-func/</link>
@@ -23,6 +23,15 @@
       
       <guid>https://daryeon.github.io/post/go-small-details/</guid>
       <description>简介 GO的一些小细节分享。 map 无序性 map存储的数据并不保证有序性，通常可以把key写入一个slice切片，依靠slice切片的有序性来读取m</description>
+    </item>
+    
+    <item>
+      <title>Go 正则表达式库之 commonregex</title>
+      <link>https://daryeon.github.io/post/go-library-commonregex/</link>
+      <pubDate>Fri, 02 Apr 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-commonregex/</guid>
+      <description>简介 Go 正则表达式库之 commonregex 为什么使用 commonregex? 在开发的时候，我们会遇到一些需要使用字符串的匹配和查找的任务。我们可以使用正则表达式去提取感兴趣的数据，如</description>
     </item>
     
     <item>
@@ -176,15 +185,6 @@
       
       <guid>https://daryeon.github.io/post/composer-and-aotuload/</guid>
       <description>简介 分享composer和自动加载相关介绍 概念 composer：是PHP用来管理依赖（dependency）关系的工具 对于现代语言而言，包管</description>
-    </item>
-    
-    <item>
-      <title>如何将Pjax整合进网站，实现全站无刷新加载？</title>
-      <link>https://daryeon.github.io/post/pjax-introduce/</link>
-      <pubDate>Tue, 02 Jan 2018 08:51:34 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/post/pjax-introduce/</guid>
-      <description>简介 pjax 是 HTML5 pushState 以及 Ajax 两项技术的简称，综合这两个技术可以实现在不刷新页面的情况下载入HTML网页，带给你超快速的浏览器体验，而且有固定链接、标题</description>
     </item>
     
   </channel>

@@ -6,7 +6,7 @@
     <description>Recent content on 大叶的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 29 Mar 2021 06:56:44 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 02 Apr 2021 06:56:44 +0800</lastBuildDate>
     
         <atom:link href="https://daryeon.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -520,6 +520,88 @@ defer2由于返回的不是匿名变量，所以不会创建中间变量，defer
         <description>&lt;ul&gt;
 &lt;li&gt;web服务端开发，Phper, Gopher。&lt;/li&gt;
 &lt;li&gt;兴趣爱好广泛，喜欢Go，算法等。平时喜欢做 LeetCode 算法题。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Go 正则表达式库之 commonregex</title>
+      <link>https://daryeon.github.io/post/go-library-commonregex/</link>
+      <pubDate>Fri, 02 Apr 2021 06:56:44 +0800</pubDate>
+      
+      <guid>https://daryeon.github.io/post/go-library-commonregex/</guid>
+      
+        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
+&lt;p&gt;Go 正则表达式库之 commonregex&lt;/p&gt;
+&lt;p&gt;为什么使用 commonregex?
+在开发的时候，我们会遇到一些需要使用字符串的匹配和查找的任务。我们可以使用正则表达式去提取感兴趣的数据，如手机号码，邮件，超链接等。但是正则表达式写起来费时费力，而且容易遗忘。commonregex 它提供了很多内置的正则表达式，开箱即用，能极大的提高开发体验和开发效率。&lt;/p&gt;
+&lt;p&gt;commonregex 简介&lt;/p&gt;
+&lt;p&gt;提供经常使用的正则表达式的集合。&lt;/p&gt;
+&lt;p&gt;它提供了这些作为获取与特定模式对应的匹配字符串的简单函数。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;日期&lt;/li&gt;
+&lt;li&gt;时间&lt;/li&gt;
+&lt;li&gt;电话号码&lt;/li&gt;
+&lt;li&gt;超链接&lt;/li&gt;
+&lt;li&gt;邮件地址&lt;/li&gt;
+&lt;li&gt;IPv4/IPv6/IP 地址&lt;/li&gt;
+&lt;li&gt;价格&lt;/li&gt;
+&lt;li&gt;十六进制颜色值&lt;/li&gt;
+&lt;li&gt;信用卡卡号&lt;/li&gt;
+&lt;li&gt;10/13 位 ISBN&lt;/li&gt;
+&lt;li&gt;邮政编码&lt;/li&gt;
+&lt;li&gt;MD5&lt;/li&gt;
+&lt;li&gt;SHA1&lt;/li&gt;
+&lt;li&gt;SHA256&lt;/li&gt;
+&lt;li&gt;GUID，全局唯一标识&lt;/li&gt;
+&lt;li&gt;Git 仓库地址&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;快速使用-commonregex&#34;&gt;快速使用 commonregex&lt;/h3&gt;
+&lt;p&gt;安装 commonregex&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;go get -u github.com/mingrammer/commonregex
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;简单使用 commonregex&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; (
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;cregex&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;github.com/mingrammer/commonregex&amp;#34;&lt;/span&gt;
+)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;`John, please get that article on www.linkedin.com to me by 5:00PM on Jan 9th 2012. 4:00 would be ideal, actually. If you have any questions, You can reach me at (519)-236-2723x341 or get in touch with my associate at harold.smith@gmail.com`&lt;/span&gt;
+
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;dateList&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cregex&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Date&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;timeList&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cregex&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Time&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;linkList&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cregex&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Links&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;phoneList&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cregex&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;PhonesWithExts&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;emailList&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cregex&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Emails&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;text&lt;/span&gt;)
+
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;date list:&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;dateList&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;time list:&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;timeList&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;link list:&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;linkList&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;phone list:&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;phoneList&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;email list:&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;emailList&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;运行结果：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;date&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;list&lt;/span&gt;: [&lt;span style=&#34;color:#a6e22e&#34;&gt;Jan&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;9&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;th&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2012&lt;/span&gt;]
+&lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;list&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;00&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;PM&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;00&lt;/span&gt; ]
+&lt;span style=&#34;color:#a6e22e&#34;&gt;link&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;list&lt;/span&gt;: [&lt;span style=&#34;color:#a6e22e&#34;&gt;www&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;linkedin&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;com&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;harold&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;smith&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;gmail&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;com&lt;/span&gt;]
+&lt;span style=&#34;color:#a6e22e&#34;&gt;phone&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;list&lt;/span&gt;: [(&lt;span style=&#34;color:#ae81ff&#34;&gt;519&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;236&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2723&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;x341&lt;/span&gt;]
+&lt;span style=&#34;color:#a6e22e&#34;&gt;email&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;list&lt;/span&gt;: [&lt;span style=&#34;color:#a6e22e&#34;&gt;harold&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;smith&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;gmail&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;com&lt;/span&gt;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;commonregex提供的 API 非常易于使用，调用相应的类别方法返回一段文本中符合这些格式的字符串列表。&lt;/p&gt;
+&lt;p&gt;上面依次从text获取日期列表，时间列表，超链接列表，电话号码列表和电子邮件列表。&lt;/p&gt;
+&lt;h3 id=&#34;总结&#34;&gt;总结&lt;/h3&gt;
+&lt;p&gt;commonregex 提供了常用的正则表达式的函数，足以应付我们日常开发场景，能较大的提高我们的开发效率。&lt;/p&gt;
+&lt;h3 id=&#34;参考资料&#34;&gt;参考资料&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/mingrammer/commonregex&#34;&gt;https://github.com/mingrammer/commonregex&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://darjun.github.io/2020/09/05/godailylib/commonregex/&#34;&gt;https://darjun.github.io/2020/09/05/godailylib/commonregex/&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 </description>
       
@@ -2155,206 +2237,6 @@ $b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;
 0000 0800-0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx
 0001 0000-0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
 &lt;/code&gt;&lt;/pre&gt;</description>
-      
-    </item>
-    
-    <item>
-      <title>Composer和自动加载学习分享</title>
-      <link>https://daryeon.github.io/post/composer-and-aotuload/</link>
-      <pubDate>Mon, 15 Jan 2018 08:51:34 +0800</pubDate>
-      
-      <guid>https://daryeon.github.io/post/composer-and-aotuload/</guid>
-      
-        <description>&lt;h3 id=&#34;简介&#34;&gt;简介&lt;/h3&gt;
-&lt;p&gt;分享composer和自动加载相关介绍&lt;/p&gt;
-&lt;h3 id=&#34;概念&#34;&gt;概念&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;composer：是PHP用来管理依赖（dependency）关系的工具&lt;/li&gt;
-&lt;li&gt;对于现代语言而言，包管理器基本上是标配。例：java有maven，python有pip，ruby有gem，nodejs有npm，go有modules，php则有pear。但使用起来麻烦，相关中文资料较少。则衍生出composer&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ol&gt;
-&lt;li&gt;创始人jordi boggiano&lt;/li&gt;
-&lt;li&gt;创建于2011年4月，直到2016年4月才发布正式版&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://daryeon.github.io/images/composer_and_autoload/1_20210316030453.png&#34; alt=&#34;作者简介&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;安装&#34;&gt;安装&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;linux下 &lt;code&gt;curl -sS https://getcomposer.org/installer | php&lt;/code&gt; （全局安装）&lt;/li&gt;
-&lt;li&gt;windows下，下载exe文件，一键安装即可（全局安装）&lt;/li&gt;
-&lt;li&gt;局部安装。只下载composer.phar文件，调用php命令执行（需要注意php版本需大于5.3，已安装openssl扩展才能正常使用）&lt;/li&gt;
-&lt;li&gt;检测是否安装成功，命令行输入composer或php composer.phar来检测是否安装成功&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://daryeon.github.io/images/composer_and_autoload/2_20210316032201.png&#34; alt=&#34;安装依赖运行过程&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;常用命令&#34;&gt;常用命令&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;composer install 安装命令（读取composer.json，安装到vendor目录）&lt;/li&gt;
-&lt;li&gt;composer require [package_name] 申明依赖（安装或者更新依赖）&lt;/li&gt;
-&lt;li&gt;composer create-project [project_name] 在目录下创建一个新项目（相当于git clone和svn checkout）&lt;/li&gt;
-&lt;li&gt;composer update [package_name] 更新当前目录指定包或者更新所有依赖的包&lt;/li&gt;
-&lt;li&gt;composer remove [package_name] 移除指定包的依赖&lt;/li&gt;
-&lt;li&gt;composer search [package_name] 搜索相关包信息&lt;/li&gt;
-&lt;li&gt;composer config [options] 更改配置（最常用是修改读取的源，使用国内镜像&lt;code&gt;composer config -g repo.packagist composer https://packagist.phpcomposer.com&lt;/code&gt;）&lt;/li&gt;
-&lt;li&gt;composer self-update 更新当前composer版本&lt;/li&gt;
-&lt;li&gt;composer init 初始化创建一个composer.json文件&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;类库包的依赖定义&#34;&gt;类库包的依赖定义&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://daryeon.github.io/images/composer_and_autoload/3_20210316033245.png&#34; alt=&#34;类库包的依赖定义&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;项目包的依赖定义&#34;&gt;项目包的依赖定义&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://daryeon.github.io/images/composer_and_autoload/4_20210316033421.png&#34; alt=&#34;类库包的依赖定义&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;php包的脚本事件&#34;&gt;php包的脚本事件&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;composer在运行阶段会触发一下事件：&lt;/li&gt;
-&lt;/ul&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style=&#34;text-align:left&#34;&gt;事件名称&lt;/th&gt;
-&lt;th style=&#34;text-align:left&#34;&gt;说明&lt;/th&gt;
-&lt;th style=&#34;text-align:left&#34;&gt;事件名称&lt;/th&gt;
-&lt;th style=&#34;text-align:left&#34;&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;pre-install-cmd&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在install命令执行前触发&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;pre-package-install&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在资源包安装前触发&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;post-install-cmd&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在install命令执行后触发&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;post-package-install&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在资源包安装后触发&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;pre-update-cmd&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在update命令执行前触发&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;pre-package-update&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在资源包更新前触发&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;post-update-cmd&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在update命令执行后触发&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;post-package-update&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在资源包更新后触发&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;pre=status-cmd&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在status命令执行前触发&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;pre-package-uninstall&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在资源包被卸载前触发&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;post-status-cmd&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在status命令执行后触发&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;post-package-uninstall&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;在资源包被卸载后触发&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;应用场景&#34;&gt;应用场景&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;主流的php框架都默认使用composer来管理类库，例如：laravel、yii2、thinkphp、ci3.1版本也可以配置composer，但默认是关闭的。&lt;/li&gt;
-&lt;li&gt;如果框架默认没有配置项，也可以手动安装composer到框架；&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://daryeon.github.io/images/composer_and_autoload/5_20210316034741.png&#34; alt=&#34;自研框架使用composer管理类库&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;使用技巧&#34;&gt;使用技巧&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;在github上看到一个类库很好用，又懒得查是否有上传到composer，可以看该类库下面是否有composer.json文件。点击进去就可以看到对应的包名和详细信息&lt;/li&gt;
-&lt;li&gt;当你不想依赖任何类库时，只想看看composer自动加载的源码实现方式，可以手动在项目目录编写composer.json（只写一个空对象）再执行install命令，composer则会自动生成依赖的相关代码文件&lt;/li&gt;
-&lt;li&gt;当你觉得composer require类库很慢的时候，可以使用config命令，全局配置使用国内镜像来下载依赖 &lt;code&gt;composer config -g repo.packagist composer https://packagist.phpcomposer.com&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;执行update命令可以批量更新当前所有类库（不带参数），也可以单独更新某个类库，但是如果是指定版本号（写死了）创建的依赖是无法更新的，需要了解包版本的配置。&lt;/li&gt;
-&lt;li&gt;如果你编辑了composer.json，你应该会看到这样的信息。比如如果你增加或更新了细节信息，如：库的描述、作者等参数，甚至仅仅增加了一个空格，都会改变文件的MD5sum、然后composer就会警告哈希值与composer.lock中记载的不同&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;warning: The lock file is not up to date with the latest changes in composer.json, you may be getting outdated dependencies, run update to update them.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;在部署代码到生产环境的时候，别忘了优化一下自动加载：&lt;code&gt;composer dump-autoload --optimize&lt;/code&gt; 安装包的时候可以同样使用 &lt;code&gt;--optimize-autoloader&lt;/code&gt;，不加这一项你可能会发现有20%到25%的性能损失&lt;/li&gt;
-&lt;li&gt;你可能会觉得每安装一个库都需要修改composer.json太麻烦，那么你可以直接使用require命令 &lt;code&gt;composer require &amp;quot;foo/bar:1.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;包版本&#34;&gt;包版本&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;我们从composer下面安装的包都是有版本的，创建依赖时不指定包名，默认安装最新的稳定发行版本&lt;/li&gt;
-&lt;/ul&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style=&#34;text-align:left&#34;&gt;名称&lt;/th&gt;
-&lt;th style=&#34;text-align:left&#34;&gt;实例&lt;/th&gt;
-&lt;th style=&#34;text-align:left&#34;&gt;描述&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;确切的版本号&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;1.0.2&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;你可以指定包的确切版本&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;范围&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;&amp;gt;=1.0 或 &amp;gt;=1.0,&amp;lt;2.0 或 &amp;gt;=1.0,&amp;lt;1.1|&amp;gt;=1.2&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;通过使用比较操作符可以指定有效的版本范围。有效的操作符：&amp;gt;、&amp;gt;=、&amp;lt;、&amp;lt;=、!=。你可以定义多个范围，用逗号隔开，这将被视为一个逻辑and处理，一个管道符号|将作为逻辑or处理。and的优先级高于or&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;通配符&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;1.0.*&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;你可以使用通配符*来指定一种模式。1.0.*与&amp;gt;=1.0,&amp;lt;1.1是等效的。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;赋值操作符~&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;~1.2&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;这对于遵循语义化版本号的项目非常有用。~1.2相当于&amp;gt;=1.2,&amp;lt;2.0。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;赋值操作符^&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;^1.2.3&lt;/td&gt;
-&lt;td style=&#34;text-align:left&#34;&gt;^1.2.3相当于&amp;gt;=1.2.3,&amp;lt;2.0.0。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;自动加载&#34;&gt;自动加载&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;什么是自动加载？&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ul&gt;
-&lt;li&gt;当加载php类时，如果类所在文件没有被包含进来，或者类名出错，zend引擎会自动调用__autoload函数&lt;/li&gt;
-&lt;li&gt;spl_autoload_register() 可以注册一个自己的函数作为__autoload()的实现&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;在composer自带的autoload出现之前，类库的加载方式？&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ul&gt;
-&lt;li&gt;需要什么就require进来&lt;/li&gt;
-&lt;li&gt;自己写__autoload()加载类库&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://daryeon.github.io/images/composer_and_autoload/6_20210316042105.png&#34; alt=&#34;自定义自动加载函数&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;composer自动加载机制&#34;&gt;composer自动加载机制&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;每一个可以使用composer安装的类库，都必须包含一个composer.json文件。（包含描述，依赖，路径和命名空间的映射关系）&lt;/li&gt;
-&lt;li&gt;使用composer安装类库之后，都会在自己的目录（项目/vendor/composer/下）生成或更新install.json文件（是各个类库composer.json信息的集合）、同时生成命名空间或文件路径映射。&lt;/li&gt;
-&lt;li&gt;应用spl_autoload_register等函数，结合require来按需加载要使用的类库&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;psr规范&#34;&gt;PSR规范&lt;/h3&gt;
-&lt;p&gt;注：使用composer自动加载的类需要满足PSR-0或PSR-4的规范，也兼容路径映射。
-Framework Interoperability Group（框架可互用性小组），简称FIG，成立于2009年。FIG最初由几位知名php框架开发者发起，在吸纳了许多优秀的大脑和强健的体魄后，提出了PSR-0到PSR-4五套php非官方规范（如今已更新到PSR-18了~~~）&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;PSR-0（Autoloading Standard）自动加载标准（2014/10/21日被明确宣布废除）&lt;/li&gt;
-&lt;li&gt;PSR-1（Basic Coding Standard）基础编码标准&lt;/li&gt;
-&lt;li&gt;PSR-2（Coding Style Guide）编码风格向导&lt;/li&gt;
-&lt;li&gt;PSR-3（Logger Interface）日志接口规范&lt;/li&gt;
-&lt;li&gt;PSR-4（Improved Autoloading）自动加载优化标准&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://daryeon.github.io/images/composer_and_autoload/7_20210316043717.png&#34; alt=&#34;PSR-0和PSR-4的区别&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://learnku.com/docs/psr&#34;&gt;查看更多规范&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&#34;使用composer安装自己的包&#34;&gt;使用composer安装自己的包&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;每一个项目都是一个包。在一个项目目录里面创建一个composer.json的文件，那么这个目录就是一个包&lt;/li&gt;
-&lt;li&gt;在composer.json文件中定义自己的项目名、说明、版本号、依赖等等参数&lt;/li&gt;
-&lt;li&gt;发布到VSC（线上版本控制系统，如git，svn）&lt;/li&gt;
-&lt;li&gt;发布到packagist &lt;a href=&#34;https://packagist.org/&#34;&gt;https://packagist.org/&lt;/a&gt; （注册-发布-收录）&lt;/li&gt;
-&lt;li&gt;发布成功后，等待一会（国内镜像是一定时间同步一次）就可以在本地使用composer命令下载自己的包了&lt;/li&gt;
-&lt;/ol&gt;
-</description>
       
     </item>
     
